@@ -66,6 +66,16 @@ async def on_ready():
     print("vega bot online\n---")
 
 
+@bot.event
+async def on_command_error(ctx, error):
+    if isinstance(error, commands.CommandNotFound):
+        embed = discord.Embed(title="Command Error -", description="Command not found.")
+        await ctx.send(embed=embed)
+
+    else:
+        raise error
+
+
 async def yes_no_dialogue(message_name: discord.Message, timeout: int, dm: bool, ctx) -> object:
     await message_name.add_reaction("✅")
     await message_name.add_reaction("❌")
@@ -98,7 +108,6 @@ async def yes_no_dialogue(message_name: discord.Message, timeout: int, dm: bool,
         return True
     else:
         return False
-
 
 
 @bot.command(aliases=["issue"])
