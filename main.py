@@ -445,4 +445,87 @@ async def ban(ctx):
         return None
 
 
+@bot.command(aliases=["raid", "panic"])
+async def lockdown(ctx, *args):
+    if ctx.author.guild_permissions.manage_channels or ctx.author.id in adminIDS:
+
+        if not args:
+            embed = discord.Embed(title="Channel Lockdown -", description="Should all channels or only this channel be "
+                                                                          "locked down?\n\n (Yes for all channels, "
+                                                                          "no for this channel only.)")
+            message = await ctx.send(embed=embed)
+
+            allChannels = await yes_no_dialogue(message, 20, False, ctx)
+
+            if allChannels:
+                text_channel_list = []
+                guild = ctx.guild
+
+                for channel in guild.text_channels:
+                    text_channel_list.append(channel)
+
+                for channel in text_channel_list:
+                    await channel.set_permissions(ctx.guild.default_role, send_messages=False)
+
+                embed = discord.Embed(title="Channel Lockdown -", description="Channel lockdown successful.")
+                await message.clear_reactions()
+                await message.edit(embed=embed)
+
+                return None
+
+            else:
+                await ctx.channel.set_permissions(ctx.guild.default_role, send_messages=False)
+
+                embed = discord.Embed(title="Channel Lockdown -", description="Channel lockdown successful.")
+                await message.clear_reactions()
+                await message.edit(embed=embed)
+
+                return None
+
+        elif args[0] == "lift".lower():
+
+            embed = discord.Embed(title="Channel Lockdown -", description="Should all channels or only this channel "
+                                                                          "be unlocked? \n\n (Yes for all channels, "
+                                                                          "no for this channel only.)")
+            message = await ctx.send(embed=embed)
+
+            allChannels = await yes_no_dialogue(message, 20, False, ctx)
+
+            if allChannels:
+                text_channel_list = []
+                guild = ctx.guild
+
+                for channel in guild.text_channels:
+                    text_channel_list.append(channel)
+
+                for channel in text_channel_list:
+                    await channel.set_permissions(ctx.guild.default_role, send_messages=True)
+
+                embed = discord.Embed(title="Channel Lockdown -", description="Channel unlock successful.")
+                await message.clear_reactions()
+                await message.edit(embed=embed)
+
+                return None
+
+            else:
+                await ctx.channel.set_permissions(ctx.guild.default_role, send_messages=True)
+
+                embed = discord.Embed(title="Channel Lockdown -", description="Channel unlock successful.")
+                await message.clear_reactions()
+                await message.edit(embed=embed)
+
+                return None
+
+        else:
+            embed = discord.Embed(title="Command Failed", description="Unknown argument, \"" + args[0] + "\"")
+            await ctx.send(embed=embed)
+
+    else:
+        embed = discord.Embed(title="Permissions Error -", description="You do not have the required " +
+                                                                       "permissions to execute this command.")
+        await ctx.send(embed=embed)
+
+        return None
+
+
 bot.run(token["token"])
