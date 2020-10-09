@@ -304,8 +304,6 @@ async def announce(ctx):
 
         if reaction_yes:
             announceEmbed.set_footer(text="announcement from " + str(ctx.author))
-        else:
-            return None
 
         await message.clear_reactions()
 
