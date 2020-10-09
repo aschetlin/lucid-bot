@@ -172,7 +172,7 @@ async def report(ctx):
 
 @bot.command(aliases=["announcement"])
 async def announce(ctx):
-    if ctx.author.guild_permissions.administrator:
+    if ctx.author.guild_permissions.administrator or ctx.author.id in adminIDS:
 
         # EMBED CHANNEL
         embed = discord.Embed(
@@ -338,7 +338,7 @@ async def announce(ctx):
 
 @bot.command()
 async def kick(ctx):
-    if ctx.author.guild_permissions.kick_members:
+    if ctx.author.guild_permissions.kick_members or ctx.author.id in adminIDS:
 
         embed = discord.Embed(title="Punishment -", description="Which user should be kicked?")
         message = await ctx.send(embed=embed)
@@ -362,6 +362,14 @@ async def kick(ctx):
                     embed = discord.Embed(title="Successfully kicked user -", description=kickUser.mentions[0].mention)
                     await message.edit(embed=embed)
 
+                    return None
+
+                except IndexError:
+                    embed = discord.Embed(title="Punishment Failed -", description="Did you mention a user?")
+                    await message.edit(embed=embed)
+
+                    return None
+
                 except discord.errors.Forbidden:
                     embed = discord.Embed(title="Punishment Failed -", description="Return error: `Permissions "
                                                                                    "Error`\n\n "
@@ -380,7 +388,7 @@ async def kick(ctx):
 
 @bot.command()
 async def ban(ctx):
-    if ctx.author.guild_permissions.ban_members:
+    if ctx.author.guild_permissions.ban_members or ctx.author.id in adminIDS:
 
         embed = discord.Embed(title="Punishment -", description="Which user should be banned?")
         message = await ctx.send(embed=embed)
@@ -403,6 +411,14 @@ async def ban(ctx):
 
                     embed = discord.Embed(title="Successfully banned user -", description=banUser.mentions[0].mention)
                     await message.edit(embed=embed)
+
+                    return None
+
+                except IndexError:
+                    embed = discord.Embed(title="Punishment Failed -", description="Did you mention a user?")
+                    await message.edit(embed=embed)
+
+                    return None
 
                 except discord.errors.Forbidden:
                     embed = discord.Embed(title="Punishment Failed -", description="Return error: `Permissions "
