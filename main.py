@@ -346,47 +346,65 @@ async def announce(ctx):
 
 
 @bot.command()
-async def kick(ctx):
+async def kick(ctx, *args):
     if ctx.author.guild_permissions.kick_members or ctx.author.id in adminIDS:
 
-        embed = discord.Embed(title="Punishment -", description="Which user should be kicked?")
-        message = await ctx.send(embed=embed)
+        if not args:
+            embed = discord.Embed(title="Punishment -", description="Which user should be kicked?")
+            message = await ctx.send(embed=embed)
 
-        while True:
+            while True:
+
+                try:
+                    kickUser = await bot.wait_for("message", timeout=20)
+
+                except asyncio.TimeoutError:
+                    embed = discord.Embed(title="Timeout", description="Sorry, you took too long to respond.")
+                    await message.edit(embed=embed)
+
+                    return None
+
+                if kickUser.author.id == ctx.author.id:
+                    await kickUser.delete()
+                    try:
+                        await kickUser.mentions[0].ban()
+
+                        embed = discord.Embed(
+                            title="Successfully banned user -", description=kickUser.mentions[0].mention
+                        )
+                        await message.edit(embed=embed)
+
+                        return None
+
+                    except IndexError:
+                        embed = discord.Embed(title="Punishment Failed -", description="Did you mention a user?")
+                        await message.edit(embed=embed)
+
+                        return None
+
+                    except discord.errors.Forbidden:
+                        embed = discord.Embed(title="Permissions Error -", description="Are you trying to kick another "
+                                                                                       "moderator/administrator?")
+                        await message.edit(embed=embed)
+
+                        return None
+
+        else:
 
             try:
-                kickUser = await bot.wait_for("message", timeout=20)
+                targetUser = ctx.message.mentions[0]
+                await targetUser.kick()
 
-            except asyncio.TimeoutError:
-                embed = discord.Embed(title="Timeout", description="Sorry, you took too long to respond.")
-                await message.edit(embed=embed)
+            except IndexError:
+                embed = discord.Embed(title="Punishment Failed -", description="IndexError: Did you mention a valid "
+                                                                               "user?")
+                await ctx.send(embed=embed)
 
-                return None
+            except discord.Forbidden:
+                embed = discord.Embed(title="Permissions Error -", description="Are you trying to kick another "
+                                                                               "moderator/administrator?")
+                await ctx.send(embed=embed)
 
-            if kickUser.author.id == ctx.author.id:
-                await kickUser.delete()
-                try:
-                    await kickUser.mentions[0].kick()
-
-                    embed = discord.Embed(title="Successfully kicked user -", description=kickUser.mentions[0].mention)
-                    await message.edit(embed=embed)
-
-                    return None
-
-                except IndexError:
-                    embed = discord.Embed(title="Punishment Failed -", description="Did you mention a user?")
-                    await message.edit(embed=embed)
-
-                    return None
-
-                except discord.errors.Forbidden:
-                    embed = discord.Embed(title="Punishment Failed -", description="Return error: `Permissions "
-                                                                                   "Error`\n\n "
-                                                                                   "Are you trying to kick another "
-                                                                                   "moderator/administrator?")
-                    await message.edit(embed=embed)
-
-                    return None
     else:
         embed = discord.Embed(title="Permissions Error -", description="You do not have the required " +
                                                                        "permissions to execute this command.")
@@ -396,47 +414,65 @@ async def kick(ctx):
 
 
 @bot.command()
-async def ban(ctx):
+async def ban(ctx, *args):
     if ctx.author.guild_permissions.ban_members or ctx.author.id in adminIDS:
 
-        embed = discord.Embed(title="Punishment -", description="Which user should be banned?")
-        message = await ctx.send(embed=embed)
+        if not args:
+            embed = discord.Embed(title="Punishment -", description="Which user should be banned?")
+            message = await ctx.send(embed=embed)
 
-        while True:
+            while True:
+
+                try:
+                    banUser = await bot.wait_for("message", timeout=20)
+
+                except asyncio.TimeoutError:
+                    embed = discord.Embed(title="Timeout", description="Sorry, you took too long to respond.")
+                    await message.edit(embed=embed)
+
+                    return None
+
+                if banUser.author.id == ctx.author.id:
+                    await banUser.delete()
+                    try:
+                        await banUser.mentions[0].ban()
+
+                        embed = discord.Embed(
+                            title="Successfully banned user -", description=banUser.mentions[0].mention
+                        )
+                        await message.edit(embed=embed)
+
+                        return None
+
+                    except IndexError:
+                        embed = discord.Embed(title="Punishment Failed -", description="Did you mention a user?")
+                        await message.edit(embed=embed)
+
+                        return None
+
+                    except discord.errors.Forbidden:
+                        embed = discord.Embed(title="Permissions Error -", description="Are you trying to ban another "
+                                                                                       "moderator/administrator?")
+                        await message.edit(embed=embed)
+
+                        return None
+
+        else:
 
             try:
-                banUser = await bot.wait_for("message", timeout=20)
+                targetUser = ctx.message.mentions[0]
+                await targetUser.ban()
 
-            except asyncio.TimeoutError:
-                embed = discord.Embed(title="Timeout", description="Sorry, you took too long to respond.")
-                await message.edit(embed=embed)
+            except IndexError:
+                embed = discord.Embed(title="Punishment Failed -", description="IndexError: Did you mention a valid "
+                                                                               "user?")
+                await ctx.send(embed=embed)
 
-                return None
+            except discord.Forbidden:
+                embed = discord.Embed(title="Permissions Error -", description="Are you trying to ban another "
+                                                                               "moderator/administrator?")
+                await ctx.send(embed=embed)
 
-            if banUser.author.id == ctx.author.id:
-                await banUser.delete()
-                try:
-                    await banUser.mentions[0].ban()
-
-                    embed = discord.Embed(title="Successfully banned user -", description=banUser.mentions[0].mention)
-                    await message.edit(embed=embed)
-
-                    return None
-
-                except IndexError:
-                    embed = discord.Embed(title="Punishment Failed -", description="Did you mention a user?")
-                    await message.edit(embed=embed)
-
-                    return None
-
-                except discord.errors.Forbidden:
-                    embed = discord.Embed(title="Punishment Failed -", description="Return error: `Permissions "
-                                                                                   "Error`\n\n "
-                                                                                   "Are you trying to ban another "
-                                                                                   "moderator/administrator?")
-                    await message.edit(embed=embed)
-
-                    return None
     else:
         embed = discord.Embed(title="Permissions Error -", description="You do not have the required " +
                                                                        "permissions to execute this command.")
