@@ -3,57 +3,13 @@ from discord.ext import commands
 import json
 import asyncio
 
-# CONSTANTS BELOW
+# BOT INIT
 
-# intents = discord.Intents.default()
-# intents.members = True
-
-adminIDS = [
-    "581593263736356885"  # viargentum#3850
-    "530540004082974720"  # Rune - Vega Development#8717
-]
-
-reactColors = {
-
-    "red": "❤",
-    "orange": "🧡",
-    "yellow": "💛",
-    "green": "💚",
-    "blue": "💙",
-    "purple": "💜",
-    "black": "🖤",
-    "brown": "🤎",
-    "white": "🤍"
-
-}
-
-reactColorsHex = {
-
-    "❤": 0xff0000,
-    "🧡": 0xFFA500,
-    "💛": 0xFFFF00,
-    "💚": 0x008000,
-    "💙": 0x0000FF,
-    "💜": 0x800080,
-    "🖤": 0x000000,
-    "🤎": 0x512525,
-    "🤍": 0xFFFFFF
-
-}
-
-helloResponseOptions = [
-
-    "hi",
-    "hii",
-    "hello",
-    "heyy"
-
-]
-
+config = json.loads(open("json/config.json", "r", encoding="utf8").read())
 ticketcount = json.loads(open("json/ticketcount.json", "r").read())
-token = json.loads(open("json/token.json", "r").read())
-
-bot = commands.Bot(command_prefix="\\", case_insensitive=False)
+intents = discord.Intents.default()
+intents.members = True
+bot = commands.Bot(command_prefix=config["prefix"], case_insensitive=False, intents=intents)
 
 
 def save_json():
@@ -63,7 +19,7 @@ def save_json():
 
 @bot.event
 async def on_ready():
-    print("vega bot online\n---")
+    print(config["botName"] + " " + "bot online\n---")
 
 
 @bot.event
@@ -159,16 +115,16 @@ async def report(ctx):
                                       color=0x00fe5f)
                 await ctx.author.send(embed=embed)
 
-                user = ctx.message.guild.get_member(581593263736356885)
+                user = bot.get_user(581593263736356885)
 
-                await user.send("**Issue Ticket #" + str(ticketcount["tickets"]) + " - **")
+                await user.send("**Issue Ticket #" + str(ticketcount[config["token"]]) + " - **")
 
                 embed = discord.Embed(title=str(issueTitle.content), description=str(issueDescription.content))
                 embed.set_footer(text=str(ctx.author) + " - " + str(ctx.author.id))
 
                 await user.send(embed=embed)
 
-                ticketcount["tickets"] += 1
+                ticketcount[config["token"]] += 1
 
                 break
 
@@ -181,7 +137,7 @@ async def report(ctx):
 
 @bot.command(aliases=["announcement"])
 async def announce(ctx):
-    if ctx.author.guild_permissions.administrator or ctx.author.id in adminIDS:
+    if ctx.author.guild_permissions.administrator or ctx.author.id in config["adminIDS"]:
 
         # EMBED CHANNEL
         embed = discord.Embed(
@@ -201,18 +157,18 @@ async def announce(ctx):
 
                 return None
 
-            except IndexError:
-                embed = discord.Embed(title="Error:",
-                                      description="You did not specify a valid channel.\n\nMake sure you mention the "
-                                                  "channel by using a # before the channel name.")
-                await message.edit(embed=embed)
-
-                return None
-
             if announceChannel.author.id == ctx.author.id:
                 await announceChannel.delete()
                 channelTag = announceChannel.content
-                announceChannel = announceChannel.channel_mentions[0]
+
+                try:
+                    announceChannel = announceChannel.channel_mentions[0]
+
+                except IndexError:
+                    embed = discord.Embed(title="Command Error -", description="Did you mention a valid channel?")
+                    await message.edit(embed=embed)
+
+                    return None
 
                 break
 
@@ -269,8 +225,8 @@ async def announce(ctx):
 
         await message.edit(embed=embed)
 
-        for keys in reactColors:
-            await message.add_reaction(reactColors[keys])
+        for value in config["reactColors"]:
+            await message.add_reaction(config["reactColors"][value])
 
         while True:
 
@@ -287,13 +243,13 @@ async def announce(ctx):
             if reactColor[1].id == ctx.author.id:
                 reactColor = reactColor[0].emoji
 
-                if reactColor in reactColors.values():
+                if reactColor in config["reactColors"].values():
                     break
 
                 else:
                     return None
 
-        colorHex = reactColorsHex[reactColor]
+        colorHex = config["reactColorsHex"][reactColor]
 
         # ANNOUNCEMENT AUTHOR YES/NO
 
@@ -308,8 +264,9 @@ async def announce(ctx):
         reaction_yes = await yes_no_dialogue(message, 10, False, ctx)
 
         # BUILDING ANNOUNCEMENT EMBED
+        hexInt = int(colorHex, 16)
         announceEmbed = discord.Embed(title=announceTitle.content, description=announceMessage.content,
-                                      color=colorHex)
+                                      color=hexInt)
 
         if reaction_yes:
             announceEmbed.set_footer(text="announcement from " + str(ctx.author))
@@ -347,7 +304,7 @@ async def announce(ctx):
 
 @bot.command()
 async def kick(ctx, *args):
-    if ctx.author.guild_permissions.kick_members or ctx.author.id in adminIDS:
+    if ctx.author.guild_permissions.kick_members or ctx.author.id in config["adminIDS"]:
 
         if not args:
             embed = discord.Embed(title="Punishment -", description="Which user should be kicked?")
@@ -415,7 +372,7 @@ async def kick(ctx, *args):
 
 @bot.command()
 async def ban(ctx, *args):
-    if ctx.author.guild_permissions.ban_members or ctx.author.id in adminIDS:
+    if ctx.author.guild_permissions.ban_members or ctx.author.id in config["adminIDS"]:
 
         if not args:
             embed = discord.Embed(title="Punishment -", description="Which user should be banned?")
@@ -483,7 +440,7 @@ async def ban(ctx, *args):
 
 @bot.command(aliases=["raid", "panic"])
 async def lockdown(ctx, *args):
-    if ctx.author.guild_permissions.manage_channels or ctx.author.id in adminIDS:
+    if ctx.author.guild_permissions.manage_channels or ctx.author.id in config["adminIDS"]:
 
         if not args:
             embed = discord.Embed(title="Channel Lockdown -", description="Should all channels or only this channel be "
@@ -564,4 +521,4 @@ async def lockdown(ctx, *args):
         return None
 
 
-bot.run(token["token"])
+bot.run(config["token"])
