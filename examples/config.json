@@ -2,7 +2,8 @@
   "botName": "",
   "token": "",
   "redis": {
-    "hostname": "localhost"
+    "hostname": "localhost",
+    "db": 0
   },
   "prefix": ",",
   "adminIDS": [],

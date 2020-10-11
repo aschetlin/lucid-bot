@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from lucid_bot.bot import bot
 from lucid_bot.config import config
 import lucid_bot.commands # noqa
