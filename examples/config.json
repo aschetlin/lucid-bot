@@ -1,0 +1,31 @@
+{
+  "botName": "",
+  "token": "",
+  "redis": {
+    "hostname": "localhost"
+  },
+  "prefix": ",",
+  "adminIDS": [],
+  "reactColors": {
+    "red": "❤",
+    "orange": "🧡",
+    "yellow": "💛",
+    "green": "💚",
+    "blue": "💙",
+    "purple": "💜",
+    "black": "🖤",
+    "brown": "🤎",
+    "white": "🤍"
+  },
+  "reactColorsHex": {
+    "❤": "0xff0000",
+    "🧡": "0xFFA500",
+    "💛": "0xFFFF00",
+    "💚": "0x008000",
+    "💙": "0x0000FF",
+    "💜": "0x800080",
+    "🖤": "0x000000",
+    "🤎": "0x512525",
+    "🤍": "0xFFFFFF"
+  }
+}
