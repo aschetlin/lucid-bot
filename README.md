@@ -52,7 +52,7 @@ Then, in a new environment or screen, you will need to edit the environment vari
 |Permission      |Command                        |Usage                       |
 |----------------|-------------------------------|-----------------------------|
 |n/a			 |`ping`            			 | ping            |
-|n/a             |`help`           				 | help **or** help <category>           |
+|n/a             |`help`           				 | help **or** help *category*           |
 |n/a	         |`info`						 | info|
 |kick_members    |`kick` 						 | kick @user **or** kick
 |mute_members	 |`mute`              			 | mute@user **or** mute
