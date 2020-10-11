@@ -31,7 +31,7 @@ To start a single instance of the bot, run the *main.py*:
 ## Running multiple instances in parallel
 
 To run multiple instances of the bot in parallel, you can begin by running a default instance, as seen above.
-Then, on in a new environment or screen, you will need to edit the environment variables:
+Then, in a new environment or screen, you will need to edit the environment variables:
 
 **Windows:**
 
@@ -52,7 +52,7 @@ Then, on in a new environment or screen, you will need to edit the environment v
 |Permission      |Command                        |Usage                       |
 |----------------|-------------------------------|-----------------------------|
 |n/a			 |`ping`            			 | ping            |
-|n/a             |`help`           				 | help            |
+|n/a             |`help`           				 | help **or** help <category>           |
 |n/a	         |`info`						 | info|
 |kick_members    |`kick` 						 | kick @user **or** kick
 |mute_members	 |`mute`              			 | mute@user **or** mute
