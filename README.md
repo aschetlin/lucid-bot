@@ -47,7 +47,7 @@ Then, on in a new environment or screen, you will need to edit the environment v
     
 (for each new instance, you will need to re-define these keys, and add one to the REDIS__DB number)
 
-## Commands
+# Commands
 
 |Permission      |Command                        |Usage                       |
 |----------------|-------------------------------|-----------------------------|
