@@ -28,5 +28,22 @@
     "🖤": "0x000000",
     "🤎": "0x512525",
     "🤍": "0xFFFFFF"
+  },
+  "commandList": {
+    "utilities": [
+      "`help` - displays this page`",
+      "`ping` - returns bot and api latency",
+      "`info` - returns bot info"
+    ],
+    "general": [
+      "`report` - starts an issue ticket in your dms",
+      "`announce` - starts an announcement creation prompt"
+    ],
+    "moderation": [
+      "`kick` - kicks a user. **usage** - kick @user *or* kick",
+      "`ban` - bans a user. **usage** - ban @user *or* ban",
+      "`mute` - mutes a user. **usage** - mute @user <time> *or* mute",
+      "`lockdown` - **usage** - lockdown *or* lockdown lift"
+    ]
   }
 }

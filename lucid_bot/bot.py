@@ -2,10 +2,10 @@ import discord
 from discord.ext import commands
 from lucid_bot.config import config
 
-
 intents = discord.Intents.default()
 intents.members = True
 bot = commands.Bot(command_prefix=config["prefix"], case_insensitive=False, intents=intents)
+bot.remove_command("help")
 
 
 @bot.event
