@@ -89,6 +89,63 @@ async def lockdown(ctx, *args):
 
 
 @bot.command()
+async def slowmode(ctx, *args):
+    if ctx.author.guild_permissions.manage_channels:
+
+        if not args:
+            embed = discord.Embed(title="Channel Slowmode -", description="How long should the message cool-down be?")
+            message = await ctx.send(embed=embed)
+
+            while True:
+
+                try:
+                    slowmodeTime = await bot.wait_for("message", timeout=20)
+
+                except asyncio.TimeoutError:
+                    embed = discord.Embed(title="Timeout Error -", description="Sorry, you took too long to respond.")
+                    await message.edit(embed=embed)
+
+                    return None
+
+                if slowmodeTime.author.id == ctx.author.id:
+                    await slowmodeTime.delete()
+                    await ctx.channel.edit(slowmode_delay=slowmodeTime.content)
+                    print(ctx.channel.slowmode_delay)
+
+                    embed = discord.Embed(title="Channel Slowmode -",
+                                          description=f"{slowmodeTime.content}s slowmode activated!")
+
+                    await message.edit(embed=embed)
+
+                    return None
+
+        if str(args[0]) == "lift":
+            await ctx.channel.edit(slowmode_delay=0)
+
+            embed = discord.Embed(title="Channel Slowmode -", description="Slowmode lifted!")
+            await ctx.send(embed=embed)
+
+        else:
+
+            try:
+                slowmodeTime = args[0]
+
+                await ctx.channel.edit(slowmode_delay=slowmodeTime)
+
+                embed = discord.Embed(title="Channel Slowmode -", description=f"{slowmodeTime}s slowmode activated!")
+                await ctx.send(embed=embed)
+
+            except IndexError:
+                embed = discord.Embed(title="Channel Slowmode -", description="Invalid slowmode time.")
+                await ctx.send(embed=embed)
+
+    else:
+        embed = discord.Embed(title="Permissions Error -", description="You don't have the required permissions to "
+                                                                       "execute that command.")
+        await ctx.send(embed=embed)
+
+
+@bot.command()
 async def kick(ctx, *args):
     if ctx.author.guild_permissions.kick_members or ctx.author.id in config["adminIDS"]:
 

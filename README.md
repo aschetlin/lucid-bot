@@ -49,14 +49,15 @@ Then, in a new environment or screen, you will need to edit the environment vari
 
 # Commands
 
-|Permission      |Command                        |Usage                       |
-|----------------|-------------------------------|-----------------------------|
-|n/a			 |`ping`            			 | ping            |
-|n/a             |`help`           				 | help **or** help *category*           |
+|Permission      |Command                        |Usage                       
+|----------------|-------------------------------|-----------------------------
+|n/a			 |`ping`            			 | ping            
+|n/a             |`help`           				 | help **or** help *category*           
 |n/a	         |`info`						 | info|
 |kick_members    |`kick` 						 | kick @user **or** kick
 |mute_members	 |`mute`              			 | mute@user **or** mute
 |ban_members     |`ban`                          | ban @user **or** ban
 |administrator   |`announce`					 | announce
 |manage_channels |`lockdown`					 | lockdown **or** lockdown lift
+|manage_channels |`slowmode`                     | slowmode *time(seconds)* **or** slowmode
 |n/a             |`report`                       | report

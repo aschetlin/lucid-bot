@@ -16,8 +16,8 @@ async def ping(ctx):
     hexInt = int(random.choice(list(config["colors"])), 16)
 
     embed = discord.Embed(title="Ping -", color=hexInt)
-    embed.add_field(name=f"API Latency", value=f"~{botPing}ms")
-    embed.add_field(name=f"Message Latency", value=f"~{msgPing}ms")
+    embed.add_field(name=f"API Latency:", value=f"~{botPing}ms")
+    embed.add_field(name=f"Message Latency:", value=f"~{msgPing}ms")
 
     await ctx.send(embed=embed)
 
@@ -32,7 +32,7 @@ async def help(ctx, *args):
                                                                                        "more info")
         embed.add_field(name="Utility -", value="`ping`, `help`, `info`", inline=False)
         embed.add_field(name="General -", value="`report`, `announce`", inline=False)
-        embed.add_field(name="Moderation -", value="`kick`, `mute`, `ban`, `lockdown`", inline=False)
+        embed.add_field(name="Moderation -", value="`kick`, `mute`, `ban`, `slowmode`, `lockdown`", inline=False)
 
         await ctx.send(embed=embed)
 
@@ -64,14 +64,8 @@ async def info(ctx):
     botName = config["botName"]
     hexInt = int(random.choice(list(config["colors"])), 16)
 
-    embed = discord.Embed(
-        title=f"{botName} Bot Info", color=hexInt
-    )
-
-    embed.set_thumbnail(
-        url=bot.user.avatar_url
-    )
-
+    embed = discord.Embed(title=f"{botName} Bot Info", color=hexInt)
+    embed.set_thumbnail(url=bot.user.avatar_url)
     embed.add_field(name="Built by:", value="viargentum#3850", inline=False)
     embed.add_field(name="Issues or suggestions:", value="If you have any issues or suggestions, use the report "
                                                          "command, or create an issue on "
