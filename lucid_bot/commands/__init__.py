@@ -2,7 +2,7 @@ import discord
 import redis
 import asyncio
 from lucid_bot.config import config
-from lucid_bot.non_bot_funcs import yes_no_dialogue
+from lucid_bot.non_bot_funcs import yes_no_dialogue, announcement_init, announcement_send
 from lucid_bot.bot import bot
 
 
@@ -78,165 +78,132 @@ async def report(ctx):
 
 
 @bot.command(aliases=["announcement"])
-async def announce(ctx):
+async def announce(ctx, *args):
     if ctx.author.guild_permissions.administrator or ctx.author.id in config["adminIDS"]:
 
-        # EMBED CHANNEL
-        embed = discord.Embed(
-            title="Bot Announcement -", description="What channel should the announcement be sent to?"
-        )
+        if not args:
+            embed = discord.Embed(
+                title="Bot Announcement -", description="What channel should the announcement be sent to?")
 
-        message = await ctx.send(embed=embed)
+            message = await ctx.send(embed=embed)
 
-        while True:
+            announceChannel, announceTitle, channelTag = await announcement_init(ctx, message)
 
-            try:
-                announceChannel = await bot.wait_for("message", timeout=20)
+            # EMBED DESCRIPTION
+            embed = discord.Embed(title="Bot Announcement -", description="What should the announcement say?")
 
-            except asyncio.TimeoutError:
-                embed = discord.Embed(title="Timeout", description="Sorry, you took too long to respond.")
-                await message.edit(embed=embed)
+            await message.edit(embed=embed)
 
-                return None
-
-            if announceChannel.author.id == ctx.author.id:
-                await announceChannel.delete()
-                channelTag = announceChannel.content
+            while True:
 
                 try:
-                    announceChannel = announceChannel.channel_mentions[0]
+                    announceMessage = await bot.wait_for("message", timeout=180)
 
-                except IndexError:
-                    embed = discord.Embed(title="Command Error -", description="Did you mention a valid channel?")
+
+                except asyncio.TimeoutError:
+                    embed = discord.Embed(title="Timeout", description="Sorry, you took too long to respond.")
+
                     await message.edit(embed=embed)
 
                     return None
 
-                break
+                if announceMessage.author.id == ctx.author.id:
+                    await announceMessage.delete()
 
-        # EMBED TITLE
-        embed = discord.Embed(title="Bot Announcement -", description="What should the title of the announcement be?")
-
-        await message.edit(embed=embed)
-
-        while True:
-
-            try:
-                announceTitle = await bot.wait_for("message", timeout=60)
-
-
-            except asyncio.TimeoutError:
-                embed = discord.Embed(title="Timeout", description="Sorry, you took too long to respond.")
-
-                await message.edit(embed=embed)
-
-                return None
-
-            if announceTitle.author.id == ctx.author.id:
-                await announceTitle.delete()
-
-                break
-
-        # EMBED DESCRIPTION
-        embed = discord.Embed(title="Bot Announcement -", description="What should the announcement say?")
-
-        await message.edit(embed=embed)
-
-        while True:
-
-            try:
-                announceMessage = await bot.wait_for("message", timeout=180)
-
-
-            except asyncio.TimeoutError:
-                embed = discord.Embed(title="Timeout", description="Sorry, you took too long to respond.")
-
-                await message.edit(embed=embed)
-
-                return None
-
-            if announceMessage.author.id == ctx.author.id:
-                await announceMessage.delete()
-
-                break
-
-        # EMBED COLOR
-        embed = discord.Embed(title="Bot Announcement -",
-                              description="What should the color of the embed be?\n\n(Wait for all reactions to "
-                                          "appear.)")
-
-        await message.edit(embed=embed)
-
-        for value in config["reactColors"]:
-            await message.add_reaction(config["reactColors"][value])
-
-        while True:
-
-            try:
-                reactColor = await bot.wait_for("reaction_add", timeout=20)
-
-            except asyncio.TimeoutError:
-                embed = discord.Embed(title="Timeout", description="Sorry, you took too long to react.")
-
-                await message.edit(embed=embed)
-
-                return None
-
-            if reactColor[1].id == ctx.author.id:
-                reactColor = reactColor[0].emoji
-
-                if reactColor in config["reactColors"].values():
                     break
 
-                else:
+            # EMBED COLOR
+            embed = discord.Embed(title="Bot Announcement -",
+                                  description="What should the color of the embed be?\n\n(Wait for all reactions to "
+                                              "appear.)")
+
+            await message.edit(embed=embed)
+
+            for value in config["reactColors"]:
+                await message.add_reaction(config["reactColors"][value])
+
+            while True:
+
+                try:
+                    reactColor = await bot.wait_for("reaction_add", timeout=20)
+
+                except asyncio.TimeoutError:
+                    embed = discord.Embed(title="Timeout", description="Sorry, you took too long to react.")
+
+                    await message.edit(embed=embed)
+
                     return None
 
-        colorHex = config["reactColorsHex"][reactColor]
+                if reactColor[1].id == ctx.author.id:
+                    reactColor = reactColor[0].emoji
 
-        # ANNOUNCEMENT AUTHOR YES/NO
+                    if reactColor in config["reactColors"].values():
+                        break
 
-        embed = discord.Embed(title="Should the announcement list who created it in the footer,\n"
-                                    "eg. the footer of this message?")
-        embed.set_footer(text="announcement from " + str(ctx.author))
+                    else:
+                        return None
 
-        await message.clear_reactions()
+            colorHex = config["reactColorsHex"][reactColor]
 
-        await message.edit(embed=embed)
+            # ANNOUNCEMENT AUTHOR YES/NO
 
-        reaction_yes = await yes_no_dialogue(message, 10, False, ctx)
+            embed = discord.Embed(title="Should the announcement list who created it in the footer,\n"
+                                        "eg. the footer of this message?")
+            embed.set_footer(text="announcement from " + str(ctx.author))
 
-        # BUILDING ANNOUNCEMENT EMBED
-        hexInt = int(colorHex, 16)
-        announceEmbed = discord.Embed(title=announceTitle.content, description=announceMessage.content,
-                                      color=hexInt)
-
-        if reaction_yes:
-            announceEmbed.set_footer(text="announcement from " + str(ctx.author))
-
-        await message.clear_reactions()
-
-        await message.edit(embed=announceEmbed)
-
-        # CONFIRM/DENY SEND
-        embed = discord.Embed(title="Bot Announcement -", description="Do you want to send the announcement " +
-                                                                      "as shown above?")
-        message = await ctx.send(embed=embed)
-
-        reaction_yes = await yes_no_dialogue(message, 10, False, ctx)
-
-        if reaction_yes:
-            await announceChannel.send(embed=announceEmbed)
-            embed = discord.Embed(title="Bot Announcement -",
-                                  description="Announcement successfully sent to " + channelTag + ".")
-            embed.set_footer(text="bot developed by viargentum#3850")
             await message.clear_reactions()
+
             await message.edit(embed=embed)
-        else:
-            embed = discord.Embed(title="Bot Announcement -",
-                                  description="Announcement Cancelled.")
-            embed.set_footer(text="bot developed by viargentum#3850")
+
+            reaction_yes = await yes_no_dialogue(message, 10, False, ctx)
+
+            # BUILDING ANNOUNCEMENT EMBED
+            hexInt = int(colorHex, 16)
+            announceEmbed = discord.Embed(title=announceTitle.content, description=announceMessage.content,
+                                          color=hexInt)
+
+            if reaction_yes:
+                announceEmbed.set_footer(text="announcement from " + str(ctx.author))
+
             await message.clear_reactions()
+
+            await message.edit(embed=announceEmbed)
+
+            await announcement_send(ctx, announceChannel, announceEmbed, channelTag)
+
+        elif args[0].lower() == "image":
+            embed = discord.Embed(
+                title="Bot Announcement -", description="What channel should the announcement be sent to?")
+
+            message = await ctx.send(embed=embed)
+
+            announceChannel, announceTitleMessage, channelTag = await announcement_init(ctx, message)
+
+            announceTitle = announceTitleMessage.content
+
+            embed = discord.Embed(title="Bot Announcement -", description="Please link the image url.")
             await message.edit(embed=embed)
+
+            while True:
+
+                try:
+                    image = await bot.wait_for("message", timeout=40)
+
+                except asyncio.TimeoutError:
+                    embed = discord.Embed(title="Timeout Error -", description="Sorry, you took too long to respond.")
+                    await message.edit(embed=embed)
+
+                    return None
+
+                if image.author.id == ctx.author.id:
+                    break
+
+            announceEmbed = discord.Embed(title=announceTitle)
+            announceEmbed.set_image(url=image.content)
+
+            await ctx.send(embed=announceEmbed)
+
+            await announcement_send(ctx, announceChannel, announceEmbed, channelTag)
 
     else:
         embed = discord.Embed(title="Permissions Error -", description="Sorry, you don't have the required "
