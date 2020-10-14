@@ -37,7 +37,7 @@ async def yes_no_dialogue(message_name: discord.Message, timeout: int, dm: bool,
         return False
 
 
-async def announcement_init(ctx, message: discord.Message):
+async def announcement_channel(ctx, message: discord.Message):
     # EMBED CHANNEL
     while True:
 
@@ -65,6 +65,10 @@ async def announcement_init(ctx, message: discord.Message):
 
             break
 
+    return announceChannel, channelTag
+
+
+async def announce_title(ctx, message: discord.Message):
     # EMBED TITLE
     embed = discord.Embed(title="Bot Announcement -", description="What should the title of the announcement be?")
 
@@ -88,7 +92,34 @@ async def announcement_init(ctx, message: discord.Message):
 
             break
 
-    return announceChannel, announceTitle, channelTag
+    return announceTitle.content
+
+
+async def announcement_description(ctx, message: discord.Message):
+    # EMBED DESCRIPTION
+    embed = discord.Embed(title="Bot Announcement -", description="What should the announcement say?")
+
+    await message.edit(embed=embed)
+
+    while True:
+
+        try:
+            announceMessage = await bot.wait_for("message", timeout=180)
+
+
+        except asyncio.TimeoutError:
+            embed = discord.Embed(title="Timeout", description="Sorry, you took too long to respond.")
+
+            await message.edit(embed=embed)
+
+            return None
+
+        if announceMessage.author.id == ctx.author.id:
+            await announceMessage.delete()
+
+            break
+
+    return announceMessage.content
 
 
 async def announcement_send(ctx, announce_channel, announce_embed, channel_tag):

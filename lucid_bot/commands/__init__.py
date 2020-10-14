@@ -2,7 +2,8 @@ import discord
 import redis
 import asyncio
 from lucid_bot.config import config
-from lucid_bot.non_bot_funcs import yes_no_dialogue, announcement_init, announcement_send
+from lucid_bot.non_bot_funcs import yes_no_dialogue, announcement_channel, announce_title, announcement_description, \
+    announcement_send
 from lucid_bot.bot import bot
 
 
@@ -87,30 +88,9 @@ async def announce(ctx, *args):
 
             message = await ctx.send(embed=embed)
 
-            announceChannel, announceTitle, channelTag = await announcement_init(ctx, message)
-
-            # EMBED DESCRIPTION
-            embed = discord.Embed(title="Bot Announcement -", description="What should the announcement say?")
-
-            await message.edit(embed=embed)
-
-            while True:
-
-                try:
-                    announceMessage = await bot.wait_for("message", timeout=180)
-
-
-                except asyncio.TimeoutError:
-                    embed = discord.Embed(title="Timeout", description="Sorry, you took too long to respond.")
-
-                    await message.edit(embed=embed)
-
-                    return None
-
-                if announceMessage.author.id == ctx.author.id:
-                    await announceMessage.delete()
-
-                    break
+            announceChannel, channelTag = await announcement_channel(ctx, message)
+            announceTitle = await announce_title(ctx, message)
+            announceMessage = await announcement_description(ctx, message)
 
             # EMBED COLOR
             embed = discord.Embed(title="Bot Announcement -",
@@ -159,7 +139,7 @@ async def announce(ctx, *args):
 
             # BUILDING ANNOUNCEMENT EMBED
             hexInt = int(colorHex, 16)
-            announceEmbed = discord.Embed(title=announceTitle.content, description=announceMessage.content,
+            announceEmbed = discord.Embed(title=announceTitle, description=announceMessage,
                                           color=hexInt)
 
             if reaction_yes:
@@ -177,9 +157,18 @@ async def announce(ctx, *args):
 
             message = await ctx.send(embed=embed)
 
-            announceChannel, announceTitleMessage, channelTag = await announcement_init(ctx, message)
+            announceChannel, channelTag = await announcement_channel(ctx, message)
+            announceTitle = await announce_title(ctx, message)
 
-            announceTitle = announceTitleMessage.content
+            embed = discord.Embed(title="Bot Announcement -", description="Should the embed have a description?")
+            await message.edit(embed=embed)
+            embedDescription = await yes_no_dialogue(message, 20, False, ctx)
+
+            if embedDescription:
+                announceMessage = await announcement_description(ctx, message)
+
+            else:
+                announceMessage = ""
 
             embed = discord.Embed(title="Bot Announcement -", description="Please link the image url.")
             await message.edit(embed=embed)
@@ -198,7 +187,12 @@ async def announce(ctx, *args):
                 if image.author.id == ctx.author.id:
                     break
 
-            announceEmbed = discord.Embed(title=announceTitle)
+            if embedDescription:
+                announceEmbed = discord.Embed(title=announceTitle, description=announceMessage)
+
+            else:
+                announceEmbed = discord.Embed(title=announceTitle)
+
             announceEmbed.set_image(url=image.content)
 
             await ctx.send(embed=announceEmbed)
