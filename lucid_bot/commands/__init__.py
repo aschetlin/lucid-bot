@@ -203,3 +203,8 @@ async def announce(ctx, *args):
         embed = discord.Embed(title="Permissions Error -", description="Sorry, you don't have the required "
                                                                        "permissions to execute that command.")
         await ctx.send(embed=embed)
+
+@bot.command()
+async def say(ctx, *, message):
+    await ctx.message.delete()
+    await ctx.send(message)
