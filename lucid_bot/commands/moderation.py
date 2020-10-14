@@ -1,11 +1,13 @@
 import discord
 import asyncio
+
+from lucid_bot import commands
 from lucid_bot.bot import bot
 from lucid_bot.config import config
 from lucid_bot.non_bot_funcs import yes_no_dialogue
 
 
-@bot.command(aliases=["raid", "panic"])
+"""@bot.command(aliases=["raid", "panic"])
 async def lockdown(ctx, *args):
     if ctx.author.guild_permissions.manage_channels or ctx.author.id in config["adminIDS"]:
 
@@ -86,6 +88,7 @@ async def lockdown(ctx, *args):
         await ctx.send(embed=embed)
 
         return None
+        """
 
 
 @bot.command()
@@ -279,3 +282,16 @@ async def ban(ctx, *args):
         await ctx.send(embed=embed)
 
         return None
+
+
+@bot.command()
+async def purge(ctx, amount=5):
+    if ctx.author.guild_permissions.administrator:
+        await ctx.channel.purge(limit=amount)
+    else:
+        embed = discord.Embed(title="Permissions Error -", description="You do not have the required " +
+                                                                       "permissions to execute this command.")
+        await ctx.send(embed=embed)
+
+
+
