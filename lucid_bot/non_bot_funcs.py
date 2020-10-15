@@ -137,6 +137,7 @@ async def announcement_send(ctx, announce_channel, announce_embed, channel_tag):
         embed.set_footer(text="bot developed by viargentum#3850")
         await message.clear_reactions()
         await message.edit(embed=embed)
+
     else:
         embed = discord.Embed(title="Bot Announcement -",
                               description="Announcement Cancelled.")

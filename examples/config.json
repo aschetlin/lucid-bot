@@ -6,6 +6,18 @@
     "db": 0
   },
   "prefix": ",",
+  "colors": [
+    "0xFEFEFE",
+    "0x7681de",
+    "0xf8b93c",
+    "0xf0fd89",
+    "0xa3cb05",
+    "0x279546",
+    "0xFF00FF",
+    "0xFF0000",
+    "0x00FF00",
+    "0x0000FF"
+  ],
   "adminIDS": [],
   "reactColors": {
     "red": "❤",
