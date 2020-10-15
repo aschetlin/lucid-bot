@@ -287,7 +287,11 @@ async def ban(ctx, *args):
 @bot.command()
 async def purge(ctx, amount=5):
     if ctx.author.guild_permissions.administrator:
-        await ctx.channel.purge(limit=amount)
+        await ctx.channel.purge(limit=amount + 1)
+
+        embed = discord.Embed(title="Message Purge -", description=f"Successfully purged {amount} messages.")
+        await ctx.send(embed=embed)
+
     else:
         embed = discord.Embed(title="Permissions Error -", description="You do not have the required " +
                                                                        "permissions to execute this command.")

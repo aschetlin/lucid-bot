@@ -204,7 +204,14 @@ async def announce(ctx, *args):
                                                                        "permissions to execute that command.")
         await ctx.send(embed=embed)
 
+
 @bot.command()
 async def say(ctx, *, message):
-    await ctx.message.delete()
-    await ctx.send(message)
+    if ctx.author.guild_permissions.manage_messages:
+        await ctx.message.delete()
+        await ctx.send(message)
+
+    else:
+        embed = discord.Embed(title="Permissions Error -", description="Sorry, you don't have the required "
+                                                                       "permissions to execute that command.")
+        await ctx.send(embed=embed)
