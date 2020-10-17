@@ -24,14 +24,15 @@ async def ping(ctx):
 
 @bot.command()
 async def help(ctx, *args):
+    prefix = config["prefix"]
     hexInt = int(random.choice(list(config["colors"])), 16)
     botName = config["botName"]
 
     if not args:
-        embed = discord.Embed(title=f"{botName} Bot Help -", color=hexInt, description="use help <category> to get "
-                                                                                       "more info")
-        embed.add_field(name="Utility -", value="`ping`, `help`, `info`", inline=False)
-        embed.add_field(name="General -", value="`report`, `announce`", inline=False)
+        embed = discord.Embed(title=f"{botName} Bot Help -", color=hexInt, description=f"use {prefix}help <category> "
+                                                                                       f"to get more info")
+        embed.add_field(name="Utility -", value="`ping`, `help`, `info`, `purchase`", inline=False)
+        embed.add_field(name="General -", value="`report`, `announce`, `say`", inline=False)
         embed.add_field(name="Moderation -", value="`kick`, `mute`, `ban`, `slowmode`, `lockdown`", inline=False)
 
         await ctx.send(embed=embed)
@@ -61,15 +62,18 @@ async def help(ctx, *args):
 
 @bot.command()
 async def info(ctx):
+    prefix = config["prefix"]
     botName = config["botName"]
     hexInt = int(random.choice(list(config["colors"])), 16)
 
     embed = discord.Embed(title=f"{botName} Bot Info", color=hexInt)
     embed.set_thumbnail(url=bot.user.avatar_url)
     embed.add_field(name="Built by:", value="viargentum#3850", inline=False)
-    embed.add_field(name="Issues or suggestions:", value="If you have any issues or suggestions, use the report "
-                                                         "command, or create an issue on "
-                                                         "https://www.github.com/viargentum/lucid-bot", inline=False)
+    embed.add_field(name="Issues or suggestions:", value=f"If you have any issues or suggestions, use {prefix}report or"
+                                                         f" create an issue on "
+                                                         f"https://www.github.com/viargentum/lucid-bot",
+                    inline=False)
+
     await ctx.send(embed=embed)
 
 

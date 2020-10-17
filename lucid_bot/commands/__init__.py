@@ -31,7 +31,7 @@ async def report(ctx):
                 issueTitle = await bot.wait_for("message", timeout=20)
 
             except asyncio.TimeoutError:
-                embed = discord.Embed(title="Timeout", description="Sorry, you took too long to respond.")
+                embed = discord.Embed(title="Timeout -", description="Sorry, you took too long to respond.")
                 await ctx.author.send(embed=embed)
 
                 return None
@@ -49,7 +49,7 @@ async def report(ctx):
                 issueDescription = await bot.wait_for("message", timeout=120)
 
             except asyncio.TimeoutError:
-                embed = discord.Embed(title="Timeout", description="Sorry, you took too long to respond.")
+                embed = discord.Embed(title="Timeout -", description="Sorry, you took too long to respond.")
                 await ctx.author.send(embed=embed)
 
                 return None
@@ -108,7 +108,7 @@ async def announce(ctx, *args):
                     reactColor = await bot.wait_for("reaction_add", timeout=20)
 
                 except asyncio.TimeoutError:
-                    embed = discord.Embed(title="Timeout", description="Sorry, you took too long to react.")
+                    embed = discord.Embed(title="Timeout -", description="Sorry, you took too long to react.")
 
                     await message.edit(embed=embed)
 
@@ -179,7 +179,7 @@ async def announce(ctx, *args):
                     image = await bot.wait_for("message", timeout=40)
 
                 except asyncio.TimeoutError:
-                    embed = discord.Embed(title="Timeout Error -", description="Sorry, you took too long to respond.")
+                    embed = discord.Embed(title="Timeout -", description="Sorry, you took too long to respond.")
                     await message.edit(embed=embed)
 
                     return None

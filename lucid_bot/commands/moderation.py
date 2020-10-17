@@ -77,7 +77,7 @@ async def kick(ctx, *args):
                     kickUser = await bot.wait_for("message", timeout=20)
 
                 except asyncio.TimeoutError:
-                    embed = discord.Embed(title="Timeout", description="Sorry, you took too long to respond.")
+                    embed = discord.Embed(title="Timeout -", description="Sorry, you took too long to respond.")
                     await message.edit(embed=embed)
 
                     return None
