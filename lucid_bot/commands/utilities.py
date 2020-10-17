@@ -71,3 +71,13 @@ async def info(ctx):
                                                          "command, or create an issue on "
                                                          "https://www.github.com/viargentum/lucid-bot", inline=False)
     await ctx.send(embed=embed)
+
+
+@bot.command(aliases=["purchase", "apply"])
+async def buy(ctx):
+    embed = discord.Embed(title="Lucid Applications -", description="All customers looking to purchase or be granted "
+                                                                    "a slot may apply at the following link "
+                                                                    "-\n\nhttps://forms.gle/PT4XdKvVA68hv1ao9",
+                          color=0xff0000)
+
+    await ctx.send(embed=embed)
