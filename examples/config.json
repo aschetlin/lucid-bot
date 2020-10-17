@@ -41,21 +41,22 @@
     "🤎": "0x512525",
     "🤍": "0xFFFFFF"
   },
-  "commandList": {
-    "utilities": [
-      "`help` - displays this page`",
+  "utilities": [
+      "`help` - displays this page",
       "`ping` - returns bot and api latency",
-      "`info` - returns bot info"
+      "`info` - returns bot info",
+      "`purchase` - information on purchasing lucid"
     ],
     "general": [
       "`report` - starts an issue ticket in your dms",
-      "`announce` - starts an announcement creation prompt"
+      "`announce` - starts an announcement creation prompt",
+      "`say` - says a message for you"
     ],
     "moderation": [
-      "`kick` - kicks a user. **usage** - kick @user *or* kick",
-      "`ban` - bans a user. **usage** - ban @user *or* ban",
-      "`mute` - mutes a user. **usage** - mute @user <time> *or* mute",
-      "`lockdown` - **usage** - lockdown *or* lockdown lift"
+      "`kick` - kicks a user\n\n **usage** - kick @user **or** kick",
+      "`ban` - bans a user\n\n **usage** - ban @user **or** ban",
+      "`mute` - mutes a user\n\n **usage** - mute @user <time> **or** mute",
+      "`slowmode` - activates slowmode in channel\n\n **usage** - slowmode <time> **or** slowmode",
+      "`lockdown` - locks down channel/server\n\n **usage** - lockdown **or** lockdown lift"
     ]
   }
-}
