@@ -1,6 +1,7 @@
 import asyncio
 import discord
 from lucid_bot.bot import bot
+from lucid_bot.config import config
 
 
 async def yes_no_dialogue(message_name: discord.Message, timeout: int, dm: bool, ctx) -> object:
@@ -120,6 +121,41 @@ async def announcement_description(ctx, message: discord.Message):
             break
 
     return announceMessage.content
+
+
+async def announce_color(message, ctx):
+    embed = discord.Embed(title="Bot Announcement -",
+                          description="What should the color of the embed be?\n\n(Wait for all reactions to "
+                                      "appear.)")
+
+    await message.edit(embed=embed)
+
+    for value in config["reactColors"]:
+        await message.add_reaction(config["reactColors"][value])
+
+    while True:
+
+        try:
+            reactColor = await bot.wait_for("reaction_add", timeout=20)
+
+        except asyncio.TimeoutError:
+            embed = discord.Embed(title="Timeout -", description="Sorry, you took too long to react.")
+
+            await message.edit(embed=embed)
+
+            return None
+
+        if reactColor[1].id == ctx.author.id:
+            reactColor = reactColor[0].emoji
+
+            if reactColor in config["reactColors"].values():
+                break
+
+            else:
+                return None
+
+    colorHex = config["reactColorsHex"][reactColor]
+    return str(colorHex)
 
 
 async def announcement_send(ctx, announce_channel, announce_embed, channel_tag):

@@ -3,7 +3,7 @@ import redis
 import asyncio
 from lucid_bot.config import config
 from lucid_bot.non_bot_funcs import yes_no_dialogue, announcement_channel, announce_title, announcement_description, \
-    announcement_send
+    announcement_send, announce_color
 from lucid_bot.bot import bot
 
 
@@ -91,39 +91,7 @@ async def announce(ctx, *args):
             announceChannel, channelTag = await announcement_channel(ctx, message)
             announceTitle = await announce_title(ctx, message)
             announceMessage = await announcement_description(ctx, message)
-
-            # EMBED COLOR
-            embed = discord.Embed(title="Bot Announcement -",
-                                  description="What should the color of the embed be?\n\n(Wait for all reactions to "
-                                              "appear.)")
-
-            await message.edit(embed=embed)
-
-            for value in config["reactColors"]:
-                await message.add_reaction(config["reactColors"][value])
-
-            while True:
-
-                try:
-                    reactColor = await bot.wait_for("reaction_add", timeout=20)
-
-                except asyncio.TimeoutError:
-                    embed = discord.Embed(title="Timeout -", description="Sorry, you took too long to react.")
-
-                    await message.edit(embed=embed)
-
-                    return None
-
-                if reactColor[1].id == ctx.author.id:
-                    reactColor = reactColor[0].emoji
-
-                    if reactColor in config["reactColors"].values():
-                        break
-
-                    else:
-                        return None
-
-            colorHex = config["reactColorsHex"][reactColor]
+            colorHex = await announce_color(message, ctx)
 
             # ANNOUNCEMENT AUTHOR YES/NO
 
@@ -171,6 +139,7 @@ async def announce(ctx, *args):
                 announceMessage = ""
 
             embed = discord.Embed(title="Bot Announcement -", description="Please link the image url.")
+            await message.clear_reactions()
             await message.edit(embed=embed)
 
             while True:
@@ -187,8 +156,11 @@ async def announce(ctx, *args):
                 if image.author.id == ctx.author.id:
                     break
 
+            colorHex = await announce_color(message, ctx)
+            hexInt = int(colorHex, 16)
+
             if embedDescription:
-                announceEmbed = discord.Embed(title=announceTitle, description=announceMessage)
+                announceEmbed = discord.Embed(title=announceTitle, description=announceMessage, color=hexInt)
 
             else:
                 announceEmbed = discord.Embed(title=announceTitle)
