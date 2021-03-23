@@ -1,14 +1,17 @@
 import discord
 import random
 from lucid_bot.config import config
-from lucid_bot.bot import bot
+from lucid_bot.bot import bot, slash, guild_ids
+from discord_slash.utils.manage_commands import create_option
 
 bot.remove_command("help")
 
 
-@bot.command(aliases=["ms", "delay"])
+@slash.slash(name="ping", description="Returns the current API and Message latencies in milliseconds.", guild_ids=guild_ids)
 async def ping(ctx):
-    pingMsg = await ctx.send("*pinging...*")
+    await ctx.respond()
+    
+    pingMsg = await ctx.send(content="*pinging...*")
     msgPing = round((pingMsg.created_at - ctx.message.created_at).total_seconds() * 1000)
 
     await pingMsg.delete()
@@ -22,13 +25,21 @@ async def ping(ctx):
     await ctx.send(embed=embed)
 
 
-@bot.command()
-async def help(ctx, *args):
+@slash.slash(name="help", description="Returns the help menu for Lucid Bot.", options=[create_option(name="category", description="Select which category to get more info on.", 
+                                                                                                                        option_type=3, required=False)], guild_ids=guild_ids)
+async def help(ctx, *category: str):
+    await ctx.respond()
+
+    if not category:
+        pass
+    else:
+        selectedCategory = category[0]
+
     prefix = config["prefix"]
     hexInt = int(random.choice(list(config["colors"])), 16)
     botName = config["botName"]
 
-    if not args:
+    if not category:
         embed = discord.Embed(title=f"{botName} Bot Help -", color=hexInt, description=f"use {prefix}help <category> "
                                                                                        f"to get more info")
         embed.add_field(name="Utility -", value="`ping`, `help`, `info`, `purchase`", inline=False)
@@ -37,26 +48,26 @@ async def help(ctx, *args):
 
         await ctx.send(embed=embed)
 
-    elif args[0].lower() == "utility":
+    elif selectedCategory == "utility":
         embed = discord.Embed(title="Utility Commands Help -", color=hexInt, description="\n\n".join(
-            config["commandList"]["utilities"]), inline=True)
+            config["utilities"]), inline=True)
 
         await ctx.send(embed=embed)
 
-    elif args[0].lower() == "general":
+    elif selectedCategory == "general":
         embed = discord.Embed(title="General Commands Help -", color=hexInt, description="\n\n".join(
-            config["commandList"]["general"]), inline=True)
+            config["general"]), inline=True)
 
         await ctx.send(embed=embed)
 
-    elif args[0].lower() == "moderation":
+    elif selectedCategory == "moderation":
         embed = discord.Embed(title="Moderation Commands Help -", color=hexInt, description="\n\n".join(
-            config["commandList"]["moderation"]), inline=True)
+            config["utilities"]), inline=True)
 
         await ctx.send(embed=embed)
 
     else:
-        embed = discord.Embed(title="Unknown Help Category -", description=f"{args[0]} is not a category.")
+        embed = discord.Embed(title="Unknown Help Category -", description=f"{selectedCategory} is not a category.")
         await ctx.send(embed=embed)
 
 

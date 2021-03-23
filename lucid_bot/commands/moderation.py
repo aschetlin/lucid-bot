@@ -211,3 +211,34 @@ async def purge(ctx, amount=5):
         embed = discord.Embed(title="Permissions Error -", description="You do not have the required " +
                                                                        "permissions to execute this command.")
         await ctx.send(embed=embed)
+
+
+@bot.command()
+async def lockdown(ctx, args):
+    if ctx.author.guild_permissions.administrator:
+
+        if not args:
+            embed = discord.Embed(title="Channel Lockdown -", description="Are you sure you want to lockdown this "
+                                                                          "channel?")
+            message = await ctx.send(embed=embed)
+
+           # if yes_no_dialogue(message, 20, False, ctx):
+
+
+
+
+
+
+        if args[0] == "lift":
+            embed = discord.Embed(title="Channel Lockdown -", desciption="Are you sure you want to lift the lockdown "
+                                                                         "on this channel?")
+
+            await ctx.send(embed=embed)
+
+    else:
+        embed = discord.Embed(title="Permissions Error -", description="You don't have the required permissions to "
+                                                                       "execute that command.")
+        await ctx.send(embed=embed)
+
+
+
