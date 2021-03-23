@@ -3,50 +3,7 @@
 This is a fully open-source, general purpose moderation and administration discord bot built in discord.py.
 
 The bot is built to make self-hosting very easy, but also allow hosting multiple instances of the bot at once with minimal effort.
-
-# Installation/Setup
-**If you haven't already, create a discord application and bot using the Discord Developer Portal. A guide on how to do so can be found [here](https://discordpy.readthedocs.io/en/latest/discord.html).**
-
-Ensure that your bot application has the **server members intent** enabled:![enter image description here](https://watch.femboi.porn/the_goods/7aba50b8.png)
-
-To setup Lucid, begin by cloning the directory:
-
-    $ git clone https://github.com/Viargentum/lucid-bot
-   Copy the config.json file found in the examples directory to the lucid-bot directory, and replace any empty keys with the corresponding value. **(if you dont plan on running multiple instances of the bot at once, you can ignore the "redis" key).**
-
-To start a single instance of the bot, run the *main.py*:
-
-**Windows:**
-
-    $ .\main.py
-   
-**Linux**:
-   Making main.py executable (only on first run):
-	
-    $ chmod 777 ./main.py
-   Running main.py:
-   
-    $ ./main.py
-
-## Running multiple instances in parallel
-
-To run multiple instances of the bot in parallel, you can begin by running a default instance, as seen above.
-Then, in a new environment or screen, you will need to edit the environment variables:
-
-**Windows:**
-
-    $ $env:LUCID_BOT__NAME = 'yourName'
     
-    $ $env:LUCID_BOT__PREFIX = 'yourPrefix'
-    
-    $ $env:LUCID_BOT__TOKEN = 'yourToken'
-    
-    $ $env:LUCID_BOT__REDIS__DB = '1'
-    
-    $ .\main.py
-    
-(for each new instance, you will need to re-define these keys, and add one to the REDIS__DB number)
-
 # Commands
 
 |Permission      |Command                        |Usage                       
@@ -61,3 +18,116 @@ Then, in a new environment or screen, you will need to edit the environment vari
 |manage_channels |`lockdown`					 | lockdown **or** lockdown lift
 |manage_channels |`slowmode`                     | slowmode *time(seconds)* **or** slowmode
 |n/a             |`report`                       | report
+
+# Installation
+**NOTE:** If you haven't already, create a Discord application and bot using the Discord Developer Portal. A guide on how to do so can be found [here](https://discordpy.readthedocs.io/en/latest/discord.html). Ensure that your bot application has the **server members intent** enabled (like [this](https://i.gyazo.com/2ed5db988dbd486030ae453497cc61ad.png)). If you are hosting multiple instances, you will need to clone the repository again into a different location for each instance.
+
+To install Lucid, begin by cloning the repository:
+
+    $ git clone https://github.com/Viargentum/lucid-bot
+
+Then, copy the config.json file found in the examples directory your working directory.
+
+To install the packages required for Lucid Bot to function, you can use pip:
+
+    $ pip install -r requirements.txt
+    
+If you're using Linux, you should also make *main.py* execulable:
+	
+    $ chmod 777 ./main.py
+
+# Database Setup
+#### Windows:
+First, download the latest release of Redis [here](https://github.com/microsoftarchive/redis/releases) (make sure you download the *.msi* file). Run and install.
+Then, run *redis-cli*:
+
+    $ redis-cli
+Disable protected mode:
+
+    > CONFIG SET protected-mode no
+Finally, exit from *redis-cli*:
+
+    > exit
+
+#### Linux (Ubuntu/Debian):
+First, install *redis-server*:
+
+    $ apt install redis-server
+Start Redis:
+
+    $ redis-server
+Then, run *redis-cli*:
+
+    $ redis-cli
+Disable protected mode:
+
+    > CONFIG SET protected-mode no
+Finally, exit from *redis-cli*:
+
+    > exit
+
+# Hosting a single instance
+### Using config.json:
+First, replace any empty fields in *config.json* with their respective values (this is also the time to change the prefix!)
+Then, run the *main.py*:
+#### Windows:
+
+    $ .\main.py
+#### Linux:
+    
+    $ ./main.py
+
+### Using environment variables:
+#### Windows:
+First, edit your environment variables:
+
+    $ $env:LUCID_BOT__NAME = 'yourName'
+    $ $env:LUCID_BOT__PREFIX = 'yourPrefix'
+    $ $env:LUCID_BOT__TOKEN = 'yourToken'
+    $ $env:LUCID_BOT__REDIS__DB = '1'
+Then, run the *main.py*:
+    
+    $ .\main.py
+   
+#### Linux:
+To set the environment variables for the current user, first open your *.bashrc* file:
+
+    $ nano ~/.bashrc
+    
+Then, append the following lines:
+    
+    export LUCID_BOT__NAME='yourName'
+    export LUCID_BOT__PREFIX='yourPrefix'
+    export LUCID_BOT__TOKEN='yourToken'
+    export LUCID_BOT__REDIS__DB='1'
+    
+Now you can save and exit. Lastly, run the *main.py*:
+
+    $ ./main.py
+    
+# Hosting multiple instances
+### Using config.json:
+First, make sure you have created multiple separate bot applications on the Discord Developer Portal. Then, replace any empty fields in each *config.json* with their respective values (this is also the time to change the prefixes!)
+Then, run the *main.py*:
+#### Windows:
+    
+    $ .\main.py
+#### Linux:
+    
+    $ ./main.py
+
+### Using environment variables:
+**NOTE:** You cannot host multiple instances of Lucid on Windows using environment variables as you can't have duplicate keys.
+#### Linux:
+First, set the environment variables:
+    
+    $ export LUCID_BOT__NAME='yourName'
+    $ export LUCID_BOT__PREFIX='yourPrefix'
+    $ export LUCID_BOT__TOKEN='yourToken'
+    $ export LUCID_BOT__REDIS__DB='1'
+    
+Now you can run the *main.py*:
+
+    $ ./main.py
+
+**This is not persistant!** Once you terminate the terminal session the environment variables will be gone.
