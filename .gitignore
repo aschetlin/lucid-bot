@@ -1,4 +1,5 @@
-/config.json
+/lucid_bot/config.json
 /venv
 __pycache__
 /.idea
+/.vscode

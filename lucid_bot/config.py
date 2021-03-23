@@ -3,7 +3,7 @@ import json
 
 
 configkeys = [k for k in os.environ.keys() if k.startswith("LUCID_BOT")]
-config = json.loads(open("config.json", "r", encoding="utf8").read())
+config = json.loads(open("./lucid_bot/config.json", "r", encoding="utf8").read())
 
 if "LUCID_BOT__TOKEN" in configkeys:
     config["token"] = os.environ["LUCID_BOT__TOKEN"]
