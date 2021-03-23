@@ -1,0 +1,63 @@
+{
+  "botName": "",
+  "token": "",
+  "redis": {
+    "hostname": "192.168.2.10",
+    "port": 6380,
+    "db": 0
+  },
+  "prefix": ",",
+  "colors": [
+    "0xFEFEFE",
+    "0x7681de",
+    "0xf8b93c",
+    "0xf0fd89",
+    "0xa3cb05",
+    "0x279546",
+    "0xFF00FF",
+    "0xFF0000",
+    "0x00FF00",
+    "0x0000FF"
+  ],
+  "adminIDS": [],
+  "reactColors": {
+    "red": "❤",
+    "orange": "🧡",
+    "yellow": "💛",
+    "green": "💚",
+    "blue": "💙",
+    "purple": "💜",
+    "black": "🖤",
+    "brown": "🤎",
+    "white": "🤍"
+  },
+  "reactColorsHex": {
+    "❤": "0xff0000",
+    "🧡": "0xFFA500",
+    "💛": "0xFFFF00",
+    "💚": "0x008000",
+    "💙": "0x0000FF",
+    "💜": "0x800080",
+    "🖤": "0x000000",
+    "🤎": "0x512525",
+    "🤍": "0xFFFFFF"
+  },
+  "utilities": [
+      "`help` - displays this page",
+      "`ping` - returns bot and api latency",
+      "`info` - returns bot info",
+      "`purchase` - information on purchasing lucid"
+    ],
+    "general": [
+      "`report` - starts an issue ticket in your dms",
+      "`announce` - starts an announcement creation prompt",
+      "`say` - says a message for you"
+    ],
+    "moderation": [
+      "`kick` - kicks a user\n\n **usage** - kick @user **or** kick",
+      "`ban` - bans a user\n\n **usage** - ban @user **or** ban",
+      "`mute` - mutes a user\n\n **usage** - mute @user <time> **or** mute",
+      "`slowmode` - activates slowmode in channel\n\n **usage** - slowmode <time> **or** slowmode",
+      "`lockdown` - locks down channel/server\n\n **usage** - lockdown **or** lockdown lift"
+    ]
+  }
