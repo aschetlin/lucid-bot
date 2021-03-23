@@ -7,7 +7,7 @@ from lucid_bot.non_bot_funcs import yes_no_dialogue, announcement_channel, annou
 from lucid_bot.bot import bot
 
 
-r = redis.Redis(host=config["redis"]["hostname"], db=config["redis"]["db"])
+r = redis.Redis(host=config["redis"]["hostname"], port=config["redis"]["port"], db=config["redis"]["db"])
 
 
 @bot.command(aliases=["issue"])
