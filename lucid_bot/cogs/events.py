@@ -15,6 +15,10 @@ class Events(commands.Cog):
         if isinstance(error, commands.CommandNotFound):
             embed = discord.Embed(title="Command Error -", description="Command not found.")
             await ctx.send(embed=embed)
+        elif isinstance(error, commands.CheckFailure):
+            embed = discord.Embed(title="Permissions Error -", description="You don't have the required permissions to "
+                                                                        "execute that command.")
+            await ctx.send(embed=embed)
 
         else:
             raise error
