@@ -9,7 +9,6 @@ class General(commands.Cog):
         self.bot = bot
         self.config = config
         self.nbf = nbf
-        
         self.r = redis.Redis(host=self.config["redis"]["hostname"], port=self.config["redis"]["port"], db=self.config["redis"]["db"])
 
     @commands.command(aliases=["issue"])
