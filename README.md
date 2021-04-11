@@ -32,7 +32,7 @@ To install the packages required for Lucid Bot to function, you can use pip:
 
     $ pip install -r requirements.txt
     
-If you're using Linux, you should also make *main.py* execulable:
+If you're using Linux or MacOS, you should also make *main.py* execulable:
 	
     $ chmod 777 ./main.py
 
