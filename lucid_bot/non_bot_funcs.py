@@ -1,12 +1,16 @@
 import asyncio
+
 import discord
 
-class NonBotFuncs():
+
+class NonBotFuncs:
     def __init__(self, bot, config):
         self.bot = bot
         self.config = config
 
-    async def yes_no_dialogue(self, message_name: discord.Message, timeout: int, dm: bool, ctx) -> object:
+    async def yes_no_dialogue(
+        self, message_name: discord.Message, timeout: int, dm: bool, ctx
+    ) -> object:
         await message_name.add_reaction("✅")
         await message_name.add_reaction("❌")
 
@@ -16,7 +20,9 @@ class NonBotFuncs():
                 reaction = await self.bot.wait_for("reaction_add", timeout=timeout)
 
             except asyncio.TimeoutError:
-                embed = discord.Embed(title="Timeout -", description="Sorry, you took too long to react.")
+                embed = discord.Embed(
+                    title="Timeout -", description="Sorry, you took too long to react."
+                )
 
                 if dm:
                     await ctx.author.send(embed=embed)
@@ -39,7 +45,6 @@ class NonBotFuncs():
         else:
             return False
 
-
     async def announcement_channel(self, ctx, message: discord.Message):
         # EMBED CHANNEL
         while True:
@@ -48,7 +53,9 @@ class NonBotFuncs():
                 announceChannel = await self.bot.wait_for("message", timeout=20)
 
             except asyncio.TimeoutError:
-                embed = discord.Embed(title="Timeout", description="Sorry, you took too long to respond.")
+                embed = discord.Embed(
+                    title="Timeout", description="Sorry, you took too long to respond."
+                )
                 await message.edit(embed=embed)
 
                 return None
@@ -61,7 +68,10 @@ class NonBotFuncs():
                     announceChannel = announceChannel.channel_mentions[0]
 
                 except IndexError:
-                    embed = discord.Embed(title="Command Error -", description="Did you mention a valid channel?")
+                    embed = discord.Embed(
+                        title="Command Error -",
+                        description="Did you mention a valid channel?",
+                    )
                     await message.edit(embed=embed)
 
                     return None
@@ -70,10 +80,12 @@ class NonBotFuncs():
 
         return announceChannel, channelTag
 
-
     async def announce_title(self, ctx, message: discord.Message):
         # EMBED TITLE
-        embed = discord.Embed(title="Bot Announcement -", description="What should the title of the announcement be?")
+        embed = discord.Embed(
+            title="Bot Announcement -",
+            description="What should the title of the announcement be?",
+        )
 
         await message.edit(embed=embed)
 
@@ -82,9 +94,10 @@ class NonBotFuncs():
             try:
                 announceTitle = await self.bot.wait_for("message", timeout=60)
 
-
             except asyncio.TimeoutError:
-                embed = discord.Embed(title="Timeout", description="Sorry, you took too long to respond.")
+                embed = discord.Embed(
+                    title="Timeout", description="Sorry, you took too long to respond."
+                )
 
                 await message.edit(embed=embed)
 
@@ -97,10 +110,11 @@ class NonBotFuncs():
 
         return announceTitle.content
 
-
     async def announcement_description(self, ctx, message: discord.Message):
         # EMBED DESCRIPTION
-        embed = discord.Embed(title="Bot Announcement -", description="What should the announcement say?")
+        embed = discord.Embed(
+            title="Bot Announcement -", description="What should the announcement say?"
+        )
 
         await message.edit(embed=embed)
 
@@ -109,9 +123,10 @@ class NonBotFuncs():
             try:
                 announceMessage = await self.bot.wait_for("message", timeout=180)
 
-
             except asyncio.TimeoutError:
-                embed = discord.Embed(title="Timeout", description="Sorry, you took too long to respond.")
+                embed = discord.Embed(
+                    title="Timeout", description="Sorry, you took too long to respond."
+                )
 
                 await message.edit(embed=embed)
 
@@ -124,11 +139,12 @@ class NonBotFuncs():
 
         return announceMessage.content
 
-
     async def announce_color(self, message, ctx):
-        embed = discord.Embed(title="Bot Announcement -",
-                            description="What should the color of the embed be?\n\n(Wait for all reactions to "
-                                        "appear.)")
+        embed = discord.Embed(
+            title="Bot Announcement -",
+            description="What should the color of the embed be?\n\n(Wait for all reactions to "
+            "appear.)",
+        )
 
         await message.edit(embed=embed)
 
@@ -141,7 +157,9 @@ class NonBotFuncs():
                 reactColor = await self.bot.wait_for("reaction_add", timeout=20)
 
             except asyncio.TimeoutError:
-                embed = discord.Embed(title="Timeout -", description="Sorry, you took too long to react.")
+                embed = discord.Embed(
+                    title="Timeout -", description="Sorry, you took too long to react."
+                )
 
                 await message.edit(embed=embed)
 
@@ -159,26 +177,32 @@ class NonBotFuncs():
         colorHex = self.config["reactColorsHex"][reactColor]
         return str(colorHex)
 
-
-    async def announcement_send(self, ctx, announce_channel, announce_embed, channel_tag):
+    async def announcement_send(
+        self, ctx, announce_channel, announce_embed, channel_tag
+    ):
         # CONFIRM/DENY SEND
-        embed = discord.Embed(title="Bot Announcement -", description="Do you want to send the announcement " +
-                                                                    "as shown above?")
+        embed = discord.Embed(
+            title="Bot Announcement -",
+            description="Do you want to send the announcement " + "as shown above?",
+        )
         message = await ctx.send(embed=embed)
 
         reaction_yes = await self.yes_no_dialogue(message, 10, False, ctx)
 
         if reaction_yes:
             await announce_channel.send(embed=announce_embed)
-            embed = discord.Embed(title="Bot Announcement -",
-                                description="Announcement successfully sent to " + channel_tag + ".")
+            embed = discord.Embed(
+                title="Bot Announcement -",
+                description="Announcement successfully sent to " + channel_tag + ".",
+            )
             embed.set_footer(text="bot developed by viargentum#3850")
             await message.clear_reactions()
             await message.edit(embed=embed)
 
         else:
-            embed = discord.Embed(title="Bot Announcement -",
-                                description="Announcement Cancelled.")
+            embed = discord.Embed(
+                title="Bot Announcement -", description="Announcement Cancelled."
+            )
             embed.set_footer(text="bot developed by viargentum#3850")
             await message.clear_reactions()
             await message.edit(embed=embed)

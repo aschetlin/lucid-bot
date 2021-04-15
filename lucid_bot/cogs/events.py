@@ -1,11 +1,12 @@
 import discord
 from discord.ext import commands
 
+
 class Events(commands.Cog):
     def __init__(self, bot, config):
         self.bot = bot
         self.config = config
-  
+
     @commands.Cog.listener()
     async def on_ready(self):
         print(self.config["botName"] + " " + "bot online\n---")
@@ -13,11 +14,16 @@ class Events(commands.Cog):
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
         if isinstance(error, commands.CommandNotFound):
-            embed = discord.Embed(title="Command Error -", description="Command not found.")
+            embed = discord.Embed(
+                title="Command Error -", description="Command not found."
+            )
             await ctx.send(embed=embed)
         elif isinstance(error, commands.CheckFailure):
-            embed = discord.Embed(title="Permissions Error -", description="You don't have the required permissions to "
-                                                                        "execute that command.")
+            embed = discord.Embed(
+                title="Permissions Error -",
+                description="You don't have the required permissions to "
+                "execute that command.",
+            )
             await ctx.send(embed=embed)
 
         else:

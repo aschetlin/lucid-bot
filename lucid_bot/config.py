@@ -1,6 +1,5 @@
-import os
 import json
-
+import os
 
 configkeys = [k for k in os.environ.keys() if k.startswith("LUCID_BOT")]
 config = json.loads(open("./config.json", "r", encoding="utf8").read())

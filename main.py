@@ -5,14 +5,15 @@ from discord.ext import commands
 
 import lucid_bot
 from lucid_bot import non_bot_funcs
-from lucid_bot.config import config
 from lucid_bot.cogs import events, general, moderation, utilities
-
+from lucid_bot.config import config
 
 # Bot init
 intents = discord.Intents.default()
 intents.members = True
-bot = commands.Bot(command_prefix=config["prefix"], case_insensitive=False, intents=intents)
+bot = commands.Bot(
+    command_prefix=config["prefix"], case_insensitive=False, intents=intents
+)
 bot.remove_command("help")
 
 # non_bot_funcs init
