@@ -19,7 +19,8 @@ class General(commands.Cog):
     @commands.command(aliases=["issue"])
     async def report(self, ctx):
         embed = discord.Embed(
-            title="Issue Report -", description="Issue report started in your dms!"
+            title="Issue Report -",
+            description="Issue report started in your dms!",
         )
         await ctx.send(embed=embed)
 
@@ -42,7 +43,9 @@ class General(commands.Cog):
             while True:
 
                 try:
-                    issueTitle = await self.bot.wait_for("message", timeout=20)
+                    issueTitle = await self.bot.wait_for(
+                        "message", timeout=20
+                    )
 
                 except asyncio.TimeoutError:
                     embed = discord.Embed(
@@ -66,7 +69,9 @@ class General(commands.Cog):
                 await ctx.author.send(embed=embed)
 
                 try:
-                    issueDescription = await self.bot.wait_for("message", timeout=120)
+                    issueDescription = await self.bot.wait_for(
+                        "message", timeout=120
+                    )
 
                 except asyncio.TimeoutError:
                     embed = discord.Embed(
@@ -94,7 +99,9 @@ class General(commands.Cog):
                         title=str(issueTitle.content),
                         description=str(issueDescription.content),
                     )
-                    embed.set_footer(text=str(ctx.author) + " - " + str(ctx.author.id))
+                    embed.set_footer(
+                        text=str(ctx.author) + " - " + str(ctx.author.id)
+                    )
 
                     await user.send(embed=embed)
 
@@ -104,7 +111,8 @@ class General(commands.Cog):
 
         else:
             embed = discord.Embed(
-                title="Issue Report -", description="Ticket creation cancelled."
+                title="Issue Report -",
+                description="Ticket creation cancelled.",
             )
             await ctx.author.send(embed=embed)
 
@@ -123,11 +131,14 @@ class General(commands.Cog):
 
                 message = await ctx.send(embed=embed)
 
-                announceChannel, channelTag = await self.nbf.announcement_channel(
+                (
+                    announceChannel,
+                    channelTag,
+                ) = await self.nbf.announcement_channel(ctx, message)
+                announceTitle = await self.nbf.announce_title(ctx, message)
+                announceMessage = await self.nbf.announcement_description(
                     ctx, message
                 )
-                announceTitle = await self.nbf.announce_title(ctx, message)
-                announceMessage = await self.nbf.announcement_description(ctx, message)
                 colorHex = await self.nbf.announce_color(message, ctx)
 
                 # ANNOUNCEMENT AUTHOR YES/NO
@@ -142,12 +153,16 @@ class General(commands.Cog):
 
                 await message.edit(embed=embed)
 
-                reaction_yes = await self.nbf.yes_no_dialogue(message, 10, False, ctx)
+                reaction_yes = await self.nbf.yes_no_dialogue(
+                    message, 10, False, ctx
+                )
 
                 # BUILDING ANNOUNCEMENT EMBED
                 hexInt = int(colorHex, 16)
                 announceEmbed = discord.Embed(
-                    title=announceTitle, description=announceMessage, color=hexInt
+                    title=announceTitle,
+                    description=announceMessage,
+                    color=hexInt,
                 )
 
                 if reaction_yes:
@@ -171,9 +186,10 @@ class General(commands.Cog):
 
                 message = await ctx.send(embed=embed)
 
-                announceChannel, channelTag = await self.nbf.announcement_channel(
-                    ctx, message
-                )
+                (
+                    announceChannel,
+                    channelTag,
+                ) = await self.nbf.announcement_channel(ctx, message)
                 announceTitle = await self.nbf.announce_title(ctx, message)
 
                 embed = discord.Embed(
@@ -194,7 +210,8 @@ class General(commands.Cog):
                     announceMessage = ""
 
                 embed = discord.Embed(
-                    title="Bot Announcement -", description="Please link the image url."
+                    title="Bot Announcement -",
+                    description="Please link the image url.",
                 )
                 await message.clear_reactions()
                 await message.edit(embed=embed)
@@ -221,7 +238,9 @@ class General(commands.Cog):
 
                 if embedDescription:
                     announceEmbed = discord.Embed(
-                        title=announceTitle, description=announceMessage, color=hexInt
+                        title=announceTitle,
+                        description=announceMessage,
+                        color=hexInt,
                     )
 
                 else:

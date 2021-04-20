@@ -3,7 +3,7 @@
   "token": "",
   "redis": {
     "hostname": "localhost",
-    "host": 6379,
+    "port": 6379,
     "db": 0
   },
   "prefix": ",",

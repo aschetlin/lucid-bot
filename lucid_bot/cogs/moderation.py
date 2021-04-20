@@ -23,7 +23,9 @@ class Moderation(commands.Cog):
             while True:
 
                 try:
-                    slowmodeTime = await self.bot.wait_for("message", timeout=20)
+                    slowmodeTime = await self.bot.wait_for(
+                        "message", timeout=20
+                    )
 
                 except asyncio.TimeoutError:
                     embed = discord.Embed(
@@ -36,7 +38,9 @@ class Moderation(commands.Cog):
 
                 if slowmodeTime.author.id == ctx.author.id:
                     await slowmodeTime.delete()
-                    await ctx.channel.edit(slowmode_delay=slowmodeTime.content)
+                    await ctx.channel.edit(
+                        slowmode_delay=slowmodeTime.content
+                    )
                     print(ctx.channel.slowmode_delay)
 
                     embed = discord.Embed(
@@ -71,7 +75,8 @@ class Moderation(commands.Cog):
 
             except IndexError:
                 embed = discord.Embed(
-                    title="Channel Slowmode -", description="Invalid slowmode time."
+                    title="Channel Slowmode -",
+                    description="Invalid slowmode time.",
                 )
                 await ctx.send(embed=embed)
 
@@ -80,7 +85,8 @@ class Moderation(commands.Cog):
     async def kick(self, ctx, *args):
         if not args:
             embed = discord.Embed(
-                title="Punishment -", description="Which user should be kicked?"
+                title="Punishment -",
+                description="Which user should be kicked?",
             )
             message = await ctx.send(embed=embed)
 
@@ -139,7 +145,8 @@ class Moderation(commands.Cog):
             except IndexError:
                 embed = discord.Embed(
                     title="Punishment Failed -",
-                    description="IndexError: Did you mention a valid " "user?",
+                    description="IndexError: Did you mention a valid "
+                    "user?",
                 )
                 await ctx.send(embed=embed)
 
@@ -156,7 +163,8 @@ class Moderation(commands.Cog):
     async def ban(self, ctx, *args):
         if not args:
             embed = discord.Embed(
-                title="Punishment -", description="Which user should be banned?"
+                title="Punishment -",
+                description="Which user should be banned?",
             )
             message = await ctx.send(embed=embed)
 
@@ -215,7 +223,8 @@ class Moderation(commands.Cog):
             except IndexError:
                 embed = discord.Embed(
                     title="Punishment Failed -",
-                    description="IndexError: Did you mention a valid " "user?",
+                    description="IndexError: Did you mention a valid "
+                    "user?",
                 )
                 await ctx.send(embed=embed)
 
