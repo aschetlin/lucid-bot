@@ -238,6 +238,65 @@ class Moderation(commands.Cog):
 
     @commands.command()
     @commands.has_permissions(administrator=True)
+    async def mute(self, ctx, *args):
+
+        if not args:
+            embed = discord.Embed(
+                title="Punishment -",
+                description="Which user should be muted?",
+            )
+
+            message = await ctx.send(embed=embed)
+
+            while True:
+
+                try:
+                    muteUser = await self.bot.wait_for("message", timeout=15)
+
+                except asyncio.TimeoutError:
+                    embed = discord.Embed(
+                        title="Timeout -",
+                        description="Sorry, you took too long to respond.",
+                    )
+                    await message.edit(embed=embed)
+
+                    return None
+
+            if muteUser.author.id == ctx.author.id:
+                await muteUser.delete()
+
+                try:
+                    await print(muteUser.mentions[0])
+
+                    embed = discord.Embed(
+                        title="Successfully muted user -",
+                        description=muteUser.mentions[0].mention,
+                    )
+                    await message.edit(embed=embed)
+
+                    return None
+
+                except IndexError:
+                    embed = discord.Embed(
+                        title="Punishment Failed -",
+                        description="Did you mention a user?",
+                    )
+                    await message.edit(embed=embed)
+
+                    return None
+
+                except discord.errors.Forbidden:
+                    embed = discord.Embed(
+                        title="Permissions Error -",
+                        description="Are you trying to ban another "
+                        "moderator/administrator?",
+                    )
+                    await message.edit(embed=embed)
+
+                    return None
+
+    @commands.command()
+    @commands.has_permissions(administrator=True)
     async def purge(self, ctx, amount=5):
         await ctx.channel.purge(limit=amount + 1)
 
