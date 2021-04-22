@@ -1,6 +1,6 @@
 FROM python:3.9.4-slim-buster
 
-# RUN apt-get update
+RUN apt-get update
 
 COPY . /lucid-bot
 
