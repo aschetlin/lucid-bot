@@ -2,6 +2,7 @@ import asyncio
 
 import discord
 from discord.ext import commands
+from discord.utils import get
 
 
 class Moderation(commands.Cog):
@@ -237,7 +238,7 @@ class Moderation(commands.Cog):
                 await ctx.send(embed=embed)
 
     @commands.command()
-    @commands.has_permissions(administrator=True)
+    @commands.has_permissions(kick_members=True)
     async def mute(self, ctx, *args):
 
         if not args:
@@ -251,7 +252,7 @@ class Moderation(commands.Cog):
             while True:
 
                 try:
-                    muteUser = await self.bot.wait_for("message", timeout=15)
+                    muteMsg = await self.bot.wait_for("message", timeout=15)
 
                 except asyncio.TimeoutError:
                     embed = discord.Embed(
@@ -262,38 +263,51 @@ class Moderation(commands.Cog):
 
                     return None
 
-            if muteUser.author.id == ctx.author.id:
-                await muteUser.delete()
+                if muteMsg.author.id == ctx.author.id:
+                    await muteMsg.delete()
 
-                try:
-                    await print(muteUser.mentions[0])
+                    permissions = discord.Permissions(send_messages=False)
 
-                    embed = discord.Embed(
-                        title="Successfully muted user -",
-                        description=muteUser.mentions[0].mention,
-                    )
-                    await message.edit(embed=embed)
+                    try:
+                        role = get(ctx.guild.roles, name="Muted")
 
-                    return None
+                        if not role:
+                            role = await ctx.guild.create_role(name="Muted")
 
-                except IndexError:
-                    embed = discord.Embed(
-                        title="Punishment Failed -",
-                        description="Did you mention a user?",
-                    )
-                    await message.edit(embed=embed)
+                        for channel in ctx.guild.channels:
+                            await channel.set_permissions(
+                                role,
+                                send_messages=False,
+                                speak=False,
+                            )
+                        await muteMsg.mentions[0].add_roles(role)
 
-                    return None
+                        embed = discord.Embed(
+                            title="Successfully muted user -",
+                            description=muteMsg.mentions[0].mention,
+                        )
+                        await message.edit(embed=embed)
 
-                except discord.errors.Forbidden:
-                    embed = discord.Embed(
-                        title="Permissions Error -",
-                        description="Are you trying to ban another "
-                        "moderator/administrator?",
-                    )
-                    await message.edit(embed=embed)
+                        return None
 
-                    return None
+                    except IndexError:
+                        embed = discord.Embed(
+                            title="Punishment Failed -",
+                            description="Did you mention a user?",
+                        )
+                        await message.edit(embed=embed)
+
+                        return None
+
+                    except discord.errors.Forbidden:
+                        embed = discord.Embed(
+                            title="Permissions Error -",
+                            description="Are you trying to ban another "
+                            "moderator/administrator?",
+                        )
+                        await message.edit(embed=embed)
+
+                        return None
 
     @commands.command()
     @commands.has_permissions(administrator=True)
