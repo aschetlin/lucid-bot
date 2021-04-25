@@ -109,13 +109,11 @@ class Moderation(commands.Cog):
                 if kickUser.author.id == ctx.author.id:
                     await kickUser.delete()
                     try:
-                        await kickUser.mentions[0].ban()
+                        await kickUser.mentions[0].kick()
 
-                        embed = discord.Embed(
-                            title="Successfully kicked user.",
-                        )
-                        embed.add_thumnail(
-                            url="https://i.pinimg.com/originals/70/a5/52/70a552e8e955049c8587b2d7606cd6a6.gif"
+                        embed = discord.Embed().set_author(
+                            name="Sucessfully kicked user.",
+                            icon_url="https://i.imgur.com/4yUeOVj.gif",
                         )
                         await message.edit(embed=embed)
 
@@ -142,8 +140,16 @@ class Moderation(commands.Cog):
 
         else:
             try:
-                targetUser = ctx.message.mentions[0]
-                await targetUser.kick()
+                await ctx.message.mentions[0].kick()
+                await ctx.message.delete()
+
+                embed = discord.Embed().set_author(
+                    name="Sucessfully kicked user.",
+                    icon_url="https://i.imgur.com/4yUeOVj.gif",
+                )
+                await ctx.send(embed=embed)
+
+                return None
 
             except IndexError:
                 embed = discord.Embed(
@@ -190,9 +196,9 @@ class Moderation(commands.Cog):
                     try:
                         await banUser.mentions[0].ban()
 
-                        embed = discord.Embed(
-                            title="Successfully banned user -",
-                            description=banUser.mentions[0].mention,
+                        embed = discord.Embed().set_author(
+                            name="Sucessfully banned user.",
+                            icon_url="https://i.imgur.com/4yUeOVj.gif",
                         )
                         await message.edit(embed=embed)
 
@@ -220,8 +226,16 @@ class Moderation(commands.Cog):
         else:
 
             try:
-                targetUser = ctx.message.mentions[0]
-                await targetUser.ban()
+                await ctx.message.mentions[0].ban()
+                await ctx.message.delete()
+
+                embed = discord.Embed().set_author(
+                    name="Sucessfully banned user.",
+                    icon_url="https://i.imgur.com/4yUeOVj.gif",
+                )
+                await ctx.send(embed=embed)
+
+                return None
 
             except IndexError:
                 embed = discord.Embed(
@@ -283,8 +297,13 @@ class Moderation(commands.Cog):
                                 )
 
                         await muteMsg.mentions[0].add_roles(role)
-                        await message.delete()
-                        await ctx.message.add_reaction("✅")
+                        await ctx.message.delete()
+
+                        embed = discord.Embed().set_author(
+                            name="Sucessfully muted user.",
+                            icon_url="https://i.imgur.com/4yUeOVj.gif",
+                        )
+                        await message.edit(embed=embed)
 
                         return None
 
@@ -324,10 +343,9 @@ class Moderation(commands.Cog):
 
                 await ctx.message.mentions[0].add_roles(role)
 
-                embed = discord.Embed()
-                embed.set_author(
-                    name="Succesfully muted user.",
-                    icon_url="https://cdn.dribbble.com/users/159981/screenshots/3269471/checkmark2.gif",
+                embed = discord.Embed().set_author(
+                    name="Sucessfully muted user.",
+                    icon_url="https://i.imgur.com/4yUeOVj.gif",
                 )
                 await ctx.send(embed=embed)
 
@@ -386,8 +404,13 @@ class Moderation(commands.Cog):
                         role = get(unmuteMsg.mentions[0].roles, name="Muted")
 
                         await unmuteMsg.mentions[0].remove_roles(role)
-                        await message.delete()
-                        await ctx.message.add_reaction("✅")
+                        await ctx.message.delete()
+
+                        embed = discord.Embed().set_author(
+                            name="Sucessfully unmuted user.",
+                            icon_url="https://i.imgur.com/4yUeOVj.gif",
+                        )
+                        await message.edit(embed=embed)
 
                         return None
 
@@ -417,8 +440,9 @@ class Moderation(commands.Cog):
 
                 await ctx.message.mentions[0].remove_roles(role)
 
-                embed = discord.Embed(
-                    title="Successfully unmuted user.",
+                embed = discord.Embed().set_author(
+                    name="Sucessfully unmuted user.",
+                    icon_url="https://i.imgur.com/4yUeOVj.gif",
                 )
                 await ctx.send(embed=embed)
 
@@ -451,5 +475,6 @@ class Moderation(commands.Cog):
         embed = discord.Embed(
             title="Message Purge -",
             description=f"Successfully purged {amount} messages.",
+            icon_url="https://i.imgur.com/4yUeOVj.gif",
         )
         await ctx.send(embed=embed)
