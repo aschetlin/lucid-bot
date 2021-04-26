@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands
+from lucid_bot.non_bot_funcs import NonBotFuncs
 
 
 class Events(commands.Cog):
@@ -13,11 +14,13 @@ class Events(commands.Cog):
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
+
         if isinstance(error, commands.CommandNotFound):
             embed = discord.Embed(
                 title="Command Error -", description="Command not found."
             )
             await ctx.send(embed=embed)
+
         elif isinstance(error, commands.CheckFailure):
             embed = discord.Embed(
                 title="Permissions Error -",

@@ -1,6 +1,7 @@
 import asyncio
 
 import discord
+from lucid_bot.embed import Embed
 from discord.ext import commands
 from discord.utils import get
 
@@ -15,7 +16,8 @@ class Moderation(commands.Cog):
     @commands.has_permissions(manage_channels=True)
     async def slowmode(self, ctx, *args):
         if not args:
-            embed = discord.Embed(
+            embed = Embed(
+                ctx,
                 title="Channel Slowmode -",
                 description="How long should the message cool-down be?",
             )
@@ -29,7 +31,9 @@ class Moderation(commands.Cog):
                     )
 
                 except asyncio.TimeoutError:
-                    embed = discord.Embed(
+                    embed = Embed(
+                        ctx,
+                        success=False,
                         title="Timeout Error -",
                         description="Sorry, you took too long to respond.",
                     )
@@ -44,7 +48,9 @@ class Moderation(commands.Cog):
                     )
                     print(ctx.channel.slowmode_delay)
 
-                    embed = discord.Embed(
+                    embed = Embed(
+                        ctx,
+                        success=True,
                         title="Channel Slowmode -",
                         description=f"{slowmodeTime.content}s slowmode activated!",
                     )
@@ -56,7 +62,9 @@ class Moderation(commands.Cog):
         if str(args[0]) == "lift":
             await ctx.channel.edit(slowmode_delay=0)
 
-            embed = discord.Embed(
+            embed = Embed(
+                ctx,
+                success=True,
                 title="Channel Slowmode -", description="Slowmode lifted!"
             )
             await ctx.send(embed=embed)
@@ -68,14 +76,18 @@ class Moderation(commands.Cog):
 
                 await ctx.channel.edit(slowmode_delay=slowmodeTime)
 
-                embed = discord.Embed(
+                embed = Embed(
+                    ctx,
+                    success=True,
                     title="Channel Slowmode -",
                     description=f"{slowmodeTime}s slowmode activated!",
                 )
                 await ctx.send(embed=embed)
 
             except IndexError:
-                embed = discord.Embed(
+                embed = Embed(
+                    ctx,
+                    success=False,
                     title="Channel Slowmode -",
                     description="Invalid slowmode time.",
                 )
@@ -86,7 +98,8 @@ class Moderation(commands.Cog):
     async def kick(self, ctx, *args):
 
         if not args:
-            embed = discord.Embed(
+            embed = Embed(
+                ctx,
                 title="Punishment -",
                 description="Which user should be kicked?",
             )
@@ -98,7 +111,9 @@ class Moderation(commands.Cog):
                     kickUser = await self.bot.wait_for("message", timeout=20)
 
                 except asyncio.TimeoutError:
-                    embed = discord.Embed(
+                    embed = Embed(
+                        ctx,
+                        success=False,
                         title="Timeout -",
                         description="Sorry, you took too long to respond.",
                     )
@@ -111,8 +126,10 @@ class Moderation(commands.Cog):
                     try:
                         await kickUser.mentions[0].kick()
 
-                        embed = discord.Embed().set_author(
-                            name="Sucessfully kicked user.",
+                        embed = Embed().set_author(
+                            ctx,
+                            success=True,
+                            name="| Successfully kicked user.",
                             icon_url="https://i.imgur.com/4yUeOVj.gif",
                         )
                         await message.edit(embed=embed)
@@ -120,7 +137,9 @@ class Moderation(commands.Cog):
                         return None
 
                     except IndexError:
-                        embed = discord.Embed(
+                        embed = Embed(
+                            ctx,
+                            success=False,
                             title="Punishment Failed -",
                             description="Did you mention a user?",
                         )
@@ -129,7 +148,8 @@ class Moderation(commands.Cog):
                         return None
 
                     except discord.errors.Forbidden:
-                        embed = discord.Embed(
+                        embed = Embed(
+                            ctx, success=False,
                             title="Permissions Error -",
                             description="Are you trying to kick another "
                             "moderator/administrator?",
@@ -143,8 +163,10 @@ class Moderation(commands.Cog):
                 await ctx.message.mentions[0].kick()
                 await ctx.message.delete()
 
-                embed = discord.Embed().set_author(
-                    name="Sucessfully kicked user.",
+                embed = Embed().set_author(
+                    ctx,
+                    success=True,
+                    name="| Successfully kicked user.",
                     icon_url="https://i.imgur.com/4yUeOVj.gif",
                 )
                 await ctx.send(embed=embed)
@@ -152,7 +174,9 @@ class Moderation(commands.Cog):
                 return None
 
             except IndexError:
-                embed = discord.Embed(
+                embed = Embed(
+                    ctx,
+                    success=False,
                     title="Punishment Failed -",
                     description="IndexError: Did you mention a valid "
                     "user?",
@@ -160,7 +184,9 @@ class Moderation(commands.Cog):
                 await ctx.send(embed=embed)
 
             except discord.Forbidden:
-                embed = discord.Embed(
+                embed = Embed(
+                    ctx,
+                    success=False,
                     title="Permissions Error -",
                     description="Are you trying to kick another "
                     "moderator/administrator?",
@@ -171,7 +197,8 @@ class Moderation(commands.Cog):
     @commands.has_permissions(ban_members=True)
     async def ban(self, ctx, *args):
         if not args:
-            embed = discord.Embed(
+            embed = Embed(
+                ctx,
                 title="Punishment -",
                 description="Which user should be banned?",
             )
@@ -183,7 +210,9 @@ class Moderation(commands.Cog):
                     banUser = await self.bot.wait_for("message", timeout=15)
 
                 except asyncio.TimeoutError:
-                    embed = discord.Embed(
+                    embed = Embed(
+                        ctx,
+                        success=False,
                         title="Timeout -",
                         description="Sorry, you took too long to respond.",
                     )
@@ -196,8 +225,10 @@ class Moderation(commands.Cog):
                     try:
                         await banUser.mentions[0].ban()
 
-                        embed = discord.Embed().set_author(
-                            name="Sucessfully banned user.",
+                        embed = Embed().set_author(
+                            ctx,
+                            success=True,
+                            name="| Successfully banned user.",
                             icon_url="https://i.imgur.com/4yUeOVj.gif",
                         )
                         await message.edit(embed=embed)
@@ -205,7 +236,9 @@ class Moderation(commands.Cog):
                         return None
 
                     except IndexError:
-                        embed = discord.Embed(
+                        embed = Embed(
+                            ctx,
+                            success=False,
                             title="Punishment Failed -",
                             description="Did you mention a user?",
                         )
@@ -214,7 +247,9 @@ class Moderation(commands.Cog):
                         return None
 
                     except discord.errors.Forbidden:
-                        embed = discord.Embed(
+                        embed = Embed(
+                            ctx,
+                            success=False,
                             title="Permissions Error -",
                             description="Are you trying to ban another "
                             "moderator/administrator?",
@@ -229,8 +264,10 @@ class Moderation(commands.Cog):
                 await ctx.message.mentions[0].ban()
                 await ctx.message.delete()
 
-                embed = discord.Embed().set_author(
-                    name="Sucessfully banned user.",
+                embed = Embed().set_author(
+                    ctx,
+                    success=True,
+                    name="| Successfully banned user.",
                     icon_url="https://i.imgur.com/4yUeOVj.gif",
                 )
                 await ctx.send(embed=embed)
@@ -238,7 +275,9 @@ class Moderation(commands.Cog):
                 return None
 
             except IndexError:
-                embed = discord.Embed(
+                embed = Embed(
+                    ctx,
+                    success=False,
                     title="Punishment Failed -",
                     description="IndexError: Did you mention a valid "
                     "user?",
@@ -246,7 +285,9 @@ class Moderation(commands.Cog):
                 await ctx.send(embed=embed)
 
             except discord.Forbidden:
-                embed = discord.Embed(
+                embed = Embed(
+                    ctx,
+                    success=False,
                     title="Permissions Error -",
                     description="Are you trying to ban another "
                     "moderator/administrator?",
@@ -258,7 +299,8 @@ class Moderation(commands.Cog):
     async def mute(self, ctx, *args):
 
         if not args:
-            embed = discord.Embed(
+            embed = Embed(
+                ctx,
                 title="Punishment -",
                 description="Which user should be muted?",
             )
@@ -271,7 +313,9 @@ class Moderation(commands.Cog):
                     muteMsg = await self.bot.wait_for("message", timeout=15)
 
                 except asyncio.TimeoutError:
-                    embed = discord.Embed(
+                    embed = Embed(
+                        ctx,
+                        success=False,
                         title="Timeout -",
                         description="Sorry, you took too long to respond.",
                     )
@@ -299,8 +343,10 @@ class Moderation(commands.Cog):
                         await muteMsg.mentions[0].add_roles(role)
                         await ctx.message.delete()
 
-                        embed = discord.Embed().set_author(
-                            name="Sucessfully muted user.",
+                        embed = Embed().set_author(
+                            ctx,
+                            success=False,
+                            name="| Successfully muted user.",
                             icon_url="https://i.imgur.com/4yUeOVj.gif",
                         )
                         await message.edit(embed=embed)
@@ -308,7 +354,9 @@ class Moderation(commands.Cog):
                         return None
 
                     except IndexError:
-                        embed = discord.Embed(
+                        embed = Embed(
+                            ctx,
+                            success=False,
                             title="Punishment Failed -",
                             description="Did you mention a user?",
                         )
@@ -317,7 +365,9 @@ class Moderation(commands.Cog):
                         return None
 
                     except discord.errors.Forbidden:
-                        embed = discord.Embed(
+                        embed = Embed(
+                            ctx,
+                            success=False,
                             title="Permissions Error -",
                             description="Are you trying to ban another "
                             "moderator/administrator?",
@@ -326,6 +376,8 @@ class Moderation(commands.Cog):
 
                         return None
         else:
+            muteUser = ctx.message.mentions[0]
+            print(muteUser)
             await ctx.message.delete()
 
             permissions = discord.Permissions(send_messages=False)
@@ -341,10 +393,10 @@ class Moderation(commands.Cog):
                             role, send_messages=False, speak=False
                         )
 
-                await ctx.message.mentions[0].add_roles(role)
+                await muteUser.add_roles(role)
 
-                embed = discord.Embed().set_author(
-                    name="Sucessfully muted user.",
+                embed = Embed(ctx, success=True).set_author(
+                    name=f"| Successfully muted {muteUser}",
                     icon_url="https://i.imgur.com/4yUeOVj.gif",
                 )
                 await ctx.send(embed=embed)
@@ -352,7 +404,9 @@ class Moderation(commands.Cog):
                 return None
 
             except IndexError:
-                embed = discord.Embed(
+                embed = Embed(
+                    ctx,
+                    success=False,
                     title="Punishment Failed -",
                     description="Did you mention a user?",
                 )
@@ -361,7 +415,9 @@ class Moderation(commands.Cog):
                 return None
 
             except discord.errors.Forbidden:
-                embed = discord.Embed(
+                embed = Embed(
+                    ctx,
+                    success=False,
                     title="Permissions Error -",
                     description="Are you trying to ban another "
                     "moderator/administrator?",
@@ -375,7 +431,8 @@ class Moderation(commands.Cog):
     async def unmute(self, ctx, *args):
 
         if not args:
-            embed = discord.Embed(
+            embed = Embed(
+                ctx,
                 title="Punishment -",
                 description="Which user should be unmuted?",
             )
@@ -388,7 +445,9 @@ class Moderation(commands.Cog):
                     unmuteMsg = await self.bot.wait_for("message", timeout=15)
 
                 except asyncio.TimeoutError:
-                    embed = discord.Embed(
+                    embed = Embed(
+                        ctx,
+                        success=False,
                         title="Timeout -",
                         description="Sorry, you took too long to respond.",
                     )
@@ -406,8 +465,10 @@ class Moderation(commands.Cog):
                         await unmuteMsg.mentions[0].remove_roles(role)
                         await ctx.message.delete()
 
-                        embed = discord.Embed().set_author(
-                            name="Sucessfully unmuted user.",
+                        embed = Embed().set_author(
+                            ctx,
+                            success=True,
+                            name="| Successfully unmuted user.",
                             icon_url="https://i.imgur.com/4yUeOVj.gif",
                         )
                         await message.edit(embed=embed)
@@ -415,7 +476,9 @@ class Moderation(commands.Cog):
                         return None
 
                     except IndexError:
-                        embed = discord.Embed(
+                        embed = Embed(
+                            ctx,
+                            success=False,
                             title="Command Failed -",
                             description="Did you mention a user?",
                         )
@@ -424,7 +487,9 @@ class Moderation(commands.Cog):
                         return None
 
                     except discord.errors.Forbidden:
-                        embed = discord.Embed(
+                        embed = Embed(
+                            ctx,
+                            success=False,
                             title="Permissions Error -",
                             description="Are you trying to unmute another "
                             "moderator/administrator?",
@@ -440,8 +505,8 @@ class Moderation(commands.Cog):
 
                 await ctx.message.mentions[0].remove_roles(role)
 
-                embed = discord.Embed().set_author(
-                    name="Sucessfully unmuted user.",
+                embed = Embed(ctx, success=True).set_author(
+                    name="| Successfully unmuted user.",
                     icon_url="https://i.imgur.com/4yUeOVj.gif",
                 )
                 await ctx.send(embed=embed)
@@ -449,7 +514,9 @@ class Moderation(commands.Cog):
                 return None
 
             except IndexError:
-                embed = discord.Embed(
+                embed = Embed(
+                    ctx,
+                    success=False,
                     title="Command Failed -",
                     description="Did you mention a user?",
                 )
@@ -458,7 +525,9 @@ class Moderation(commands.Cog):
                 return None
 
             except discord.errors.Forbidden:
-                embed = discord.Embed(
+                embed = Embed(
+                    ctx,
+                    success=False,
                     title="Permissions Error -",
                     description="Are you trying to unmute another "
                     "moderator/administrator?",
@@ -472,7 +541,9 @@ class Moderation(commands.Cog):
     async def purge(self, ctx, amount=5):
         await ctx.channel.purge(limit=amount + 1)
 
-        embed = discord.Embed(
+        embed = Embed(
+            ctx,
+            success=True,
             title="Message Purge -",
             description=f"Successfully purged {amount} messages.",
             icon_url="https://i.imgur.com/4yUeOVj.gif",

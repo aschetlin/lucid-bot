@@ -1,4 +1,5 @@
 import asyncio
+import datetime
 
 import discord
 
@@ -7,6 +8,10 @@ class NonBotFuncs:
     def __init__(self, bot, config):
         self.bot = bot
         self.config = config
+
+    def time(self):
+        time = datetime.now().strftime("%H:%M:%S:$f")
+        return f"[\033[32m{time[:12]}\033[0m] |"
 
     async def yes_no_dialogue(
         self, message_name: discord.Message, timeout: int, dm: bool, ctx
