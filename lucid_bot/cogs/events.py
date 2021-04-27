@@ -10,7 +10,8 @@ class Events(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        print(self.config["botName"] + " " + "bot online\n---")
+        botName = self.config["botName"]
+        print(f"\n-----\n{botName} bot online\n-----")
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
