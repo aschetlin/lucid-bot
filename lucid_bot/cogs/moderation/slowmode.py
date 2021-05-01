@@ -1,7 +1,7 @@
 import asyncio
 
 from discord.ext import commands
-from lucid_bot.embed import Embed
+from lucid_bot.embed import embed
 
 
 class Slowmode(commands.Cog):
@@ -13,7 +13,7 @@ class Slowmode(commands.Cog):
     async def slowmode(self, ctx, *args):
 
         if not args:
-            embed = Embed(
+            embed = embed(
                 ctx,
                 title="Channel Slowmode -",
                 description="How long should the message cool-down be?",
@@ -28,7 +28,7 @@ class Slowmode(commands.Cog):
                     )
 
                 except asyncio.TimeoutError:
-                    embed = Embed(
+                    embed = embed(
                         ctx,
                         success=False,
                         title="Timeout Error -",
@@ -44,7 +44,7 @@ class Slowmode(commands.Cog):
                         slowmode_delay=slowmodeTime.content
                     )
 
-                    embed = Embed(
+                    embed = embed(
                         ctx,
                         success=True,
                         title="Channel Slowmode -",
@@ -58,7 +58,7 @@ class Slowmode(commands.Cog):
         if str(args[0]) == "lift":
             await ctx.channel.edit(slowmode_delay=0)
 
-            embed = Embed(
+            embed = embed(
                 ctx,
                 success=True,
                 title="Channel Slowmode -",
@@ -73,7 +73,7 @@ class Slowmode(commands.Cog):
 
                 await ctx.channel.edit(slowmode_delay=slowmodeTime)
 
-                embed = Embed(
+                embed = embed(
                     ctx,
                     success=True,
                     title="Channel Slowmode -",
@@ -82,7 +82,7 @@ class Slowmode(commands.Cog):
                 await ctx.send(embed=embed)
 
             except IndexError:
-                embed = Embed(
+                embed = embed(
                     ctx,
                     success=False,
                     title="Channel Slowmode -",

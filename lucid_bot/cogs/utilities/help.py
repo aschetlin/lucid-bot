@@ -2,6 +2,7 @@ import random
 
 import discord
 from discord.ext import commands
+from lucid_bot.embed import embed
 
 
 class Help(commands.Cog):
@@ -16,7 +17,7 @@ class Help(commands.Cog):
         botName = self.config["botName"]
 
         if not args:
-            embed = discord.Embed(
+            embed = embed(
                 title=f"{botName} Bot Help -",
                 color=hexInt,
                 description=f"use {prefix}help <category> " f"to get more info",
@@ -38,7 +39,7 @@ class Help(commands.Cog):
             await ctx.send(embed=embed)
 
         elif args[0].lower() == "utility":
-            embed = discord.Embed(
+            embed = embed(
                 title="Utility Commands Help -",
                 color=hexInt,
                 description="\n\n".join(self.config["utilities"]),
@@ -48,7 +49,7 @@ class Help(commands.Cog):
             await ctx.send(embed=embed)
 
         elif args[0].lower() == "general":
-            embed = discord.Embed(
+            embed = embed(
                 title="General Commands Help -",
                 color=hexInt,
                 description="\n\n".join(self.config["general"]),
@@ -58,7 +59,7 @@ class Help(commands.Cog):
             await ctx.send(embed=embed)
 
         elif args[0].lower() == "moderation":
-            embed = discord.Embed(
+            embed = embed(
                 title="Moderation Commands Help -",
                 color=hexInt,
                 description="\n\n".join(self.config["moderation"]),
@@ -68,7 +69,7 @@ class Help(commands.Cog):
             await ctx.send(embed=embed)
 
         else:
-            embed = discord.Embed(
+            embed = embed(
                 title="Unknown Help Category -",
                 description=f"{args[0]} is not a category.",
             )

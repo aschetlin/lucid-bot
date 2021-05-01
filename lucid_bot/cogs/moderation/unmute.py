@@ -3,7 +3,7 @@ import asyncio
 import discord
 from discord.ext import commands
 from discord.utils import get
-from lucid_bot.embed import Embed
+from lucid_bot.embed import embed
 
 
 class Unmute(commands.Cog):
@@ -15,7 +15,7 @@ class Unmute(commands.Cog):
     async def unmute(self, ctx, *args):
 
         if not args:
-            embed = Embed(
+            embed = embed(
                 ctx,
                 title="Punishment -",
                 description="Which user should be unmuted?",
@@ -29,7 +29,7 @@ class Unmute(commands.Cog):
                     unmuteMsg = await self.bot.wait_for("message", timeout=15)
 
                 except asyncio.TimeoutError:
-                    embed = Embed(
+                    embed = embed(
                         ctx,
                         success=False,
                         title="Timeout -",
@@ -49,7 +49,7 @@ class Unmute(commands.Cog):
                         await unmuteMsg.mentions[0].remove_roles(role)
                         await ctx.message.delete()
 
-                        embed = Embed(ctx, success=True).set_author(
+                        embed = embed(ctx, success=True).set_author(
                             name=f"| Successfully unmuted {unmuteMsg.mentions[0]}.",
                             icon_url="https://i.imgur.com/4yUeOVj.gif",
                         )
@@ -58,7 +58,7 @@ class Unmute(commands.Cog):
                         return None
 
                     except IndexError:
-                        embed = Embed(
+                        embed = embed(
                             ctx,
                             success=False,
                             title="Command Failed -",
@@ -69,7 +69,7 @@ class Unmute(commands.Cog):
                         return None
 
                     except discord.errors.Forbidden:
-                        embed = Embed(
+                        embed = embed(
                             ctx,
                             success=False,
                             title="Permissions Error -",
@@ -87,7 +87,7 @@ class Unmute(commands.Cog):
 
                 await ctx.message.mentions[0].remove_roles(role)
 
-                embed = Embed(ctx, success=True).set_author(
+                embed = embed(ctx, success=True).set_author(
                     name=f"| Successfully unmuted {ctx.message.mentions[0]}.",
                     icon_url="https://i.imgur.com/4yUeOVj.gif",
                 )
@@ -96,7 +96,7 @@ class Unmute(commands.Cog):
                 return None
 
             except IndexError:
-                embed = Embed(
+                embed = embed(
                     ctx,
                     success=False,
                     title="Command Failed -",
@@ -107,7 +107,7 @@ class Unmute(commands.Cog):
                 return None
 
             except discord.errors.Forbidden:
-                embed = Embed(
+                embed = embed(
                     ctx,
                     success=False,
                     title="Permissions Error -",

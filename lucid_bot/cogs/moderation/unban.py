@@ -2,7 +2,7 @@ import asyncio
 
 import discord
 from discord.ext import commands
-from lucid_bot.embed import Embed
+from lucid_bot.embed import embed
 
 
 class Unban(commands.Cog):
@@ -13,7 +13,7 @@ class Unban(commands.Cog):
     @commands.has_permissions(ban_members=True)
     async def unban(self, ctx, *args):
         if not args:
-            embed = Embed(
+            embed = embed(
                 ctx,
                 title="Unban -",
                 description="Which user should be unbanned?",
@@ -26,7 +26,7 @@ class Unban(commands.Cog):
                     unbanMsg = await self.bot.wait_for("message", timeout=15)
 
                 except asyncio.TimeoutError:
-                    embed = Embed(
+                    embed = embed(
                         ctx,
                         success=False,
                         title="Timeout -",
@@ -44,7 +44,7 @@ class Unban(commands.Cog):
                         )
                         await ctx.guild.unban(unbanUser)
 
-                        embed = Embed(ctx, success=True).set_author(
+                        embed = embed(ctx, success=True).set_author(
                             name=f"| Successfully unbanned {unbanMsg.mentions[0]}.",
                             icon_url="https://i.imgur.com/4yUeOVj.gif",
                         )
@@ -64,7 +64,7 @@ class Unban(commands.Cog):
                     #     return None
 
                     except discord.errors.Forbidden:
-                        embed = Embed(
+                        embed = embed(
                             ctx,
                             success=False,
                             title="Permissions Error -",
@@ -80,7 +80,7 @@ class Unban(commands.Cog):
                 await ctx.message.mentions[0].unban()
                 await ctx.message.delete()
 
-                embed = Embed().set_author(
+                embed = embed().set_author(
                     ctx,
                     success=True,
                     name=f"| Successfully unbanned {ctx.message.mentions[0]}.",
@@ -91,7 +91,7 @@ class Unban(commands.Cog):
                 return None
 
             except IndexError:
-                embed = Embed(
+                embed = embed(
                     ctx,
                     success=False,
                     title="Unban Failed -",

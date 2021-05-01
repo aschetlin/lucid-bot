@@ -3,7 +3,7 @@ import asyncio
 import discord
 from discord.ext import commands
 from discord.utils import get
-from lucid_bot.embed import Embed
+from lucid_bot.embed import embed
 
 
 class Mute(commands.Cog):
@@ -15,7 +15,7 @@ class Mute(commands.Cog):
     async def mute(self, ctx, *args):
 
         if not args:
-            embed = Embed(
+            embed = embed(
                 ctx,
                 title="Punishment -",
                 description="Which user should be muted?",
@@ -29,7 +29,7 @@ class Mute(commands.Cog):
                     muteMsg = await self.bot.wait_for("message", timeout=15)
 
                 except asyncio.TimeoutError:
-                    embed = Embed(
+                    embed = embed(
                         ctx,
                         success=False,
                         title="Timeout -",
@@ -59,7 +59,7 @@ class Mute(commands.Cog):
                         await muteMsg.mentions[0].add_roles(role)
                         await ctx.message.delete()
 
-                        embed = Embed(ctx, success=True).set_author(
+                        embed = embed(ctx, success=True).set_author(
                             name=f"| Successfully muted {muteMsg.mentions[0]}.",
                             icon_url="https://i.imgur.com/4yUeOVj.gif",
                         )
@@ -68,7 +68,7 @@ class Mute(commands.Cog):
                         return None
 
                     except IndexError:
-                        embed = Embed(
+                        embed = embed(
                             ctx,
                             success=False,
                             title="Punishment Failed -",
@@ -79,7 +79,7 @@ class Mute(commands.Cog):
                         return None
 
                     except discord.errors.Forbidden:
-                        embed = Embed(
+                        embed = embed(
                             ctx,
                             success=False,
                             title="Permissions Error -",
@@ -108,7 +108,7 @@ class Mute(commands.Cog):
 
                 await muteUser.add_roles(role)
 
-                embed = Embed(ctx, success=True).set_author(
+                embed = embed(ctx, success=True).set_author(
                     name=f"| Successfully muted {muteUser}",
                     icon_url="https://i.imgur.com/4yUeOVj.gif",
                 )
@@ -117,7 +117,7 @@ class Mute(commands.Cog):
                 return None
 
             except IndexError:
-                embed = Embed(
+                embed = embed(
                     ctx,
                     success=False,
                     title="Punishment Failed -",
@@ -128,7 +128,7 @@ class Mute(commands.Cog):
                 return None
 
             except discord.errors.Forbidden:
-                embed = Embed(
+                embed = embed(
                     ctx,
                     success=False,
                     title="Permissions Error -",

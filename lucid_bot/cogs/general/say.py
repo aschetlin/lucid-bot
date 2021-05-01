@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands
+from lucid_bot.embed import embed
 
 
 class Say(commands.Cog):
@@ -13,7 +14,7 @@ class Say(commands.Cog):
             await ctx.send(message)
 
         else:
-            embed = discord.Embed(
+            embed = embed(
                 title="Permissions Error -",
                 description="Sorry, you don't have the required "
                 "permissions to execute that command.",

@@ -1,5 +1,5 @@
 from discord.ext import commands
-from lucid_bot.embed import Embed
+from lucid_bot.embed import embed
 
 
 class Purge(commands.Cog):
@@ -11,7 +11,7 @@ class Purge(commands.Cog):
     async def purge(self, ctx, amount=5):
         await ctx.channel.purge(limit=amount + 1)
 
-        embed = Embed(
+        embed = embed(
             ctx,
             success=True,
             title="Message Purge -",

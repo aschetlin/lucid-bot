@@ -2,7 +2,7 @@ import asyncio
 
 import discord
 from discord.ext import commands
-from lucid_bot.embed import Embed
+from lucid_bot.embed import embed
 
 
 class Kick(commands.Cog):
@@ -14,7 +14,7 @@ class Kick(commands.Cog):
     async def kick(self, ctx, *args):
 
         if not args:
-            embed = Embed(
+            embed = embed(
                 ctx,
                 title="Punishment -",
                 description="Which user should be kicked?",
@@ -27,7 +27,7 @@ class Kick(commands.Cog):
                     kickUser = await self.bot.wait_for("message", timeout=20)
 
                 except asyncio.TimeoutError:
-                    embed = Embed(
+                    embed = embed(
                         ctx,
                         success=False,
                         title="Timeout -",
@@ -42,7 +42,7 @@ class Kick(commands.Cog):
                     try:
                         await kickUser.mentions[0].kick()
 
-                        embed = Embed(ctx, success=True).set_author(
+                        embed = embed(ctx, success=True).set_author(
                             name=f"| Successfully kicked {kickUser.mentions[0]}.",
                             icon_url="https://i.imgur.com/4yUeOVj.gif",
                         )
@@ -51,7 +51,7 @@ class Kick(commands.Cog):
                         return None
 
                     except IndexError:
-                        embed = Embed(
+                        embed = embed(
                             ctx,
                             success=False,
                             title="Punishment Failed -",
@@ -62,7 +62,7 @@ class Kick(commands.Cog):
                         return None
 
                     except discord.errors.Forbidden:
-                        embed = Embed(
+                        embed = embed(
                             ctx,
                             success=False,
                             title="Permissions Error -",
@@ -79,7 +79,7 @@ class Kick(commands.Cog):
                 await ctx.message.mentions[0].kick()
                 await ctx.message.delete()
 
-                embed = Embed(ctx, success=True).set_author(
+                embed = embed(ctx, success=True).set_author(
                     name=f"| Successfully kicked {ctx.message.mentions[0]}.",
                     icon_url="https://i.imgur.com/4yUeOVj.gif",
                 )
@@ -88,7 +88,7 @@ class Kick(commands.Cog):
                 return None
 
             except IndexError:
-                embed = Embed(
+                embed = embed(
                     ctx,
                     success=False,
                     title="Punishment Failed -",
@@ -98,7 +98,7 @@ class Kick(commands.Cog):
                 await ctx.send(embed=embed)
 
             except discord.Forbidden:
-                embed = Embed(
+                embed = embed(
                     ctx,
                     success=False,
                     title="Permissions Error -",

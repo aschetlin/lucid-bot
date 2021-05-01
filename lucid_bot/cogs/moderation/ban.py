@@ -2,7 +2,7 @@ import asyncio
 
 import discord
 from discord.ext import commands
-from lucid_bot.embed import Embed
+from lucid_bot.embed import embed
 
 
 class Ban(commands.Cog):
@@ -13,7 +13,7 @@ class Ban(commands.Cog):
     @commands.has_permissions(ban_members=True)
     async def ban(self, ctx, *args):
         if not args:
-            embed = Embed(
+            embed = embed(
                 ctx,
                 title="Punishment -",
                 description="Which user should be banned?",
@@ -26,7 +26,7 @@ class Ban(commands.Cog):
                     banUser = await self.bot.wait_for("message", timeout=15)
 
                 except asyncio.TimeoutError:
-                    embed = Embed(
+                    embed = embed(
                         ctx,
                         success=False,
                         title="Timeout -",
@@ -41,7 +41,7 @@ class Ban(commands.Cog):
                     try:
                         await banUser.mentions[0].ban()
 
-                        embed = Embed(ctx, success=True).set_author(
+                        embed = embed(ctx, success=True).set_author(
                             name=f"| Successfully banned {banUser.mentions[0]}.",
                             icon_url="https://i.imgur.com/4yUeOVj.gif",
                         )
@@ -50,7 +50,7 @@ class Ban(commands.Cog):
                         return None
 
                     except IndexError:
-                        embed = Embed(
+                        embed = embed(
                             ctx,
                             success=False,
                             title="Punishment Failed -",
@@ -61,7 +61,7 @@ class Ban(commands.Cog):
                         return None
 
                     except discord.errors.Forbidden:
-                        embed = Embed(
+                        embed = embed(
                             ctx,
                             success=False,
                             title="Permissions Error -",
@@ -78,7 +78,7 @@ class Ban(commands.Cog):
                 await ctx.message.mentions[0].ban()
                 await ctx.message.delete()
 
-                embed = Embed(ctx, success=True).set_author(
+                embed = embed(ctx, success=True).set_author(
                     name=f"| Successfully banned {ctx.message.mentions[0]}.",
                     icon_url="https://i.imgur.com/4yUeOVj.gif",
                 )
@@ -87,7 +87,7 @@ class Ban(commands.Cog):
                 return None
 
             except IndexError:
-                embed = Embed(
+                embed = embed(
                     ctx,
                     success=False,
                     title="Punishment Failed -",
@@ -97,7 +97,7 @@ class Ban(commands.Cog):
                 await ctx.send(embed=embed)
 
             except discord.Forbidden:
-                embed = Embed(
+                embed = embed(
                     ctx,
                     success=False,
                     title="Permissions Error -",

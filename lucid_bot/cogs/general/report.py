@@ -3,6 +3,7 @@ import asyncio
 import discord
 import redis
 from discord.ext import commands
+from lucid_bot.embed import embed
 
 
 class Report(commands.Cog):
@@ -18,13 +19,13 @@ class Report(commands.Cog):
 
     @commands.command(aliases=["issue"])
     async def report(self, ctx):
-        embed = discord.Embed(
+        embed = embed(
             title="Issue Report -",
             description="Issue report started in your dms!",
         )
         await ctx.send(embed=embed)
 
-        embed = discord.Embed(
+        embed = embed(
             title="Issue Report -",
             description="Would you like to start an issue report ticket?",
         )
@@ -34,7 +35,7 @@ class Report(commands.Cog):
 
         if startTicket:
 
-            embed = discord.Embed(
+            embed = embed(
                 title="Issue Report -",
                 description="What should the title of your issue be?",
             )
@@ -48,7 +49,7 @@ class Report(commands.Cog):
                     )
 
                 except asyncio.TimeoutError:
-                    embed = discord.Embed(
+                    embed = embed(
                         title="Timeout -",
                         description="Sorry, you took too long to respond.",
                     )
@@ -61,7 +62,7 @@ class Report(commands.Cog):
 
             while True:
 
-                embed = discord.Embed(
+                embed = embed(
                     title="Issue Report -",
                     description="Describe your issue as detailed as possible, "
                     "and how to recreate it, (if applicable).",
@@ -74,7 +75,7 @@ class Report(commands.Cog):
                     )
 
                 except asyncio.TimeoutError:
-                    embed = discord.Embed(
+                    embed = embed(
                         title="Timeout -",
                         description="Sorry, you took too long to respond.",
                     )
@@ -83,7 +84,7 @@ class Report(commands.Cog):
                     return None
 
                 if issueDescription.author.id == ctx.author.id:
-                    embed = discord.Embed(
+                    embed = embed(
                         title="Issue Report -",
                         description="Issue report successfully filed, thank you!",
                         color=0x00FE5F,
@@ -95,7 +96,7 @@ class Report(commands.Cog):
 
                     await user.send(f"**Issue Ticket #{ticketcount} - **")
 
-                    embed = discord.Embed(
+                    embed = embed(
                         title=str(issueTitle.content),
                         description=str(issueDescription.content),
                     )
@@ -110,7 +111,7 @@ class Report(commands.Cog):
                     break
 
         else:
-            embed = discord.Embed(
+            embed = embed(
                 title="Issue Report -",
                 description="Ticket creation cancelled.",
             )

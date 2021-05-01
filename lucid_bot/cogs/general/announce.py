@@ -2,6 +2,7 @@ import asyncio
 
 import discord
 from discord.ext import commands
+from lucid_bot.embed import embed
 
 
 class Announce(commands.Cog):
@@ -18,7 +19,7 @@ class Announce(commands.Cog):
         ):
 
             if not args:
-                embed = discord.Embed(
+                embed = embed(
                     title="Bot Announcement -",
                     description="What channel should the announcement be sent to?",
                 )
@@ -37,7 +38,7 @@ class Announce(commands.Cog):
 
                 # ANNOUNCEMENT AUTHOR YES/NO
 
-                embed = discord.Embed(
+                embed = embed(
                     title="Should the announcement list who created it in the footer,\n"
                     "eg. the footer of this message?"
                 )
@@ -53,7 +54,7 @@ class Announce(commands.Cog):
 
                 # BUILDING ANNOUNCEMENT EMBED
                 hexInt = int(colorHex, 16)
-                announceEmbed = discord.Embed(
+                announceEmbed = embed(
                     title=announceTitle,
                     description=announceMessage,
                     color=hexInt,
@@ -73,7 +74,7 @@ class Announce(commands.Cog):
                 )
 
             elif args[0].lower() == "image":
-                embed = discord.Embed(
+                embed = embed(
                     title="Bot Announcement -",
                     description="What channel should the announcement be sent to?",
                 )
@@ -86,7 +87,7 @@ class Announce(commands.Cog):
                 ) = await self.nbf.announcement_channel(ctx, message)
                 announceTitle = await self.nbf.announce_title(ctx, message)
 
-                embed = discord.Embed(
+                embed = embed(
                     title="Bot Announcement -",
                     description="Should the embed have a description?",
                 )
@@ -103,7 +104,7 @@ class Announce(commands.Cog):
                 else:
                     announceMessage = ""
 
-                embed = discord.Embed(
+                embed = embed(
                     title="Bot Announcement -",
                     description="Please link the image url.",
                 )
@@ -116,7 +117,7 @@ class Announce(commands.Cog):
                         image = await self.bot.wait_for("message", timeout=40)
 
                     except asyncio.TimeoutError:
-                        embed = discord.Embed(
+                        embed = embed(
                             title="Timeout -",
                             description="Sorry, you took too long to respond.",
                         )
@@ -131,14 +132,14 @@ class Announce(commands.Cog):
                 hexInt = int(colorHex, 16)
 
                 if embedDescription:
-                    announceEmbed = discord.Embed(
+                    announceEmbed = embed(
                         title=announceTitle,
                         description=announceMessage,
                         color=hexInt,
                     )
 
                 else:
-                    announceEmbed = discord.Embed(title=announceTitle)
+                    announceEmbed = embed(title=announceTitle)
 
                 announceEmbed.set_image(url=image.content)
 
@@ -149,7 +150,7 @@ class Announce(commands.Cog):
                 )
 
         else:
-            embed = discord.Embed(
+            embed = embed(
                 title="Permissions Error -",
                 description="Sorry, you don't have the required "
                 "permissions to execute that command.",
