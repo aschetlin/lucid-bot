@@ -3,7 +3,7 @@ import asyncio
 import discord
 from discord.ext import commands
 from discord.utils import get
-from lucid_bot.embed import embed
+from lucid_bot.lucid_embed import lucid_embed
 
 
 class Unmute(commands.Cog):
@@ -15,7 +15,7 @@ class Unmute(commands.Cog):
     async def unmute(self, ctx, *args):
 
         if not args:
-            embed = embed(
+            embed = lucid_embed(
                 ctx,
                 title="Punishment -",
                 description="Which user should be unmuted?",
@@ -29,9 +29,9 @@ class Unmute(commands.Cog):
                     unmuteMsg = await self.bot.wait_for("message", timeout=15)
 
                 except asyncio.TimeoutError:
-                    embed = embed(
+                    embed = lucid_embed(
                         ctx,
-                        success=False,
+                        fail=True,
                         title="Timeout -",
                         description="Sorry, you took too long to respond.",
                     )
@@ -49,7 +49,7 @@ class Unmute(commands.Cog):
                         await unmuteMsg.mentions[0].remove_roles(role)
                         await ctx.message.delete()
 
-                        embed = embed(ctx, success=True).set_author(
+                        embed = lucid_embed(ctx, success=True).set_author(
                             name=f"| Successfully unmuted {unmuteMsg.mentions[0]}.",
                             icon_url="https://i.imgur.com/4yUeOVj.gif",
                         )
@@ -58,9 +58,9 @@ class Unmute(commands.Cog):
                         return None
 
                     except IndexError:
-                        embed = embed(
+                        embed = lucid_embed(
                             ctx,
-                            success=False,
+                            fail=True,
                             title="Command Failed -",
                             description="Did you mention a user?",
                         )
@@ -69,9 +69,9 @@ class Unmute(commands.Cog):
                         return None
 
                     except discord.errors.Forbidden:
-                        embed = embed(
+                        embed = lucid_embed(
                             ctx,
-                            success=False,
+                            fail=True,
                             title="Permissions Error -",
                             description="Are you trying to unmute another "
                             "moderator/administrator?",
@@ -87,7 +87,7 @@ class Unmute(commands.Cog):
 
                 await ctx.message.mentions[0].remove_roles(role)
 
-                embed = embed(ctx, success=True).set_author(
+                embed = lucid_embed(ctx, success=True).set_author(
                     name=f"| Successfully unmuted {ctx.message.mentions[0]}.",
                     icon_url="https://i.imgur.com/4yUeOVj.gif",
                 )
@@ -96,9 +96,9 @@ class Unmute(commands.Cog):
                 return None
 
             except IndexError:
-                embed = embed(
+                embed = lucid_embed(
                     ctx,
-                    success=False,
+                    fail=True,
                     title="Command Failed -",
                     description="Did you mention a user?",
                 )
@@ -107,9 +107,9 @@ class Unmute(commands.Cog):
                 return None
 
             except discord.errors.Forbidden:
-                embed = embed(
+                embed = lucid_embed(
                     ctx,
-                    success=False,
+                    fail=True,
                     title="Permissions Error -",
                     description="Are you trying to unmute another "
                     "moderator/administrator?",

@@ -2,7 +2,7 @@ import asyncio
 
 import discord
 from discord.ext import commands
-from lucid_bot.embed import embed
+from lucid_bot.lucid_embed import lucid_embed
 
 
 class Unban(commands.Cog):
@@ -13,7 +13,7 @@ class Unban(commands.Cog):
     @commands.has_permissions(ban_members=True)
     async def unban(self, ctx, *args):
         if not args:
-            embed = embed(
+            embed = lucid_embed(
                 ctx,
                 title="Unban -",
                 description="Which user should be unbanned?",
@@ -26,9 +26,9 @@ class Unban(commands.Cog):
                     unbanMsg = await self.bot.wait_for("message", timeout=15)
 
                 except asyncio.TimeoutError:
-                    embed = embed(
+                    embed = lucid_embed(
                         ctx,
-                        success=False,
+                        fail=True,
                         title="Timeout -",
                         description="Sorry, you took too long to respond.",
                     )
@@ -44,7 +44,7 @@ class Unban(commands.Cog):
                         )
                         await ctx.guild.unban(unbanUser)
 
-                        embed = embed(ctx, success=True).set_author(
+                        embed = lucid_embed(ctx, success=True).set_author(
                             name=f"| Successfully unbanned {unbanMsg.mentions[0]}.",
                             icon_url="https://i.imgur.com/4yUeOVj.gif",
                         )
@@ -55,7 +55,7 @@ class Unban(commands.Cog):
                     # except IndexError:
                     #     embed = Embed(
                     #         ctx,
-                    #         success=False,
+                    #         fail=True,
                     #         title="Unban Failed -",
                     #         description="Did you mention a user?",
                     #     )
@@ -64,9 +64,9 @@ class Unban(commands.Cog):
                     #     return None
 
                     except discord.errors.Forbidden:
-                        embed = embed(
+                        embed = lucid_embed(
                             ctx,
-                            success=False,
+                            fail=True,
                             title="Permissions Error -",
                             description="Are you trying to ban another "
                             "moderator/administrator?",
@@ -80,7 +80,7 @@ class Unban(commands.Cog):
                 await ctx.message.mentions[0].unban()
                 await ctx.message.delete()
 
-                embed = embed().set_author(
+                embed = lucid_embed().set_author(
                     ctx,
                     success=True,
                     name=f"| Successfully unbanned {ctx.message.mentions[0]}.",
@@ -91,9 +91,9 @@ class Unban(commands.Cog):
                 return None
 
             except IndexError:
-                embed = embed(
+                embed = lucid_embed(
                     ctx,
-                    success=False,
+                    fail=True,
                     title="Unban Failed -",
                     description="IndexError: Did you mention a valid "
                     "user?",
@@ -103,7 +103,7 @@ class Unban(commands.Cog):
             # except discord.Forbidden:
             #     embed = Embed(
             #         ctx,
-            #         success=False,
+            #         fail=True,
             #         title="Permissions Error -",
             #         description="Are you trying to ban another "
             #         "moderator/administrator?",

@@ -17,13 +17,13 @@ class Events(commands.Cog):
     async def on_command_error(self, ctx, error):
 
         if isinstance(error, commands.CommandNotFound):
-            embed = embed(
+            embed = lucid_embed(
                 title="Command Error -", description="Command not found."
             )
             await ctx.send(embed=embed)
 
         elif isinstance(error, commands.CheckFailure):
-            embed = embed(
+            embed = lucid_embed(
                 title="Permissions Error -",
                 description="You don't have the required permissions to "
                 "execute that command.",

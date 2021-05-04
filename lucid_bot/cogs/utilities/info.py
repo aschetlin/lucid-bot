@@ -2,7 +2,7 @@ import random
 
 import discord
 from discord.ext import commands
-from lucid_bot.embed import embed
+from lucid_bot.lucid_embed import lucid_embed
 
 
 class Info(commands.Cog):
@@ -16,7 +16,7 @@ class Info(commands.Cog):
         botName = self.config["botName"]
         hexInt = int(random.choice(list(self.config["colors"])), 16)
 
-        embed = embed(title=f"{botName} Bot Info", color=hexInt)
+        embed = lucid_embed(title=f"{botName} Bot Info", color=hexInt)
         embed.set_thumbnail(url=self.bot.user.avatar_url)
         embed.add_field(
             name="Built by:", value="viargentum#3850", inline=False

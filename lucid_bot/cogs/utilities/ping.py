@@ -2,7 +2,7 @@ import random
 
 import discord
 from discord.ext import commands
-from lucid_bot.embed import embed
+from lucid_bot.lucid_embed import lucid_embed
 
 
 class Ping(commands.Cog):
@@ -22,7 +22,7 @@ class Ping(commands.Cog):
         botPing = round(self.bot.latency * 1000)
         hexInt = int(random.choice(list(self.config["colors"])), 16)
 
-        embed = embed(title="Ping -", color=hexInt)
+        embed = lucid_embed(title="Ping -", color=hexInt)
         embed.add_field(name=f"API Latency:", value=f"~{botPing}ms")
         embed.add_field(name=f"Message Latency:", value=f"~{msgPing}ms")
 

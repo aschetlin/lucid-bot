@@ -2,7 +2,7 @@ import asyncio
 
 import discord
 from discord.ext import commands
-from lucid_bot.embed import embed
+from lucid_bot.lucid_embed import lucid_embed
 
 
 class Kick(commands.Cog):
@@ -14,7 +14,7 @@ class Kick(commands.Cog):
     async def kick(self, ctx, *args):
 
         if not args:
-            embed = embed(
+            embed = lucid_embed(
                 ctx,
                 title="Punishment -",
                 description="Which user should be kicked?",
@@ -27,9 +27,9 @@ class Kick(commands.Cog):
                     kickUser = await self.bot.wait_for("message", timeout=20)
 
                 except asyncio.TimeoutError:
-                    embed = embed(
+                    embed = lucid_embed(
                         ctx,
-                        success=False,
+                        fail=True,
                         title="Timeout -",
                         description="Sorry, you took too long to respond.",
                     )
@@ -42,7 +42,7 @@ class Kick(commands.Cog):
                     try:
                         await kickUser.mentions[0].kick()
 
-                        embed = embed(ctx, success=True).set_author(
+                        embed = lucid_embed(ctx, success=True).set_author(
                             name=f"| Successfully kicked {kickUser.mentions[0]}.",
                             icon_url="https://i.imgur.com/4yUeOVj.gif",
                         )
@@ -51,9 +51,9 @@ class Kick(commands.Cog):
                         return None
 
                     except IndexError:
-                        embed = embed(
+                        embed = lucid_embed(
                             ctx,
-                            success=False,
+                            fail=True,
                             title="Punishment Failed -",
                             description="Did you mention a user?",
                         )
@@ -62,9 +62,9 @@ class Kick(commands.Cog):
                         return None
 
                     except discord.errors.Forbidden:
-                        embed = embed(
+                        embed = lucid_embed(
                             ctx,
-                            success=False,
+                            fail=True,
                             title="Permissions Error -",
                             description="Are you trying to kick another "
                             "moderator/administrator?",
@@ -79,7 +79,7 @@ class Kick(commands.Cog):
                 await ctx.message.mentions[0].kick()
                 await ctx.message.delete()
 
-                embed = embed(ctx, success=True).set_author(
+                embed = lucid_embed(ctx, success=True).set_author(
                     name=f"| Successfully kicked {ctx.message.mentions[0]}.",
                     icon_url="https://i.imgur.com/4yUeOVj.gif",
                 )
@@ -88,9 +88,9 @@ class Kick(commands.Cog):
                 return None
 
             except IndexError:
-                embed = embed(
+                embed = lucid_embed(
                     ctx,
-                    success=False,
+                    fail=True,
                     title="Punishment Failed -",
                     description="IndexError: Did you mention a valid "
                     "user?",
@@ -98,9 +98,9 @@ class Kick(commands.Cog):
                 await ctx.send(embed=embed)
 
             except discord.Forbidden:
-                embed = embed(
+                embed = lucid_embed(
                     ctx,
-                    success=False,
+                    fail=True,
                     title="Permissions Error -",
                     description="Are you trying to kick another "
                     "moderator/administrator?",

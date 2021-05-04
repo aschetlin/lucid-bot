@@ -4,14 +4,14 @@ import discord
 from discord.colour import Color
 
 
-def embed(ctx=None, success: bool = None, **kwargs):
+def lucid_embed(ctx=None, success: bool = None, fail: bool = None, **kwargs):
     if success:
         kwargs["color"] = Color.green()
 
-    elif success is False:
+    elif fail:
         kwargs["color"] = Color.red()
 
-    embed = embed(**kwargs, timestamp=datetime.utcnow())
+    embed = discord.Embed(**kwargs, timestamp=datetime.utcnow())
 
     if ctx:
         embed.set_footer(text=ctx.author)

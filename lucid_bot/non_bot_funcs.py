@@ -27,7 +27,7 @@ class NonBotFuncs:
                 )
 
             except asyncio.TimeoutError:
-                embed = embed(
+                embed = lucid_embed(
                     title="Timeout -",
                     description="Sorry, you took too long to react.",
                 )
@@ -63,7 +63,7 @@ class NonBotFuncs:
                 )
 
             except asyncio.TimeoutError:
-                embed = embed(
+                embed = lucid_embed(
                     title="Timeout",
                     description="Sorry, you took too long to respond.",
                 )
@@ -79,7 +79,7 @@ class NonBotFuncs:
                     announceChannel = announceChannel.channel_mentions[0]
 
                 except IndexError:
-                    embed = embed(
+                    embed = lucid_embed(
                         title="Command Error -",
                         description="Did you mention a valid channel?",
                     )
@@ -93,7 +93,7 @@ class NonBotFuncs:
 
     async def announce_title(self, ctx, message: discord.Message):
         # EMBED TITLE
-        embed = embed(
+        embed = lucid_embed(
             title="Bot Announcement -",
             description="What should the title of the announcement be?",
         )
@@ -106,7 +106,7 @@ class NonBotFuncs:
                 announceTitle = await self.bot.wait_for("message", timeout=60)
 
             except asyncio.TimeoutError:
-                embed = embed(
+                embed = lucid_embed(
                     title="Timeout",
                     description="Sorry, you took too long to respond.",
                 )
@@ -124,7 +124,7 @@ class NonBotFuncs:
 
     async def announcement_description(self, ctx, message: discord.Message):
         # EMBED DESCRIPTION
-        embed = embed(
+        embed = lucid_embed(
             title="Bot Announcement -",
             description="What should the announcement say?",
         )
@@ -139,7 +139,7 @@ class NonBotFuncs:
                 )
 
             except asyncio.TimeoutError:
-                embed = embed(
+                embed = lucid_embed(
                     title="Timeout",
                     description="Sorry, you took too long to respond.",
                 )
@@ -156,7 +156,7 @@ class NonBotFuncs:
         return announceMessage.content
 
     async def announce_color(self, message, ctx):
-        embed = embed(
+        embed = lucid_embed(
             title="Bot Announcement -",
             description="What should the color of the embed be?\n\n(Wait for all reactions to "
             "appear.)",
@@ -175,7 +175,7 @@ class NonBotFuncs:
                 )
 
             except asyncio.TimeoutError:
-                embed = embed(
+                embed = lucid_embed(
                     title="Timeout -",
                     description="Sorry, you took too long to react.",
                 )
@@ -200,7 +200,7 @@ class NonBotFuncs:
         self, ctx, announce_channel, announce_embed, channel_tag
     ):
         # CONFIRM/DENY SEND
-        embed = embed(
+        embed = lucid_embed(
             title="Bot Announcement -",
             description="Do you want to send the announcement "
             + "as shown above?",
@@ -211,7 +211,7 @@ class NonBotFuncs:
 
         if reaction_yes:
             await announce_channel.send(embed=announce_embed)
-            embed = embed(
+            embed = lucid_embed(
                 title="Bot Announcement -",
                 description="Announcement successfully sent to "
                 + channel_tag
@@ -222,7 +222,7 @@ class NonBotFuncs:
             await message.edit(embed=embed)
 
         else:
-            embed = embed(
+            embed = lucid_embed(
                 title="Bot Announcement -",
                 description="Announcement Cancelled.",
             )

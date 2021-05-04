@@ -1,7 +1,7 @@
 import asyncio
 
 from discord.ext import commands
-from lucid_bot.embed import embed
+from lucid_bot.lucid_embed import lucid_embed
 
 
 class Slowmode(commands.Cog):
@@ -13,7 +13,7 @@ class Slowmode(commands.Cog):
     async def slowmode(self, ctx, *args):
 
         if not args:
-            embed = embed(
+            embed = lucid_embed(
                 ctx,
                 title="Channel Slowmode -",
                 description="How long should the message cool-down be?",
@@ -28,9 +28,9 @@ class Slowmode(commands.Cog):
                     )
 
                 except asyncio.TimeoutError:
-                    embed = embed(
+                    embed = lucid_embed(
                         ctx,
-                        success=False,
+                        fail=True,
                         title="Timeout Error -",
                         description="Sorry, you took too long to respond.",
                     )
@@ -44,7 +44,7 @@ class Slowmode(commands.Cog):
                         slowmode_delay=slowmodeTime.content
                     )
 
-                    embed = embed(
+                    embed = lucid_embed(
                         ctx,
                         success=True,
                         title="Channel Slowmode -",
@@ -58,7 +58,7 @@ class Slowmode(commands.Cog):
         if str(args[0]) == "lift":
             await ctx.channel.edit(slowmode_delay=0)
 
-            embed = embed(
+            embed = lucid_embed(
                 ctx,
                 success=True,
                 title="Channel Slowmode -",
@@ -73,7 +73,7 @@ class Slowmode(commands.Cog):
 
                 await ctx.channel.edit(slowmode_delay=slowmodeTime)
 
-                embed = embed(
+                embed = lucid_embed(
                     ctx,
                     success=True,
                     title="Channel Slowmode -",
@@ -82,9 +82,9 @@ class Slowmode(commands.Cog):
                 await ctx.send(embed=embed)
 
             except IndexError:
-                embed = embed(
+                embed = lucid_embed(
                     ctx,
-                    success=False,
+                    fail=True,
                     title="Channel Slowmode -",
                     description="Invalid slowmode time.",
                 )
