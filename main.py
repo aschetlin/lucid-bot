@@ -3,9 +3,7 @@
 import discord
 from discord.ext import commands
 
-import lucid_bot
-from lucid_bot import non_bot_funcs, cog_config
-from lucid_bot.cogs import events, general, moderation, utilities
+from lucid_bot import cog_config, non_bot_funcs
 from lucid_bot.config import config
 
 # Bot init
@@ -28,8 +26,7 @@ for cog in cog_config.cogs:
     if cog.get("nbf"):
         optional_params.append(nbf)
 
-
-    current_class=cog["class"]
+    current_class = cog["class"]
     print(f"Loading {current_class.__name__}....")
 
     bot.add_cog(cog["class"](bot, *optional_params))

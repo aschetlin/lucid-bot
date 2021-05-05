@@ -1,11 +1,19 @@
 from lucid_bot.cogs import events
 from lucid_bot.cogs.general import announce, report, say
-from lucid_bot.cogs.moderation import ban, kick, mute, purge, slowmode, unban, unmute
+from lucid_bot.cogs.moderation import (
+    ban,
+    kick,
+    mute,
+    purge,
+    slowmode,
+    unban,
+    unmute,
+)
 from lucid_bot.cogs.utilities import help, info, ping
 
 cogs = [
     {"class": events.Events, "config": True},
-    {"class": announce.Announce, "nbf": True, "config": True} ,
+    {"class": announce.Announce, "nbf": True, "config": True},
     {"class": report.Report, "nbf": True, "config": True},
     {"class": say.Say},
     {"class": ban.Ban},

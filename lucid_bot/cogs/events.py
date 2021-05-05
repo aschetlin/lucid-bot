@@ -1,6 +1,5 @@
-import discord
 from discord.ext import commands
-from lucid_bot.non_bot_funcs import NonBotFuncs
+from lucid_bot.lucid_embed import lucid_embed
 
 
 class Events(commands.Cog):

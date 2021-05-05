@@ -3,6 +3,8 @@ import datetime
 
 import discord
 
+from lucid_bot.lucid_embed import lucid_embed
+
 
 class NonBotFuncs:
     def __init__(self, bot, config):

@@ -1,6 +1,5 @@
 import random
 
-import discord
 from discord.ext import commands
 from lucid_bot.lucid_embed import lucid_embed
 
