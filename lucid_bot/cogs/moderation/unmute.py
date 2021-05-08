@@ -10,10 +10,9 @@ class Unmute(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
+    @commands.command(name="unmute")
     @commands.has_permissions(manage_roles=True)
-    async def unmute(self, ctx, *args):
-
+    async def _unmute(self, ctx, *args):
         if not args:
             embed = lucid_embed(
                 ctx,
@@ -117,3 +116,7 @@ class Unmute(commands.Cog):
                 await ctx.send(embed=embed)
 
                 return None
+
+
+def setup(bot):
+    bot.add_cog(Unmute(bot))

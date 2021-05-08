@@ -6,8 +6,8 @@ class Say(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
-    async def say(self, ctx, *, message):
+    @commands.command(name="say")
+    async def _say(self, ctx, *, message):
         if ctx.author.guild_permissions.manage_messages:
             await ctx.message.delete()
             await ctx.send(message)
@@ -19,3 +19,7 @@ class Say(commands.Cog):
                 "permissions to execute that command.",
             )
             await ctx.send(embed=embed)
+
+
+def setup(bot):
+    bot.add_cog(Say(bot))

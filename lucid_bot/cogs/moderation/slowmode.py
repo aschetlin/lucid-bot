@@ -8,10 +8,9 @@ class Slowmode(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
+    @commands.command(name="slowmode")
     @commands.has_permissions(manage_channels=True)
-    async def slowmode(self, ctx, *args):
-
+    async def _slowmode(self, ctx, *args):
         if not args:
             embed = lucid_embed(
                 ctx,
@@ -89,3 +88,7 @@ class Slowmode(commands.Cog):
                     description="Invalid slowmode time.",
                 )
                 await ctx.send(embed=embed)
+
+
+def setup(bot):
+    bot.add_cog(Slowmode(bot))

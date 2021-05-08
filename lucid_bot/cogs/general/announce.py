@@ -1,17 +1,18 @@
 import asyncio
 
 from discord.ext import commands
+from lucid_bot import config, non_bot_funcs
 from lucid_bot.lucid_embed import lucid_embed
 
 
 class Announce(commands.Cog):
-    def __init__(self, bot, config, nbf):
+    def __init__(self, bot):
         self.bot = bot
-        self.config = config
-        self.nbf = nbf
+        self.config = config.config
+        self.nbf = non_bot_funcs.NonBotFuncs(bot)
 
-    @commands.command(aliases=["announcement"])
-    async def announce(self, ctx, *args):
+    @commands.command(name="announce", aliases=["announcement"])
+    async def _announce(self, ctx, *args):
         if (
             ctx.author.guild_permissions.administrator
             or ctx.author.id in self.config["adminIDS"]
@@ -24,7 +25,6 @@ class Announce(commands.Cog):
                 )
 
                 message = await ctx.send(embed=embed)
-
                 (
                     announceChannel,
                     channelTag,
@@ -48,7 +48,7 @@ class Announce(commands.Cog):
                 await message.edit(embed=embed)
 
                 reaction_yes = await self.nbf.yes_no_dialogue(
-                    message, 10, False, ctx
+                    message, ctx, 10, False
                 )
 
                 # BUILDING ANNOUNCEMENT EMBED
@@ -92,7 +92,7 @@ class Announce(commands.Cog):
                 )
                 await message.edit(embed=embed)
                 embedDescription = await self.nbf.yes_no_dialogue(
-                    message, 20, False, ctx
+                    message, ctx, 20, False
                 )
 
                 if embedDescription:
@@ -155,3 +155,7 @@ class Announce(commands.Cog):
                 "permissions to execute that command.",
             )
             await ctx.send(embed=embed)
+
+
+def setup(bot):
+    bot.add_cog(Announce(bot))

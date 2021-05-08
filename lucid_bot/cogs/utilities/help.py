@@ -1,16 +1,17 @@
 import random
 
 from discord.ext import commands
+from lucid_bot import config
 from lucid_bot.lucid_embed import lucid_embed
 
 
 class Help(commands.Cog):
-    def __init__(self, bot, config):
+    def __init__(self, bot):
         self.bot = bot
-        self.config = config
+        self.config = config.config
 
-    @commands.command()
-    async def help(self, ctx, *args):
+    @commands.command(name="help")
+    async def _help(self, ctx, *args):
         prefix = self.config["prefix"]
         hexInt = int(random.choice(list(self.config["colors"])), 16)
         botName = self.config["botName"]
@@ -19,7 +20,8 @@ class Help(commands.Cog):
             embed = lucid_embed(
                 title=f"{botName} Bot Help -",
                 color=hexInt,
-                description=f"use {prefix}help <category> " f"to get more info",
+                description=f"use {prefix}help <category> "
+                f"to get more info",
             )
             embed.add_field(
                 name="Utility -",
@@ -27,7 +29,9 @@ class Help(commands.Cog):
                 inline=False,
             )
             embed.add_field(
-                name="General -", value="`report`, `announce`, `say`", inline=False
+                name="General -",
+                value="`report`, `announce`, `say`",
+                inline=False,
             )
             embed.add_field(
                 name="Moderation -",
@@ -41,7 +45,7 @@ class Help(commands.Cog):
             embed = lucid_embed(
                 title="Utility Commands Help -",
                 color=hexInt,
-                description="\n\n".join(self.config["utilities"]),
+                description="\n\n".join(config["utilities"]),
                 inline=True,
             )
 
@@ -51,7 +55,7 @@ class Help(commands.Cog):
             embed = lucid_embed(
                 title="General Commands Help -",
                 color=hexInt,
-                description="\n\n".join(self.config["general"]),
+                description="\n\n".join(config["general"]),
                 inline=True,
             )
 
@@ -61,7 +65,7 @@ class Help(commands.Cog):
             embed = lucid_embed(
                 title="Moderation Commands Help -",
                 color=hexInt,
-                description="\n\n".join(self.config["moderation"]),
+                description="\n\n".join(config["moderation"]),
                 inline=True,
             )
 
@@ -73,3 +77,7 @@ class Help(commands.Cog):
                 description=f"{args[0]} is not a category.",
             )
             await ctx.send(embed=embed)
+
+
+def setup(bot):
+    bot.add_cog(Help(bot))

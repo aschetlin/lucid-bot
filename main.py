@@ -3,10 +3,10 @@
 import discord
 from discord.ext import commands
 
-from lucid_bot import cog_config, non_bot_funcs
+from lucid_bot import extension_config, non_bot_funcs
+from lucid_bot.cogs.moderation import ban
 from lucid_bot.config import config
 
-# Bot init
 intents = discord.Intents.default()
 intents.members = True
 bot = commands.Bot(
@@ -14,22 +14,15 @@ bot = commands.Bot(
 )
 bot.remove_command("help")
 
-# non_bot_funcs init
-nbf = non_bot_funcs.NonBotFuncs(bot, config)
+# nbf = non_bot_funcs.NonBotFuncs(bot, config)
 
-# Adding cogs (may be a better way of doing this)
-for cog in cog_config.cogs:
+
+for extension in extension_config.extension:
     optional_params = []
+    current_extension = extension_config.extension[extension]
+    print(f"Loading {extension.capitalize()}....")
 
-    if cog.get("config"):
-        optional_params.append(config)
-    if cog.get("nbf"):
-        optional_params.append(nbf)
+    bot.load_extension(current_extension)
 
-    current_class = cog["class"]
-    print(f"Loading {current_class.__name__}....")
 
-    bot.add_cog(cog["class"](bot, *optional_params))
-
-# Run da bot
 bot.run(config["token"])

@@ -1,16 +1,17 @@
 import random
 
 from discord.ext import commands
+from lucid_bot import config
 from lucid_bot.lucid_embed import lucid_embed
 
 
 class Info(commands.Cog):
-    def __init__(self, bot, config):
+    def __init__(self, bot):
         self.bot = bot
-        self.config = config
+        self.config = config.config
 
-    @commands.command()
-    async def info(self, ctx):
+    @commands.command(name="info")
+    async def _info(self, ctx):
         prefix = self.config["prefix"]
         botName = self.config["botName"]
         hexInt = int(random.choice(list(self.config["colors"])), 16)
@@ -29,3 +30,7 @@ class Info(commands.Cog):
         )
 
         await ctx.send(embed=embed)
+
+
+def setup(bot):
+    bot.add_cog(Info(bot))

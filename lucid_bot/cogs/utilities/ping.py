@@ -1,16 +1,17 @@
 import random
 
 from discord.ext import commands
+from lucid_bot import config
 from lucid_bot.lucid_embed import lucid_embed
 
 
 class Ping(commands.Cog):
-    def __init__(self, bot, config):
+    def __init__(self, bot):
         self.bot = bot
-        self.config = config
+        self.config = config.config
 
-    @commands.command(aliases=["ms", "delay"])
-    async def ping(self, ctx):
+    @commands.command(name="ping", aliases=["ms", "delay"])
+    async def _ping(self, ctx):
         pingMsg = await ctx.send("*pinging...*")
         msgPing = round(
             (pingMsg.created_at - ctx.message.created_at).total_seconds()
@@ -26,3 +27,7 @@ class Ping(commands.Cog):
         embed.add_field(name=f"Message Latency:", value=f"~{msgPing}ms")
 
         await ctx.send(embed=embed)
+
+
+def setup(bot):
+    bot.add_cog(Ping(bot))

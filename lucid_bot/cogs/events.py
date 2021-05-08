@@ -1,11 +1,12 @@
 from discord.ext import commands
+from lucid_bot import config
 from lucid_bot.lucid_embed import lucid_embed
 
 
 class Events(commands.Cog):
-    def __init__(self, bot, config):
+    def __init__(self, bot):
         self.bot = bot
-        self.config = config
+        self.config = config.config
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -31,3 +32,7 @@ class Events(commands.Cog):
 
         else:
             raise error
+
+
+def setup(bot):
+    bot.add_cog(Events(bot))

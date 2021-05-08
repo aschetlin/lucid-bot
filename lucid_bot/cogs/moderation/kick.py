@@ -9,10 +9,9 @@ class Kick(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
+    @commands.command(name="kick")
     @commands.has_permissions(kick_members=True)
-    async def kick(self, ctx, *args):
-
+    async def _kick(self, ctx, *args):
         if not args:
             embed = lucid_embed(
                 ctx,
@@ -106,3 +105,7 @@ class Kick(commands.Cog):
                     "moderator/administrator?",
                 )
                 await ctx.send(embed=embed)
+
+
+def setup(bot):
+    bot.add_cog(Kick(bot))

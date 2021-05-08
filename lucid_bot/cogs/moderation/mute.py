@@ -10,10 +10,9 @@ class Mute(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
+    @commands.command(name="mute")
     @commands.has_permissions(manage_roles=True)
-    async def mute(self, ctx, *args):
-
+    async def _mute(self, ctx, *args):
         if not args:
             embed = lucid_embed(
                 ctx,
@@ -138,3 +137,7 @@ class Mute(commands.Cog):
                 await ctx.send(embed=embed)
 
                 return None
+
+
+def setup(bot):
+    bot.add_cog(Mute(bot))

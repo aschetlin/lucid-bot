@@ -3,23 +3,24 @@ import datetime
 
 import discord
 
+from lucid_bot import config
 from lucid_bot.lucid_embed import lucid_embed
 
 
 class NonBotFuncs:
-    def __init__(self, bot, config):
+    def __init__(self, bot):
         self.bot = bot
-        self.config = config
+        self.config = config.config
 
     def time(self):
         time = datetime.now().strftime("%H:%M:%S:$f")
         return f"[\033[32m{time[:12]}\033[0m] |"
 
     async def yes_no_dialogue(
-        self, message_name: discord.Message, timeout: int, dm: bool, ctx
+        self, message: discord.Message, ctx, timeout=20, dm=False
     ) -> object:
-        await message_name.add_reaction("✅")
-        await message_name.add_reaction("❌")
+        await message.add_reaction("✅")
+        await message.add_reaction("❌")
 
         while True:
 
@@ -209,7 +210,7 @@ class NonBotFuncs:
         )
         message = await ctx.send(embed=embed)
 
-        reaction_yes = await self.yes_no_dialogue(message, 10, False, ctx)
+        reaction_yes = await self.yes_no_dialogue(message, ctx, 10, False)
 
         if reaction_yes:
             await announce_channel.send(embed=announce_embed)

@@ -9,9 +9,9 @@ class Ban(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
+    @commands.command(name="ban")
     @commands.has_permissions(ban_members=True)
-    async def ban(self, ctx, *args):
+    async def _ban(self, ctx, *args):
         if not args:
             embed = lucid_embed(
                 ctx,
@@ -105,3 +105,7 @@ class Ban(commands.Cog):
                     "moderator/administrator?",
                 )
                 await ctx.send(embed=embed)
+
+
+def setup(bot):
+    bot.add_cog(Ban(bot))

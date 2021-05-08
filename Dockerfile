@@ -6,7 +6,7 @@ RUN apt-get update # update container packages
 
 RUN pip install --upgrade pip # update pip
 
-COPY . .
+COPY . . # copy project to /lucid-bot
 
 RUN pip install -r requirements.txt # install dependancies
 

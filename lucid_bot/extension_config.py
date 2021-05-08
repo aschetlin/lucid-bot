@@ -1,0 +1,17 @@
+extension = {
+    "events": "lucid_bot.cogs.events",
+    "announce": "lucid_bot.cogs.general.announce",
+    "report": "lucid_bot.cogs.general.report",
+    "say": "lucid_bot.cogs.general.say",
+    "ban": "lucid_bot.cogs.moderation.ban",
+    "kick": "lucid_bot.cogs.moderation.kick",
+    "mute": "lucid_bot.cogs.moderation.mute",
+    "purge": "lucid_bot.cogs.moderation.purge",
+    "slowmode": "lucid_bot.cogs.moderation.slowmode",
+    "unban": "lucid_bot.cogs.moderation.unban",
+    "unmute": "lucid_bot.cogs.moderation.unmute",
+    "help": "lucid_bot.cogs.utilities.help",
+    "info": "lucid_bot.cogs.utilities.info",
+    "ping": "lucid_bot.cogs.utilities.ping",
+    "reload": "lucid_bot.cogs.utilities.reload",
+}
