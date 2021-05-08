@@ -1,6 +1,5 @@
 from discord.ext import commands
 from lucid_bot import utils
-from lucid_bot.lucid_embed import lucid_embed
 
 
 class Lockdown(commands.Cog):
