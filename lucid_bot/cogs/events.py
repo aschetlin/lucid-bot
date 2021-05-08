@@ -1,5 +1,5 @@
 from discord.ext import commands
-from lucid_bot import config
+from lucid_bot import config, utils
 from lucid_bot.lucid_embed import lucid_embed
 
 
@@ -7,11 +7,32 @@ class Events(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.config = config.config
+        self.utils = utils.Utils
+
+    @commands.Cog.listener()
+    async def on_connect(self):
+        time = self.utils.time()
+        print(f"\n{time}Bot connected to Discord.")
 
     @commands.Cog.listener()
     async def on_ready(self):
         botName = self.config["botName"]
-        print(f"\n-----\n{botName} bot online\n-----")
+        time = self.utils.time()
+        print(f"\n{time}{botName} Bot ready.")
+        print("-----------------------------")
+
+    @commands.Cog.listener()
+    async def on_disconnect(self):
+        time = self.utils.time()
+        print("-----------------------------")
+        print(f"\n{time}Bot disconnected.")
+
+    @commands.Cog.listener()
+    async def on_command(self, ctx):
+        time = self.utils.time()
+        print(
+            f"{time}{ctx.author} | {ctx.author.id} did `{ctx.message.content}`"
+        )
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):

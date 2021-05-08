@@ -1,5 +1,5 @@
 import asyncio
-import datetime
+from datetime import datetime
 
 import discord
 
@@ -7,14 +7,25 @@ from lucid_bot import config
 from lucid_bot.lucid_embed import lucid_embed
 
 
-class NonBotFuncs:
+class Utils:
     def __init__(self, bot):
         self.bot = bot
         self.config = config.config
 
-    def time(self):
-        time = datetime.now().strftime("%H:%M:%S:$f")
-        return f"[\033[32m{time[:12]}\033[0m] |"
+    @staticmethod
+    def time():
+        time = datetime.now().strftime("%H:%M:%S")
+        return f"[\033[32m{time[:12]}\033[0m] | "
+
+    async def command_success(self, ctx, react=False, *, action=None):
+        if react:
+            await ctx.message.add_reaction("✅")
+        else:
+            embed = lucid_embed(ctx, success=True).set_author(
+                name=f"Successfully {action}",
+                icon_url="https://i.imgur.com/4yUeOVj.gif",
+            )
+            await ctx.send(embed=embed)
 
     async def yes_no_dialogue(
         self, message: discord.Message, ctx, timeout=20, dm=False

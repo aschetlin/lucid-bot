@@ -1,7 +1,7 @@
 import asyncio
 
 from discord.ext import commands
-from lucid_bot import config, non_bot_funcs
+from lucid_bot import config, utils
 from lucid_bot.lucid_embed import lucid_embed
 
 
@@ -9,7 +9,7 @@ class Announce(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.config = config.config
-        self.nbf = non_bot_funcs.NonBotFuncs(bot)
+        self.nbf = utils.Utils(bot)
 
     @commands.command(name="announce", aliases=["announcement"])
     async def _announce(self, ctx, *args):

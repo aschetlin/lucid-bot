@@ -2,7 +2,7 @@ import asyncio
 
 import redis
 from discord.ext import commands
-from lucid_bot import config, non_bot_funcs
+from lucid_bot import config, utils
 from lucid_bot.lucid_embed import lucid_embed
 
 
@@ -10,7 +10,7 @@ class Report(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.config = config.config
-        self.nbf = non_bot_funcs.NonBotFuncs(bot)
+        self.nbf = utils.Utils(bot)
         self.r = redis.Redis(
             host=self.config["redis"]["hostname"],
             port=self.config["redis"]["port"],
@@ -30,7 +30,6 @@ class Report(commands.Cog):
             description="Would you like to start an issue report ticket?",
         )
         message = await ctx.author.send(embed=embed)
-        print(message)
         startTicket = await self.nbf.yes_no_dialogue(message, ctx, 30, True)
 
         if startTicket:
