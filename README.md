@@ -36,7 +36,7 @@ If you're using Linux or MacOS, you should also make *main.py* execulable:
 	
     $ chmod 777 ./main.py
 
-# Database Setup
+# Redis Setup
 #### Windows:
 First, download the latest release of Redis [here](https://github.com/microsoftarchive/redis/releases) (make sure you download the *.msi* file). Run and install.
 Then, run *redis-cli*:
