@@ -5,6 +5,7 @@ extension = {
     "say": "lucid_bot.cogs.general.say",
     "ban": "lucid_bot.cogs.moderation.ban",
     "kick": "lucid_bot.cogs.moderation.kick",
+    "lockdown": "lucid_bot.cogs.moderation.lockdown",
     "mute": "lucid_bot.cogs.moderation.mute",
     "purge": "lucid_bot.cogs.moderation.purge",
     "slowmode": "lucid_bot.cogs.moderation.slowmode",
