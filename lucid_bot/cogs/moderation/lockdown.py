@@ -22,6 +22,10 @@ class Lockdown(commands.Cog):
             )
             await self.utils.command_success(ctx, react=True)
 
+        # elif args:
+        #     try:
+        #         channel = args
+
         else:
             raise commands.CommandNotFound
 

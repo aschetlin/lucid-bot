@@ -2,14 +2,14 @@ FROM python:3.9.4-slim-buster
 
 WORKDIR /lucid-bot
 
-RUN apt-get update # update container packages
+RUN apt-get update
 
-RUN pip install --upgrade pip # update pip
+RUN pip install --upgrade pip
 
-COPY . . 
+COPY . .
 
-RUN pip install -r requirements.txt # install dependancies
+RUN pip install -r requirements.txt
 
-RUN chmod +x main.py # make main.py executable
+RUN chmod +x main.py
 
-CMD ./main.py # run bot
+CMD ./main.py

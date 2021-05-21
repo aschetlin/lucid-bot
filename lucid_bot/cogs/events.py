@@ -31,7 +31,7 @@ class Events(commands.Cog):
     async def on_command(self, ctx):
         time = self.utils.time()
         print(
-            f"{time}{ctx.author} | {ctx.author.id} did `{ctx.message.content}`"
+            f"{time}{ctx.author}::{ctx.author.id} did `{ctx.message.content}`"
         )
 
     @commands.Cog.listener()

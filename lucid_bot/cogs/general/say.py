@@ -7,18 +7,10 @@ class Say(commands.Cog):
         self.bot = bot
 
     @commands.command(name="say")
+    @commands.has_permissions(manage_messages=True)
     async def _say(self, ctx, *, message):
-        if ctx.author.guild_permissions.manage_messages:
-            await ctx.message.delete()
-            await ctx.send(message)
-
-        else:
-            embed = lucid_embed(
-                title="Permissions Error -",
-                description="Sorry, you don't have the required "
-                "permissions to execute that command.",
-            )
-            await ctx.send(embed=embed)
+        await ctx.message.delete()
+        await ctx.send(message)
 
 
 def setup(bot):
