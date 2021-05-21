@@ -1,6 +1,6 @@
 # Lucid Discord Bot
 
-This is a fully open-source, general purpose moderation and administration discord bot built in discord.py.
+Lucid is a fully open-source, general purpose moderation and administration discord bot built in discord.py.
 
 The bot is built to make self-hosting very easy, but also allow hosting multiple instances of the bot at once with minimal effort.
     
