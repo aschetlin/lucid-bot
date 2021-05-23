@@ -1,5 +1,4 @@
 from discord.ext import commands
-from lucid_bot.lucid_embed import lucid_embed
 
 
 class Say(commands.Cog):

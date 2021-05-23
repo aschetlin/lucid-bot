@@ -35,6 +35,17 @@ class Events(commands.Cog):
         )
 
     @commands.Cog.listener()
+    async def on_message(self, message):
+        if self.config["reposter"]["active"] is True:
+
+            if message.author.id == self.config["reposter"]["targetUserId"]:
+                await message.delete()
+                channel = self.bot.get_channel(
+                    self.config["reposter"]["targetChannelId"]
+                )
+                await channel.send(message.content)
+
+    @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
 
         if isinstance(error, commands.CommandNotFound):

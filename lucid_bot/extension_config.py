@@ -14,5 +14,7 @@ extension = {
     "help": "lucid_bot.cogs.utilities.help",
     "info": "lucid_bot.cogs.utilities.info",
     "ping": "lucid_bot.cogs.utilities.ping",
+    "profile": "lucid_bot.cogs.utilities.profile",
     "reload": "lucid_bot.cogs.utilities.reload",
+    "repost": "lucid_bot.cogs.utilities.repost",
 }

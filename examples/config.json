@@ -6,6 +6,11 @@
     "port": 6379,
     "db": 0
   },
+  "reposter": {
+    "active": false,
+    "targetChannelId": ,
+    "targetUserId": 
+},
   "prefix": ",",
   "colors": [
     "0xFEFEFE",
