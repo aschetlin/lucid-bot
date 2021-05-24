@@ -61,25 +61,25 @@ class Events(commands.Cog):
                 channel = self.bot.get_channel(int(channel_id))
                 await channel.send(message.content)
 
-    @commands.Cog.listener()
-    async def on_command_error(self, ctx, error):
+    # @commands.Cog.listener()
+    # async def on_command_error(self, ctx, error):
 
-        if isinstance(error, commands.CommandNotFound):
-            embed = lucid_embed(
-                title="Command Error -", description="Command not found."
-            )
-            await ctx.send(embed=embed)
+    #     if isinstance(error, commands.CommandNotFound):
+    #         embed = lucid_embed(
+    #             title="Command Error -", description="Command not found."
+    #         )
+    #         await ctx.send(embed=embed)
 
-        # elif isinstance(error, commands.CheckFailure):
-        #     embed = lucid_embed(
-        #         title="Permissions Error -",
-        #         description="You don't have the required permissions to "
-        #         "execute that command.",
-        #     )
-        #     await ctx.send(embed=embed)
+    #     elif isinstance(error, commands.CheckFailure):
+    #         embed = lucid_embed(
+    #             title="Permissions Error -",
+    #             description="You don't have the required permissions to "
+    #             "execute that command.",
+    #         )
+    #         await ctx.send(embed=embed)
 
-        else:
-            raise error
+    #     else:
+    #         raise error
 
 
 def setup(bot):
