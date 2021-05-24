@@ -19,6 +19,8 @@ class Repost(commands.Cog):
                 json.dump(json_object, file)
                 file.truncate()
 
+            await ctx.message.add_reaction("✅")
+
         elif args[0] == "deactivate":
             with open("./config.json", "r+") as file:
                 json_object = json.load(file)
@@ -26,6 +28,8 @@ class Repost(commands.Cog):
                 file.seek(0)
                 json.dump(json_object, file)
                 file.truncate()
+
+            await ctx.message.add_reaction("✅")
 
         elif args[0] == "user":
             with open("./config.json", "r+") as file:
@@ -35,6 +39,8 @@ class Repost(commands.Cog):
                 json.dump(json_object, file)
                 file.truncate()
 
+            await ctx.message.add_reaction("✅")
+
         elif args[0] == "channel":
             with open("./config.json", "r+") as file:
                 json_object = json.load(file)
@@ -42,6 +48,8 @@ class Repost(commands.Cog):
                 file.seek(0)
                 json.dump(json_object, file)
                 file.truncate()
+
+            await ctx.message.add_reaction("✅")
 
 
 def setup(bot):
