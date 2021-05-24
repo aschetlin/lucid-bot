@@ -8,7 +8,7 @@ class Lockdown(commands.Cog):
         self.utils = utils.Utils(bot)
 
     @commands.command(name="lockdown")
-    @commands.has_permissions(manage_guild=True)
+    @commands.is_owner()
     async def _lockdown(self, ctx, args="lock"):
         if args == "lock":
             await ctx.channel.set_permissions(

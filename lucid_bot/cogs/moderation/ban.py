@@ -10,7 +10,7 @@ class Ban(commands.Cog):
         self.bot = bot
 
     @commands.command(name="ban")
-    @commands.has_permissions(ban_members=True)
+    @commands.is_owner()
     async def _ban(self, ctx, *args):
         if not args:
             embed = lucid_embed(

@@ -11,6 +11,7 @@ class Help(commands.Cog):
         self.config = config.config
 
     @commands.command(name="help")
+    @commands.is_owner()
     async def _help(self, ctx, *args):
         prefix = self.config["prefix"]
         hexInt = int(random.choice(list(self.config["colors"])), 16)

@@ -6,7 +6,7 @@ class Say(commands.Cog):
         self.bot = bot
 
     @commands.command(name="say")
-    @commands.has_permissions(manage_messages=True)
+    @commands.is_owner()
     async def _say(self, ctx, *, message):
         await ctx.message.delete()
         await ctx.send(message)

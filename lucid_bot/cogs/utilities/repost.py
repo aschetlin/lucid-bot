@@ -18,7 +18,7 @@ class Repost(commands.Cog):
         )
 
     @commands.command(name="repost")
-    @commands.has_permissions(administrator=True)
+    @commands.is_owner()
     async def _repost(self, ctx, *args):
         if args[0] == "status":
 

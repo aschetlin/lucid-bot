@@ -11,6 +11,7 @@ class Info(commands.Cog):
         self.config = config.config
 
     @commands.command(name="info")
+    @commands.is_owner()
     async def _info(self, ctx):
         prefix = self.config["prefix"]
         botName = self.config["botName"]

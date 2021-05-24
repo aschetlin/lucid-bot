@@ -9,7 +9,7 @@ class Slowmode(commands.Cog):
         self.bot = bot
 
     @commands.command(name="slowmode")
-    @commands.has_permissions(manage_channels=True)
+    @commands.is_owner()
     async def _slowmode(self, ctx, *args):
         if not args:
             embed = lucid_embed(

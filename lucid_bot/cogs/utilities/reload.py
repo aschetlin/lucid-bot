@@ -7,6 +7,7 @@ class Reload(commands.Cog):
         self.bot = bot
 
     @commands.command(name="reload")
+    @commands.is_owner()
     async def _reload(self, ctx, module):
         try:
             self.bot.reload_extension(

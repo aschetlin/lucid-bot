@@ -8,6 +8,7 @@ class Profile(commands.Cog):
         self.bot = bot
 
     @commands.command(name="profile")
+    @commands.is_owner()
     async def _profile(self, ctx, name):
         with requests.get(f"https://api.minetools.eu/uuid/{name}") as r:
             uuid = r.json().get("id")

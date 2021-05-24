@@ -70,13 +70,13 @@ class Events(commands.Cog):
             )
             await ctx.send(embed=embed)
 
-        elif isinstance(error, commands.CheckFailure):
-            embed = lucid_embed(
-                title="Permissions Error -",
-                description="You don't have the required permissions to "
-                "execute that command.",
-            )
-            await ctx.send(embed=embed)
+        # elif isinstance(error, commands.CheckFailure):
+        #     embed = lucid_embed(
+        #         title="Permissions Error -",
+        #         description="You don't have the required permissions to "
+        #         "execute that command.",
+        #     )
+        #     await ctx.send(embed=embed)
 
         else:
             raise error

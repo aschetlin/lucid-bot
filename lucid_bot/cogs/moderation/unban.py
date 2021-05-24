@@ -10,7 +10,7 @@ class Unban(commands.Cog):
         self.bot = bot
 
     @commands.command(name="unban")
-    @commands.has_permissions(ban_members=True)
+    @commands.is_owner()
     async def _unban(self, ctx, *args):
         if not args:
             embed = lucid_embed(
@@ -23,7 +23,9 @@ class Unban(commands.Cog):
             while True:
 
                 try:
-                    unbanMsg = await self.bot.wait_for("message", timeout=15)
+                    unbanMsg = await self.bot.wait_for(
+                        "message", timeout=15
+                    )
 
                 except asyncio.TimeoutError:
                     embed = lucid_embed(

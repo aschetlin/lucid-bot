@@ -18,6 +18,7 @@ class Report(commands.Cog):
         )
 
     @commands.command(name="report", aliases=["issue"])
+    @commands.is_owner()
     async def _report(self, ctx):
         embed = lucid_embed(
             title="Issue Report -",

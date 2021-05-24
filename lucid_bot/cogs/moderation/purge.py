@@ -7,7 +7,7 @@ class Purge(commands.Cog):
         self.bot = bot
 
     @commands.command(name="purge")
-    @commands.has_permissions(administrator=True)
+    @commands.is_owner()
     async def _purge(self, ctx, amount=5):
         await ctx.channel.purge(limit=amount + 1)
 

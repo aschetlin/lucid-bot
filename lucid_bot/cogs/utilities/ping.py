@@ -11,6 +11,7 @@ class Ping(commands.Cog):
         self.config = config.config
 
     @commands.command(name="ping", aliases=["ms", "delay"])
+    @commands.is_owner()
     async def _ping(self, ctx):
         pingMsg = await ctx.send("*pinging...*")
         msgPing = round(
