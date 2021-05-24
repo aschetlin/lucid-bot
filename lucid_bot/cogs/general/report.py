@@ -105,7 +105,7 @@ class Report(commands.Cog):
 
                     await user.send(embed=embed)
 
-                    r.set("ticketcount", int(ticketcount) + 1)
+                    self.r.set("ticketcount", int(ticketcount) + 1)
 
                     break
 
