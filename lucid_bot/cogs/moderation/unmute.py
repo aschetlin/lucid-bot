@@ -12,7 +12,7 @@ class Unmute(commands.Cog):
         self.bot = bot
 
     @commands.command(name="unmute")
-    @commands.is_owner()
+    @commands.has_permissions(manage_roles=True)
     async def _unmute(self, ctx, *args):
         if not args:
             embed = lucid_embed(
@@ -26,7 +26,9 @@ class Unmute(commands.Cog):
             while True:
 
                 try:
-                    unmuteMsg = await self.bot.wait_for("message", timeout=15)
+                    unmuteMsg = await self.bot.wait_for(
+                        "message", timeout=15
+                    )
 
                 except asyncio.TimeoutError:
                     embed = lucid_embed(
@@ -44,7 +46,9 @@ class Unmute(commands.Cog):
                     await unmuteMsg.delete()
 
                     try:
-                        role = get(unmuteMsg.mentions[0].roles, name="Muted")
+                        role = get(
+                            unmuteMsg.mentions[0].roles, name="Muted"
+                        )
 
                         await unmuteMsg.mentions[0].remove_roles(role)
                         await ctx.message.delete()

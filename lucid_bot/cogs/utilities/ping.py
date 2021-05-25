@@ -12,11 +12,12 @@ class Ping(commands.Cog):
         self.config = config.config
 
     @commands.command(name="ping", aliases=["ms", "delay"])
-    @commands.is_owner()
+    @commands.cooldown(1, 15, commands.BucketType.user)
     async def _ping(self, ctx):
         pingMsg = await ctx.send("*pinging...*")
         msgPing = round(
-            (pingMsg.created_at - ctx.message.created_at).total_seconds() * 1000
+            (pingMsg.created_at - ctx.message.created_at).total_seconds()
+            * 1000
         )
 
         await pingMsg.delete()

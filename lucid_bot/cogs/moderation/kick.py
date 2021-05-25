@@ -11,7 +11,7 @@ class Kick(commands.Cog):
         self.bot = bot
 
     @commands.command(name="kick")
-    @commands.is_owner()
+    @commands.has_permissions(kick_members=True)
     async def _kick(self, ctx, *args):
         if not args:
             embed = lucid_embed(
@@ -24,7 +24,9 @@ class Kick(commands.Cog):
             while True:
 
                 try:
-                    kickUser = await self.bot.wait_for("message", timeout=20)
+                    kickUser = await self.bot.wait_for(
+                        "message", timeout=20
+                    )
 
                 except asyncio.TimeoutError:
                     embed = lucid_embed(
@@ -92,7 +94,8 @@ class Kick(commands.Cog):
                     ctx,
                     fail=True,
                     title="Punishment Failed -",
-                    description="IndexError: Did you mention a valid " "user?",
+                    description="IndexError: Did you mention a valid "
+                    "user?",
                 )
                 await ctx.send(embed=embed)
 

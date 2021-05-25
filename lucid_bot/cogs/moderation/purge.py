@@ -8,7 +8,7 @@ class Purge(commands.Cog):
         self.bot = bot
 
     @commands.command(name="purge")
-    @commands.is_owner()
+    @commands.has_permissions(manage_messages=True)
     async def _purge(self, ctx, amount=5):
         await ctx.channel.purge(limit=amount + 1)
 

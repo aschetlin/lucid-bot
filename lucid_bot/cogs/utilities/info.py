@@ -12,7 +12,7 @@ class Info(commands.Cog):
         self.config = config.config
 
     @commands.command(name="info")
-    @commands.is_owner()
+    @commands.cooldown(1, 30, commands.BucketType.user)
     async def _info(self, ctx):
         prefix = self.config["prefix"]
         botName = self.config["botName"]
@@ -20,7 +20,9 @@ class Info(commands.Cog):
 
         embed = lucid_embed(title=f"{botName} Bot Info", color=hexInt)
         embed.set_thumbnail(url=self.bot.user.avatar_url)
-        embed.add_field(name="Built by:", value="viargentum#3850", inline=False)
+        embed.add_field(
+            name="Built by:", value="viargentum#3850", inline=False
+        )
         embed.add_field(
             name="Issues or suggestions:",
             value=f"If you have any issues or suggestions, use {prefix}report or"

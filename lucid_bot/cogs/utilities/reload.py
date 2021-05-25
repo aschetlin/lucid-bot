@@ -7,11 +7,12 @@ class Reload(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name="reload")
-    @commands.is_owner()
+    @commands.command(name="reload", hidden=True)
     async def _reload(self, ctx, module):
         try:
-            self.bot.reload_extension(extension[module], package="lucid_bot.cogs")
+            self.bot.reload_extension(
+                extension[module], package="lucid_bot.cogs"
+            )
 
         except commands.ExtensionError as e:
             print(e)

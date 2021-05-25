@@ -11,7 +11,7 @@ class Ban(commands.Cog):
         self.bot = bot
 
     @commands.command(name="ban")
-    @commands.is_owner()
+    @commands.has_permissions(ban_members=True)
     async def _ban(self, ctx, *args):
         if not args:
             embed = lucid_embed(
@@ -92,7 +92,8 @@ class Ban(commands.Cog):
                     ctx,
                     fail=True,
                     title="Punishment Failed -",
-                    description="IndexError: Did you mention a valid " "user?",
+                    description="IndexError: Did you mention a valid "
+                    "user?",
                 )
                 await ctx.send(embed=embed)
 

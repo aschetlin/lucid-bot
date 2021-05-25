@@ -11,7 +11,7 @@ class Unban(commands.Cog):
         self.bot = bot
 
     @commands.command(name="unban")
-    @commands.is_owner()
+    @commands.has_permissions(ban_members=True)
     async def _unban(self, ctx, *args):
         if not args:
             embed = lucid_embed(
@@ -24,7 +24,9 @@ class Unban(commands.Cog):
             while True:
 
                 try:
-                    unbanMsg = await self.bot.wait_for("message", timeout=15)
+                    unbanMsg = await self.bot.wait_for(
+                        "message", timeout=15
+                    )
 
                 except asyncio.TimeoutError:
                     embed = lucid_embed(
@@ -40,7 +42,9 @@ class Unban(commands.Cog):
                 if unbanMsg.author.id == ctx.author.id:
                     await unbanMsg.delete()
                     try:
-                        unbanUser = await self.bot.fetch_user(int(unbanMsg.content))
+                        unbanUser = await self.bot.fetch_user(
+                            int(unbanMsg.content)
+                        )
                         await ctx.guild.unban(unbanUser)
 
                         embed = lucid_embed(ctx, success=True).set_author(
@@ -94,7 +98,8 @@ class Unban(commands.Cog):
                     ctx,
                     fail=True,
                     title="Unban Failed -",
-                    description="IndexError: Did you mention a valid " "user?",
+                    description="IndexError: Did you mention a valid "
+                    "user?",
                 )
                 await ctx.send(embed=embed)
 

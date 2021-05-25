@@ -9,24 +9,35 @@ class Profile(commands.Cog):
         self.bot = bot
 
     @commands.command(name="profile")
-    @commands.is_owner()
+    @commands.cooldown(1, 30, commands.BucketType.user)
     async def _profile(self, ctx, name):
         with requests.get(f"https://api.minetools.eu/uuid/{name}") as r:
             uuid = r.json().get("id")
 
         with requests.get(f"https://api.minetools.eu/profile/{uuid}") as r:
             uname = r.json().get("decoded").get("profileName")
-            skin_url = r.json().get("decoded").get("textures").get("SKIN").get("url")
+            skin_url = (
+                r.json()
+                .get("decoded")
+                .get("textures")
+                .get("SKIN")
+                .get("url")
+            )
 
         embed = (
-            lucid_embed(ctx, success=True, title="Minecraft Profile Query -")
+            lucid_embed(
+                ctx, success=True, title="Minecraft Profile Query -"
+            )
             .add_field(name="Username:", value=uname)
             .add_field(name="UUID:", value=uuid, inline=False)
-            .add_field(name="Skin URL:", value=f"[link]({skin_url})", inline=False)
-            .set_thumbnail(url=f"https://crafatar.com/renders/body/{uuid}?overlay")
+            .add_field(
+                name="Skin URL:", value=f"[link]({skin_url})", inline=False
+            )
+            .set_thumbnail(
+                url=f"https://crafatar.com/renders/body/{uuid}?overlay"
+            )
         )
 
-        await ctx.message.delete()
         await ctx.send(embed=embed)
 
 

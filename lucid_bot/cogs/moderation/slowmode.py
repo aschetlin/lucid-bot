@@ -10,7 +10,7 @@ class Slowmode(commands.Cog):
         self.bot = bot
 
     @commands.command(name="slowmode")
-    @commands.is_owner()
+    @commands.has_permissions(manage_channels=True)
     async def _slowmode(self, ctx, *args):
         if not args:
             embed = lucid_embed(
@@ -23,7 +23,9 @@ class Slowmode(commands.Cog):
             while True:
 
                 try:
-                    slowmodeTime = await self.bot.wait_for("message", timeout=20)
+                    slowmodeTime = await self.bot.wait_for(
+                        "message", timeout=20
+                    )
 
                 except asyncio.TimeoutError:
                     embed = lucid_embed(
@@ -38,7 +40,9 @@ class Slowmode(commands.Cog):
 
                 if slowmodeTime.author.id == ctx.author.id:
                     await slowmodeTime.delete()
-                    await ctx.channel.edit(slowmode_delay=slowmodeTime.content)
+                    await ctx.channel.edit(
+                        slowmode_delay=slowmodeTime.content
+                    )
 
                     embed = lucid_embed(
                         ctx,

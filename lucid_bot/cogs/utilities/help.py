@@ -12,7 +12,7 @@ class Help(commands.Cog):
         self.config = config.config
 
     @commands.command(name="help")
-    @commands.is_owner()
+    @commands.cooldown(1, 5, commands.BucketType.user)
     async def _help(self, ctx, *args):
         prefix = self.config["prefix"]
         hexInt = int(random.choice(list(self.config["colors"])), 16)
@@ -22,7 +22,8 @@ class Help(commands.Cog):
             embed = lucid_embed(
                 title=f"{botName} Bot Help -",
                 color=hexInt,
-                description=f"use {prefix}help <category> " f"to get more info",
+                description=f"use {prefix}help <category> "
+                f"to get more info",
             )
             embed.add_field(
                 name="Utility -",
