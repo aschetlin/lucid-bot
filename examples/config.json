@@ -1,17 +1,12 @@
 {
   "botName": "",
   "token": "",
+  "prefix": ",",
   "redis": {
-    "hostname": "localhost",
+    "hostname": "redis",
     "port": 6379,
     "db": 0
   },
-  "reposter": {
-    "active": false,
-    "targetChannelId": ,
-    "targetUserId": 
-},
-  "prefix": ",",
   "colors": [
     "0xFEFEFE",
     "0x7681de",
