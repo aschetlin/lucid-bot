@@ -1,6 +1,7 @@
 import random
 
 from discord.ext import commands
+
 from lucid_bot import config
 from lucid_bot.lucid_embed import lucid_embed
 
@@ -19,9 +20,7 @@ class Info(commands.Cog):
 
         embed = lucid_embed(title=f"{botName} Bot Info", color=hexInt)
         embed.set_thumbnail(url=self.bot.user.avatar_url)
-        embed.add_field(
-            name="Built by:", value="viargentum#3850", inline=False
-        )
+        embed.add_field(name="Built by:", value="viargentum#3850", inline=False)
         embed.add_field(
             name="Issues or suggestions:",
             value=f"If you have any issues or suggestions, use {prefix}report or"

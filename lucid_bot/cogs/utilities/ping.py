@@ -1,6 +1,7 @@
 import random
 
 from discord.ext import commands
+
 from lucid_bot import config
 from lucid_bot.lucid_embed import lucid_embed
 
@@ -15,8 +16,7 @@ class Ping(commands.Cog):
     async def _ping(self, ctx):
         pingMsg = await ctx.send("*pinging...*")
         msgPing = round(
-            (pingMsg.created_at - ctx.message.created_at).total_seconds()
-            * 1000
+            (pingMsg.created_at - ctx.message.created_at).total_seconds() * 1000
         )
 
         await pingMsg.delete()

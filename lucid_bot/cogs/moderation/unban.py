@@ -2,6 +2,7 @@ import asyncio
 
 import discord
 from discord.ext import commands
+
 from lucid_bot.lucid_embed import lucid_embed
 
 
@@ -23,9 +24,7 @@ class Unban(commands.Cog):
             while True:
 
                 try:
-                    unbanMsg = await self.bot.wait_for(
-                        "message", timeout=15
-                    )
+                    unbanMsg = await self.bot.wait_for("message", timeout=15)
 
                 except asyncio.TimeoutError:
                     embed = lucid_embed(
@@ -41,9 +40,7 @@ class Unban(commands.Cog):
                 if unbanMsg.author.id == ctx.author.id:
                     await unbanMsg.delete()
                     try:
-                        unbanUser = await self.bot.fetch_user(
-                            int(unbanMsg.content)
-                        )
+                        unbanUser = await self.bot.fetch_user(int(unbanMsg.content))
                         await ctx.guild.unban(unbanUser)
 
                         embed = lucid_embed(ctx, success=True).set_author(
@@ -97,8 +94,7 @@ class Unban(commands.Cog):
                     ctx,
                     fail=True,
                     title="Unban Failed -",
-                    description="IndexError: Did you mention a valid "
-                    "user?",
+                    description="IndexError: Did you mention a valid " "user?",
                 )
                 await ctx.send(embed=embed)
 

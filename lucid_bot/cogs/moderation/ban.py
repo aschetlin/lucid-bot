@@ -2,6 +2,7 @@ import asyncio
 
 import discord
 from discord.ext import commands
+
 from lucid_bot.lucid_embed import lucid_embed
 
 
@@ -91,8 +92,7 @@ class Ban(commands.Cog):
                     ctx,
                     fail=True,
                     title="Punishment Failed -",
-                    description="IndexError: Did you mention a valid "
-                    "user?",
+                    description="IndexError: Did you mention a valid " "user?",
                 )
                 await ctx.send(embed=embed)
 

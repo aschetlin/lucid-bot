@@ -1,9 +1,11 @@
 import json
-from lucid_bot.lucid_embed import lucid_embed
+
 import discord
 import redis
 from discord.ext import commands
+
 from lucid_bot import config
+from lucid_bot.lucid_embed import lucid_embed
 
 
 class Repost(commands.Cog):
@@ -35,9 +37,7 @@ class Repost(commands.Cog):
                 )
                 .add_field(
                     name="Target Channel:",
-                    value=self.redis.hget(
-                        ctx.guild.id, "repostTargetChannel"
-                    ),
+                    value=self.redis.hget(ctx.guild.id, "repostTargetChannel"),
                     inline=False,
                 )
             )
@@ -56,14 +56,10 @@ class Repost(commands.Cog):
                 await self.bot.fetch_user(args[1])
 
             except (discord.NotFound, discord.HTTPException):
-                await ctx.send(
-                    f"User with ID {args[1]} could not be found."
-                )
+                await ctx.send(f"User with ID {args[1]} could not be found.")
                 return
 
-            self.redis.hmset(
-                ctx.guild.id, {"repostTargetUser": str(args[1])}
-            )
+            self.redis.hmset(ctx.guild.id, {"repostTargetUser": str(args[1])})
             await ctx.message.add_reaction("✅")
 
         elif args[0] == "channel":
@@ -71,14 +67,10 @@ class Repost(commands.Cog):
                 self.bot.get_channel(int(args[1]))
 
             except (discord.NotFound, discord.HTTPException):
-                await ctx.send(
-                    f"Channel with ID {args[1]} could not be found."
-                )
+                await ctx.send(f"Channel with ID {args[1]} could not be found.")
                 return
 
-            self.redis.hmset(
-                ctx.guild.id, {"repostTargetChannel": str(args[1])}
-            )
+            self.redis.hmset(ctx.guild.id, {"repostTargetChannel": str(args[1])})
             await ctx.message.add_reaction("✅")
 
 

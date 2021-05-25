@@ -2,6 +2,7 @@ import asyncio
 
 import redis
 from discord.ext import commands
+
 from lucid_bot import config, utils
 from lucid_bot.lucid_embed import lucid_embed
 
@@ -44,9 +45,7 @@ class Report(commands.Cog):
             while True:
 
                 try:
-                    issueTitle = await self.bot.wait_for(
-                        "message", timeout=20
-                    )
+                    issueTitle = await self.bot.wait_for("message", timeout=20)
 
                 except asyncio.TimeoutError:
                     embed = lucid_embed(
@@ -70,9 +69,7 @@ class Report(commands.Cog):
                 await ctx.author.send(embed=embed)
 
                 try:
-                    issueDescription = await self.bot.wait_for(
-                        "message", timeout=120
-                    )
+                    issueDescription = await self.bot.wait_for("message", timeout=120)
 
                 except asyncio.TimeoutError:
                     embed = lucid_embed(
@@ -100,9 +97,7 @@ class Report(commands.Cog):
                         title=str(issueTitle.content),
                         description=str(issueDescription.content),
                     )
-                    embed.set_footer(
-                        text=str(ctx.author) + " - " + str(ctx.author.id)
-                    )
+                    embed.set_footer(text=str(ctx.author) + " - " + str(ctx.author.id))
 
                     await user.send(embed=embed)
 

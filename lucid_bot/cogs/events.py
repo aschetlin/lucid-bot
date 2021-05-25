@@ -1,5 +1,6 @@
-from discord.ext import commands
 import redis
+from discord.ext import commands
+
 from lucid_bot import config, utils
 from lucid_bot.lucid_embed import lucid_embed
 
@@ -37,27 +38,21 @@ class Events(commands.Cog):
     @commands.Cog.listener()
     async def on_command(self, ctx):
         time = self.utils.time()
-        print(
-            f"{time}{ctx.author}::{ctx.author.id} did `{ctx.message.content}`"
-        )
+        print(f"{time}{ctx.author}::{ctx.author.id} did `{ctx.message.content}`")
 
     @commands.Cog.listener()
     async def on_message(self, message):
         repost_active = self.redis.hget(message.guild.id, "repostActive")
 
         if repost_active == "True":
-            target_user = self.redis.hget(
-                message.guild.id, "repostTargetUser"
-            )
+            target_user = self.redis.hget(message.guild.id, "repostTargetUser")
 
             if message.author.id == int(target_user):
                 print(f"here {message.author.id}")
 
                 await message.delete()
 
-                channel_id = self.redis.hget(
-                    message.guild.id, "repostTargetChannel"
-                )
+                channel_id = self.redis.hget(message.guild.id, "repostTargetChannel")
                 channel = self.bot.get_channel(int(channel_id))
                 await channel.send(message.content)
 

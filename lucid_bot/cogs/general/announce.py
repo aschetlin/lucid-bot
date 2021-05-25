@@ -1,6 +1,7 @@
 import asyncio
 
 from discord.ext import commands
+
 from lucid_bot import config, utils
 from lucid_bot.lucid_embed import lucid_embed
 
@@ -31,9 +32,7 @@ class Announce(commands.Cog):
                     channelTag,
                 ) = await self.nbf.announcement_channel(ctx, message)
                 announceTitle = await self.nbf.announce_title(ctx, message)
-                announceMessage = await self.nbf.announcement_description(
-                    ctx, message
-                )
+                announceMessage = await self.nbf.announcement_description(ctx, message)
                 colorHex = await self.nbf.announce_color(message, ctx)
 
                 # ANNOUNCEMENT AUTHOR YES/NO
@@ -42,17 +41,13 @@ class Announce(commands.Cog):
                     title="Should the announcement list who created it in the footer,\n"
                     "eg. the footer of this message?"
                 )
-                embed.set_footer(
-                    text="announcement from " + str(ctx.author)
-                )
+                embed.set_footer(text="announcement from " + str(ctx.author))
 
                 await message.clear_reactions()
 
                 await message.edit(embed=embed)
 
-                reaction_yes = await self.nbf.yes_no_dialogue(
-                    message, ctx, 10, False
-                )
+                reaction_yes = await self.nbf.yes_no_dialogue(message, ctx, 10, False)
 
                 # BUILDING ANNOUNCEMENT EMBED
                 hexInt = int(colorHex, 16)
@@ -99,10 +94,8 @@ class Announce(commands.Cog):
                 )
 
                 if embedDescription:
-                    announceMessage = (
-                        await self.nbf.announcement_description(
-                            ctx, message
-                        )
+                    announceMessage = await self.nbf.announcement_description(
+                        ctx, message
                     )
 
                 else:
@@ -118,9 +111,7 @@ class Announce(commands.Cog):
                 while True:
 
                     try:
-                        image = await self.bot.wait_for(
-                            "message", timeout=40
-                        )
+                        image = await self.bot.wait_for("message", timeout=40)
 
                     except asyncio.TimeoutError:
                         embed = lucid_embed(

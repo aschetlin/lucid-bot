@@ -1,6 +1,7 @@
 import random
 
 from discord.ext import commands
+
 from lucid_bot import config
 from lucid_bot.lucid_embed import lucid_embed
 
@@ -21,8 +22,7 @@ class Help(commands.Cog):
             embed = lucid_embed(
                 title=f"{botName} Bot Help -",
                 color=hexInt,
-                description=f"use {prefix}help <category> "
-                f"to get more info",
+                description=f"use {prefix}help <category> " f"to get more info",
             )
             embed.add_field(
                 name="Utility -",

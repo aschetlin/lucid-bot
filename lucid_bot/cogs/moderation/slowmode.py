@@ -1,6 +1,7 @@
 import asyncio
 
 from discord.ext import commands
+
 from lucid_bot.lucid_embed import lucid_embed
 
 
@@ -22,9 +23,7 @@ class Slowmode(commands.Cog):
             while True:
 
                 try:
-                    slowmodeTime = await self.bot.wait_for(
-                        "message", timeout=20
-                    )
+                    slowmodeTime = await self.bot.wait_for("message", timeout=20)
 
                 except asyncio.TimeoutError:
                     embed = lucid_embed(
@@ -39,9 +38,7 @@ class Slowmode(commands.Cog):
 
                 if slowmodeTime.author.id == ctx.author.id:
                     await slowmodeTime.delete()
-                    await ctx.channel.edit(
-                        slowmode_delay=slowmodeTime.content
-                    )
+                    await ctx.channel.edit(slowmode_delay=slowmodeTime.content)
 
                     embed = lucid_embed(
                         ctx,
