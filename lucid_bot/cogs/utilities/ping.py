@@ -1,5 +1,6 @@
 import random
 
+from discord import Color
 from discord.ext import commands
 
 from lucid_bot import config
@@ -22,9 +23,8 @@ class Ping(commands.Cog):
 
         await pingMsg.delete()
         botPing = round(self.bot.latency * 1000)
-        hexInt = int(random.choice(list(self.config["colors"])), 16)
 
-        embed = lucid_embed(title="Ping -", color=hexInt)
+        embed = lucid_embed(title="Ping -")
         embed.add_field(name=f"API Latency:", value=f"~{botPing}ms")
         embed.add_field(name=f"Message Latency:", value=f"~{msgPing}ms")
 

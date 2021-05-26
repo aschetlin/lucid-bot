@@ -11,6 +11,10 @@ def lucid_embed(ctx=None, success: bool = None, fail: bool = None, **kwargs):
     elif fail:
         kwargs["color"] = Color.red()
 
+    else:
+        kwargs["color"] = int("2F3136", 16)
+
+
     embed = discord.Embed(**kwargs, timestamp=datetime.utcnow())
 
     if ctx:
