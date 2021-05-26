@@ -1,0 +1,14 @@
+[Unit]
+Desciption=Lucid Bot Systemd Service
+After=multi-user.target
+
+[Service]
+WorkingDirectory=/home/admin/lucid-bot
+User=admin
+ExecStart=/home/admin/lucid-bot/main.py
+Restart=always
+StandardOutput=journal+console
+StandardError=journal+console
+
+[Install]
+WantedBy=multi-user.target

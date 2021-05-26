@@ -3,6 +3,7 @@ import asyncio
 import discord
 from discord.ext import commands
 from discord.utils import get
+
 from lucid_bot.lucid_embed import lucid_embed
 
 
@@ -13,6 +14,7 @@ class Mute(commands.Cog):
     @commands.command(name="mute")
     @commands.has_permissions(manage_roles=True)
     async def _mute(self, ctx, *args):
+
         if not args:
             embed = lucid_embed(
                 ctx,

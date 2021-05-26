@@ -2,6 +2,7 @@ import asyncio
 
 import discord
 from discord.ext import commands
+
 from lucid_bot.lucid_embed import lucid_embed
 
 
@@ -23,7 +24,9 @@ class Unban(commands.Cog):
             while True:
 
                 try:
-                    unbanMsg = await self.bot.wait_for("message", timeout=15)
+                    unbanMsg = await self.bot.wait_for(
+                        "message", timeout=15
+                    )
 
                 except asyncio.TimeoutError:
                     embed = lucid_embed(

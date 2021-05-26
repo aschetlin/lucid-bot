@@ -36,9 +36,7 @@ class Utils:
         while True:
 
             try:
-                reaction = await self.bot.wait_for(
-                    "reaction_add", timeout=timeout
-                )
+                reaction = await self.bot.wait_for("reaction_add", timeout=timeout)
 
             except asyncio.TimeoutError:
                 embed = lucid_embed(
@@ -72,9 +70,7 @@ class Utils:
         while True:
 
             try:
-                announceChannel = await self.bot.wait_for(
-                    "message", timeout=20
-                )
+                announceChannel = await self.bot.wait_for("message", timeout=20)
 
             except asyncio.TimeoutError:
                 embed = lucid_embed(
@@ -148,9 +144,7 @@ class Utils:
         while True:
 
             try:
-                announceMessage = await self.bot.wait_for(
-                    "message", timeout=180
-                )
+                announceMessage = await self.bot.wait_for("message", timeout=180)
 
             except asyncio.TimeoutError:
                 embed = lucid_embed(
@@ -184,9 +178,7 @@ class Utils:
         while True:
 
             try:
-                reactColor = await self.bot.wait_for(
-                    "reaction_add", timeout=20
-                )
+                reactColor = await self.bot.wait_for("reaction_add", timeout=20)
 
             except asyncio.TimeoutError:
                 embed = lucid_embed(
@@ -216,8 +208,7 @@ class Utils:
         # CONFIRM/DENY SEND
         embed = lucid_embed(
             title="Bot Announcement -",
-            description="Do you want to send the announcement "
-            + "as shown above?",
+            description="Do you want to send the announcement " + "as shown above?",
         )
         message = await ctx.send(embed=embed)
 
@@ -227,9 +218,7 @@ class Utils:
             await announce_channel.send(embed=announce_embed)
             embed = lucid_embed(
                 title="Bot Announcement -",
-                description="Announcement successfully sent to "
-                + channel_tag
-                + ".",
+                description="Announcement successfully sent to " + channel_tag + ".",
             )
             embed.set_footer(text="bot developed by viargentum#3850")
             await message.clear_reactions()

@@ -2,6 +2,7 @@ import asyncio
 
 import discord
 from discord.ext import commands
+
 from lucid_bot.lucid_embed import lucid_embed
 
 
@@ -23,7 +24,9 @@ class Kick(commands.Cog):
             while True:
 
                 try:
-                    kickUser = await self.bot.wait_for("message", timeout=20)
+                    kickUser = await self.bot.wait_for(
+                        "message", timeout=20
+                    )
 
                 except asyncio.TimeoutError:
                     embed = lucid_embed(

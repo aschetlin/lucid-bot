@@ -1,6 +1,7 @@
 import random
 
 from discord.ext import commands
+
 from lucid_bot import config
 from lucid_bot.lucid_embed import lucid_embed
 
@@ -11,6 +12,7 @@ class Info(commands.Cog):
         self.config = config.config
 
     @commands.command(name="info")
+    @commands.cooldown(1, 30, commands.BucketType.user)
     async def _info(self, ctx):
         prefix = self.config["prefix"]
         botName = self.config["botName"]

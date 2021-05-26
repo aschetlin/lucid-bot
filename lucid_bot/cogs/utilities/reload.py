@@ -1,4 +1,5 @@
 from discord.ext import commands
+
 from lucid_bot.extension_config import extension
 
 
@@ -6,7 +7,7 @@ class Reload(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name="reload")
+    @commands.command(name="reload", hidden=True)
     async def _reload(self, ctx, module):
         try:
             self.bot.reload_extension(

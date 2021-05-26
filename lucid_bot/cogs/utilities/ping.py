@@ -1,6 +1,7 @@
 import random
 
 from discord.ext import commands
+
 from lucid_bot import config
 from lucid_bot.lucid_embed import lucid_embed
 
@@ -11,6 +12,7 @@ class Ping(commands.Cog):
         self.config = config.config
 
     @commands.command(name="ping", aliases=["ms", "delay"])
+    @commands.cooldown(1, 15, commands.BucketType.user)
     async def _ping(self, ctx):
         pingMsg = await ctx.send("*pinging...*")
         msgPing = round(

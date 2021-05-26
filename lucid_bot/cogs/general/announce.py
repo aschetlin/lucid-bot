@@ -1,6 +1,7 @@
 import asyncio
 
 from discord.ext import commands
+
 from lucid_bot import config, utils
 from lucid_bot.lucid_embed import lucid_embed
 
@@ -12,6 +13,7 @@ class Announce(commands.Cog):
         self.nbf = utils.Utils(bot)
 
     @commands.command(name="announce", aliases=["announcement"])
+    @commands.has_permissions(manage_guild=True)
     async def _announce(self, ctx, *args):
         if (
             ctx.author.guild_permissions.administrator
@@ -41,7 +43,9 @@ class Announce(commands.Cog):
                     title="Should the announcement list who created it in the footer,\n"
                     "eg. the footer of this message?"
                 )
-                embed.set_footer(text="announcement from " + str(ctx.author))
+                embed.set_footer(
+                    text="announcement from " + str(ctx.author)
+                )
 
                 await message.clear_reactions()
 
@@ -96,8 +100,10 @@ class Announce(commands.Cog):
                 )
 
                 if embedDescription:
-                    announceMessage = await self.nbf.announcement_description(
-                        ctx, message
+                    announceMessage = (
+                        await self.nbf.announcement_description(
+                            ctx, message
+                        )
                     )
 
                 else:
@@ -113,7 +119,9 @@ class Announce(commands.Cog):
                 while True:
 
                     try:
-                        image = await self.bot.wait_for("message", timeout=40)
+                        image = await self.bot.wait_for(
+                            "message", timeout=40
+                        )
 
                     except asyncio.TimeoutError:
                         embed = lucid_embed(

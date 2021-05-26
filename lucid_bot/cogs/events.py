@@ -1,12 +1,18 @@
+import redis
 from discord.ext import commands
 from lucid_bot import config, utils
-from lucid_bot.lucid_embed import lucid_embed
 
 
 class Events(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.config = config.config
+        self.redis = redis.Redis(
+            host=self.config["redis"]["hostname"],
+            port=self.config["redis"]["port"],
+            db=self.config["redis"]["db"],
+            decode_responses=True,
+        )
         self.utils = utils.Utils
 
     @commands.Cog.listener()
@@ -35,21 +41,36 @@ class Events(commands.Cog):
         )
 
     @commands.Cog.listener()
+    async def on_message(self, message):
+        repost_active = self.redis.hget(message.guild.id, "repostActive")
+
+        if repost_active == "True":
+            target_user = self.redis.hget(
+                message.guild.id, "repostTargetUser"
+            )
+
+            if message.author.id == int(target_user):
+                print(f"here {message.author.id}")
+
+                await message.delete()
+
+                channel_id = self.redis.hget(
+                    message.guild.id, "repostTargetChannel"
+                )
+                channel = self.bot.get_channel(int(channel_id))
+                await channel.send(message.content)
+
+    @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
 
         if isinstance(error, commands.CommandNotFound):
-            embed = lucid_embed(
-                title="Command Error -", description="Command not found."
-            )
-            await ctx.send(embed=embed)
+            await ctx.message.add_reaction("❓")
 
         elif isinstance(error, commands.CheckFailure):
-            embed = lucid_embed(
-                title="Permissions Error -",
-                description="You don't have the required permissions to "
-                "execute that command.",
-            )
-            await ctx.send(embed=embed)
+            await ctx.message.add_reaction("❌")
+
+        elif isinstance(error, commands.CommandOnCooldown):
+            await ctx.message.add_reaction("🕐")
 
         else:
             raise error

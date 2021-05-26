@@ -4,7 +4,6 @@ import discord
 from discord.ext import commands
 
 from lucid_bot import extension_config
-from lucid_bot.cogs.moderation import ban
 from lucid_bot.config import config
 from lucid_bot.utils import Utils
 

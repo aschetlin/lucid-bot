@@ -2,6 +2,7 @@ import asyncio
 
 import redis
 from discord.ext import commands
+
 from lucid_bot import config, utils
 from lucid_bot.lucid_embed import lucid_embed
 
@@ -18,6 +19,7 @@ class Report(commands.Cog):
         )
 
     @commands.command(name="report", aliases=["issue"])
+    @commands.cooldown(1, 60, commands.BucketType.user)
     async def _report(self, ctx):
         embed = lucid_embed(
             title="Issue Report -",
@@ -105,7 +107,7 @@ class Report(commands.Cog):
 
                     await user.send(embed=embed)
 
-                    r.set("ticketcount", int(ticketcount) + 1)
+                    self.r.set("ticketcount", int(ticketcount) + 1)
 
                     break
 

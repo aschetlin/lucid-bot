@@ -1,4 +1,5 @@
 from discord.ext import commands
+
 from lucid_bot.lucid_embed import lucid_embed
 
 
@@ -7,7 +8,7 @@ class Purge(commands.Cog):
         self.bot = bot
 
     @commands.command(name="purge")
-    @commands.has_permissions(administrator=True)
+    @commands.has_permissions(manage_messages=True)
     async def _purge(self, ctx, amount=5):
         await ctx.channel.purge(limit=amount + 1)
 

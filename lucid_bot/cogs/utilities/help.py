@@ -1,6 +1,7 @@
 import random
 
 from discord.ext import commands
+
 from lucid_bot import config
 from lucid_bot.lucid_embed import lucid_embed
 
@@ -11,6 +12,7 @@ class Help(commands.Cog):
         self.config = config.config
 
     @commands.command(name="help")
+    @commands.cooldown(1, 5, commands.BucketType.user)
     async def _help(self, ctx, *args):
         prefix = self.config["prefix"]
         hexInt = int(random.choice(list(self.config["colors"])), 16)
