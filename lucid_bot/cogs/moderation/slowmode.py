@@ -1,7 +1,6 @@
 import asyncio
 
 from discord.ext import commands
-
 from lucid_bot.lucid_embed import lucid_embed
 
 
@@ -9,10 +8,11 @@ class Slowmode(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name="slowmode")
+    @commands.group(name="slowmode", invoke_without_command=True)
     @commands.has_permissions(manage_channels=True)
-    async def _slowmode(self, ctx, *args):
-        if not args:
+    async def _slowmode(self, ctx, time: int = None):
+        if not time:
+
             embed = lucid_embed(
                 ctx,
                 title="Channel Slowmode -",
@@ -44,42 +44,17 @@ class Slowmode(commands.Cog):
                         slowmode_delay=slowmodeTime.content
                     )
 
-                    embed = lucid_embed(
-                        ctx,
-                        success=True,
-                        title="Channel Slowmode -",
-                        description=f"{slowmodeTime.content}s slowmode activated!",
-                    )
-
-                    await message.edit(embed=embed)
+                    await message.delete()
+                    await ctx.message.add_reaction("✅")
 
                     return None
-
-        if str(args[0]) == "lift":
-            await ctx.channel.edit(slowmode_delay=0)
-
-            embed = lucid_embed(
-                ctx,
-                success=True,
-                title="Channel Slowmode -",
-                description="Slowmode lifted!",
-            )
-            await ctx.send(embed=embed)
-
         else:
 
             try:
-                slowmodeTime = args[0]
+                slowmodeTime = time
 
                 await ctx.channel.edit(slowmode_delay=slowmodeTime)
-
-                embed = lucid_embed(
-                    ctx,
-                    success=True,
-                    title="Channel Slowmode -",
-                    description=f"{slowmodeTime}s slowmode activated!",
-                )
-                await ctx.send(embed=embed)
+                await ctx.message.add_reaction("✅")
 
             except IndexError:
                 embed = lucid_embed(
@@ -89,6 +64,11 @@ class Slowmode(commands.Cog):
                     description="Invalid slowmode time.",
                 )
                 await ctx.send(embed=embed)
+
+    @_slowmode.command(name="lift")
+    async def _slowmode_lift(self, ctx):
+        await ctx.channel.edit(slowmode_delay=0)
+        await ctx.message.add_reaction("✅")
 
 
 def setup(bot):
