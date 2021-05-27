@@ -1,6 +1,7 @@
 import redis
 from discord.ext import commands
 from lucid_bot import config, utils
+from lucid_bot.lucid_embed import lucid_embed
 
 
 class Events(commands.Cog):
@@ -49,16 +50,44 @@ class Events(commands.Cog):
                 message.guild.id, "repostTargetUser"
             )
 
-            if message.author.id == int(target_user):
-                print(f"here {message.author.id}")
+            channel_id = self.redis.hget(
+                message.guild.id, "repostTargetChannel"
+            )
+
+            if (
+                target_user is not None
+                and channel_id is not None
+                and int(target_user) == message.author.id
+            ):
 
                 await message.delete()
 
-                channel_id = self.redis.hget(
-                    message.guild.id, "repostTargetChannel"
-                )
                 channel = self.bot.get_channel(int(channel_id))
                 await channel.send(message.content)
+
+    @commands.Cog.listener()
+    async def on_message_edit(self, before, after):
+        if self.redis.hget(before.guild.id, "editLogActive") == "True":
+            embed = (
+                lucid_embed()
+                .set_author(
+                    name=f"{before.author} edited their message",
+                    url=before.jump_url,
+                    icon_url=before.author.avatar_url,
+                )
+                .add_field(name="Before:", value=before.content)
+                .add_field(name="After:", value=after.content, inline=False)
+            )
+            send_channel = self.redis.hget(
+                before.guild.id, "editLogChannel"
+            )
+
+            if send_channel is not None:
+                channel = self.bot.get_channel(int(send_channel))
+                await channel.send(embed=embed)
+
+            else:
+                await before.channel.send(embed=embed)
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
