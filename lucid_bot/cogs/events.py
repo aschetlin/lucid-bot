@@ -95,6 +95,9 @@ class Events(commands.Cog):
         if isinstance(error, commands.CommandNotFound):
             await ctx.message.add_reaction("❓")
 
+        elif isinstance(error, commands.NotOwner):
+            await ctx.message.add_reaction("❌")
+
         elif isinstance(error, commands.CheckFailure):
             await ctx.message.add_reaction("❌")
 

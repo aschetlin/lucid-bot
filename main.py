@@ -10,7 +10,9 @@ from lucid_bot.utils import Utils
 intents = discord.Intents.default()
 intents.members = True
 bot = commands.Bot(
-    command_prefix=config["prefix"], case_insensitive=False, intents=intents
+    command_prefix=config["prefix"],
+    case_insensitive=False,
+    intents=intents,
 )
 bot.remove_command("help")
 
