@@ -1,4 +1,4 @@
-extension = {
+extensions = {
     "events": "lucid_bot.cogs.events",
     "announce": "lucid_bot.cogs.general.announce",
     "report": "lucid_bot.cogs.general.report",
