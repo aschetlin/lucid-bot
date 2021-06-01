@@ -11,18 +11,11 @@ class Profile(commands.Cog):
     @commands.command(name="profile")
     @commands.cooldown(1, 30, commands.BucketType.user)
     async def _profile(self, ctx, name):
-        with requests.get(f"https://api.minetools.eu/uuid/{name}") as r:
+        with requests.get(
+            f"https://api.mojang.com/users/profiles/minecraft/{name}"
+        ) as r:
             uuid = r.json().get("id")
-
-        with requests.get(f"https://api.minetools.eu/profile/{uuid}") as r:
-            uname = r.json().get("decoded").get("profileName")
-            skin_url = (
-                r.json()
-                .get("decoded")
-                .get("textures")
-                .get("SKIN")
-                .get("url")
-            )
+            uname = r.json().get("name")
 
         embed = (
             lucid_embed(
@@ -31,7 +24,9 @@ class Profile(commands.Cog):
             .add_field(name="Username:", value=uname)
             .add_field(name="UUID:", value=uuid, inline=False)
             .add_field(
-                name="Skin URL:", value=f"[link]({skin_url})", inline=False
+                name="Skin URL:",
+                value=f"[link](https://crafatar.com/skins/{uuid})",
+                inline=False,
             )
             .set_thumbnail(
                 url=f"https://crafatar.com/renders/body/{uuid}?overlay"
