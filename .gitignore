@@ -1,7 +1,8 @@
-/config.json
-/venv
-__pycache__
-/dump.rdb
 /.idea
-/.vscode
 /.python-version
+/.vscode
+/config.json
+/dump.rdb
+/venv
+README.org
+__pycache__

@@ -12,7 +12,7 @@ class Unmute(commands.Cog):
         self.bot = bot
 
     @commands.command(name="unmute")
-    @commands.has_permissions(manage_roles=True)
+    @commands.has_permissions(kick_members=True)
     async def _unmute(self, ctx, *args):
         if not args:
             embed = lucid_embed(

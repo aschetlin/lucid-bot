@@ -12,7 +12,7 @@ class Mute(commands.Cog):
         self.bot = bot
 
     @commands.command(name="mute")
-    @commands.has_permissions(manage_roles=True)
+    @commands.has_permissions(kick_members=True)
     async def _mute(self, ctx, *args):
 
         if not args:
