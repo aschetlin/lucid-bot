@@ -1,3 +1,4 @@
+from json.decoder import JSONDecodeError
 import requests
 from discord.ext import commands
 
@@ -14,8 +15,13 @@ class Profile(commands.Cog):
         with requests.get(
             f"https://api.mojang.com/users/profiles/minecraft/{name}"
         ) as r:
-            uuid = r.json().get("id")
-            uname = r.json().get("name")
+            try:
+                uuid = r.json().get("id")
+                uname = r.json().get("name")
+
+            except JSONDecodeError:
+                await ctx.message.add_reaction("❌")
+                return
 
         embed = (
             lucid_embed(
