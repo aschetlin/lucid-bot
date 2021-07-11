@@ -11,7 +11,7 @@ extensions = {
     "slowmode": "lucid_bot.cogs.moderation.slowmode",
     "unban": "lucid_bot.cogs.moderation.unban",
     "unmute": "lucid_bot.cogs.moderation.unmute",
-    "editlog": "lucid_bot.cogs.utilities.editlog",
+    "logger": "lucid_bot.cogs.utilities.logger",
     "help": "lucid_bot.cogs.utilities.help",
     "info": "lucid_bot.cogs.utilities.info",
     "ping": "lucid_bot.cogs.utilities.ping",

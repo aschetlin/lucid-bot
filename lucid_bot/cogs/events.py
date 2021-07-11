@@ -1,5 +1,7 @@
 import redis
+
 from discord.ext import commands
+
 from lucid_bot import config, utils
 from lucid_bot.lucid_embed import lucid_embed
 
@@ -37,22 +39,16 @@ class Events(commands.Cog):
     @commands.Cog.listener()
     async def on_command(self, ctx):
         time = self.utils.time()
-        print(
-            f"{time}{ctx.author}::{ctx.author.id} did `{ctx.message.content}`"
-        )
+        print(f"{time}{ctx.author}::{ctx.author.id} did `{ctx.message.content}`")
 
     @commands.Cog.listener()
     async def on_message(self, message):
         repost_active = self.redis.hget(message.guild.id, "repostActive")
 
         if repost_active == "True":
-            target_user = self.redis.hget(
-                message.guild.id, "repostTargetUser"
-            )
+            target_user = self.redis.hget(message.guild.id, "repostTargetUser")
 
-            channel_id = self.redis.hget(
-                message.guild.id, "repostTargetChannel"
-            )
+            channel_id = self.redis.hget(message.guild.id, "repostTargetChannel")
 
             if (
                 target_user is not None
@@ -78,9 +74,7 @@ class Events(commands.Cog):
                 .add_field(name="Before:", value=before.content)
                 .add_field(name="After:", value=after.content, inline=False)
             )
-            send_channel = self.redis.hget(
-                before.guild.id, "editLogChannel"
-            )
+            send_channel = self.redis.hget(before.guild.id, "logChannel")
 
             if send_channel is not None:
                 channel = self.bot.get_channel(int(send_channel))
@@ -88,6 +82,27 @@ class Events(commands.Cog):
 
             else:
                 await before.channel.send(embed=embed)
+
+    @commands.Cog.listener()
+    async def on_message_delete(self, message):
+        if self.redis.hget(message.guild.id, "deleteLogActive") == "True":
+            embed = (
+                lucid_embed()
+                .set_author(
+                    name=f"{message.author} deleted their message",
+                    url=message.jump_url,
+                    icon_url=message.author.avatar_url,
+                )
+                .add_field(name="Message:", value=message.content)
+            )
+            send_channel = self.redis.hget(message.guild.id, "logChannel")
+
+            if send_channel is not None:
+                channel = self.bot.get_channel(int(send_channel))
+                await channel.send(embed=embed)
+
+            else:
+                await message.channel.send(embed=embed)
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
@@ -103,6 +118,18 @@ class Events(commands.Cog):
 
         elif isinstance(error, commands.CommandOnCooldown):
             await ctx.message.add_reaction("🕐")
+
+        elif isinstance(error, commands.BadArgument):
+            embed = lucid_embed(fail=True).set_author(name="Invalid argument(s)")
+
+            await ctx.send(embed=embed)
+
+        elif isinstance(error, commands.MissingRequiredArgument):
+            embed = lucid_embed(
+                fail=True,
+            ).set_author(name=f"Missing argument: {error.param}")
+
+            await ctx.send(embed=embed)
 
         else:
             raise error
