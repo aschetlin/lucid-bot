@@ -19,12 +19,14 @@ class Kick(commands.Cog):
                 title="Punishment -",
                 description="Which user should be kicked?",
             )
-            message = await ctx.send(embed=embed)
+            message: discord.Message = await ctx.send(embed=embed)
 
             while True:
 
                 try:
-                    kickUser = await self.bot.wait_for("message", timeout=20)
+                    kick_user_message: discord.Message = await self.bot.wait_for(
+                        "message", timeout=20
+                    )
 
                 except asyncio.TimeoutError:
                     embed = lucid_embed(
@@ -37,13 +39,13 @@ class Kick(commands.Cog):
 
                     return None
 
-                if kickUser.author.id == ctx.author.id:
-                    await kickUser.delete()
+                if kick_user_message.author.id == ctx.author.id:
+                    await kick_user_message.delete()
                     try:
-                        await kickUser.mentions[0].kick()
+                        await kick_user_message.mentions[0].kick()
 
                         embed = lucid_embed(ctx, success=True).set_author(
-                            name=f"| Successfully kicked {kickUser.mentions[0]}.",
+                            name=f"| Successfully kicked {kick_user_message.mentions[0]}.",
                             icon_url="https://i.imgur.com/4yUeOVj.gif",
                         )
                         await message.edit(embed=embed)

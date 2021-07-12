@@ -21,12 +21,14 @@ class Unmute(commands.Cog):
                 description="Which user should be unmuted?",
             )
 
-            message = await ctx.send(embed=embed)
+            message: discord.Message = await ctx.send(embed=embed)
 
             while True:
 
                 try:
-                    unmuteMsg = await self.bot.wait_for("message", timeout=15)
+                    unmute_message: discord.Message = await self.bot.wait_for(
+                        "message", timeout=15
+                    )
 
                 except asyncio.TimeoutError:
                     embed = lucid_embed(
@@ -39,18 +41,20 @@ class Unmute(commands.Cog):
 
                     return None
 
-                if unmuteMsg.author.id == ctx.author.id:
+                if unmute_message.author.id == ctx.author.id:
 
-                    await unmuteMsg.delete()
+                    await unmute_message.delete()
 
                     try:
-                        role = get(unmuteMsg.mentions[0].roles, name="Muted")
+                        role: discord.Role = get(
+                            unmute_message.mentions[0].roles, name="Muted"
+                        )
 
-                        await unmuteMsg.mentions[0].remove_roles(role)
+                        await unmute_message.mentions[0].remove_roles(role)
                         await ctx.message.delete()
 
                         embed = lucid_embed(ctx, success=True).set_author(
-                            name=f"| Successfully unmuted {unmuteMsg.mentions[0]}.",
+                            name=f"| Successfully unmuted {unmute_message.mentions[0]}.",
                             icon_url="https://i.imgur.com/4yUeOVj.gif",
                         )
                         await message.edit(embed=embed)

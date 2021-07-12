@@ -16,8 +16,8 @@ class Profile(commands.Cog):
             f"https://api.mojang.com/users/profiles/minecraft/{name}"
         ) as r:
             try:
-                uuid = r.json().get("id")
-                uname = r.json().get("name")
+                uuid: str = r.json().get("id")
+                uname: str = r.json().get("name")
 
             except JSONDecodeError:
                 await ctx.message.add_reaction("❌")

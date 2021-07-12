@@ -19,12 +19,14 @@ class Unban(commands.Cog):
                 title="Unban -",
                 description="Which user should be unbanned?",
             )
-            message = await ctx.send(embed=embed)
+            message: discord.Message = await ctx.send(embed=embed)
 
             while True:
 
                 try:
-                    unbanMsg = await self.bot.wait_for("message", timeout=15)
+                    unban_message: discord.Message = await self.bot.wait_for(
+                        "message", timeout=15
+                    )
 
                 except asyncio.TimeoutError:
                     embed = lucid_embed(
@@ -37,14 +39,16 @@ class Unban(commands.Cog):
 
                     return None
 
-                if unbanMsg.author.id == ctx.author.id:
-                    await unbanMsg.delete()
+                if unban_message.author.id == ctx.author.id:
+                    await unban_message.delete()
                     try:
-                        unbanUser = await self.bot.fetch_user(int(unbanMsg.content))
-                        await ctx.guild.unban(unbanUser)
+                        unban_user: discord.User = await self.bot.fetch_user(
+                            int(unban_message.content)
+                        )
+                        await ctx.guild.unban(unban_user)
 
                         embed = lucid_embed(ctx, success=True).set_author(
-                            name=f"| Successfully unbanned {unbanMsg.mentions[0]}.",
+                            name=f"| Successfully unbanned {unban_message.mentions[0]}.",
                             icon_url="https://i.imgur.com/4yUeOVj.gif",
                         )
                         await message.edit(embed=embed)

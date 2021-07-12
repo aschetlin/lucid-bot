@@ -101,7 +101,9 @@ class Events(commands.Cog):
             send_channel = self.redis.hget(message.guild.id, "logChannel")
 
             if send_channel is not None:
-                channel = self.bot.get_channel(int(send_channel))
+                channel: discord.abc.GuildChannel = self.bot.get_channel(
+                    int(send_channel)
+                )
                 await channel.send(embed=embed)
 
             else:
@@ -113,7 +115,9 @@ class Events(commands.Cog):
             log_channel = self.redis.hget(member.guild.id, "logChannel")
 
             if log_channel is not None:
-                log_channel = self.bot.get_channel(int(log_channel))
+                log_channel: discord.abc.GuildChannel = self.bot.get_channel(
+                    int(log_channel)
+                )
 
                 embed = lucid_embed(description=f"{member.mention} joined.").set_author(
                     name=f"Member #{len(member.guild.members) + 1}",
@@ -127,7 +131,9 @@ class Events(commands.Cog):
             log_channel = self.redis.hget(member.guild.id, "logChannel")
 
             if log_channel is not None:
-                log_channel = self.bot.get_channel(int(log_channel))
+                log_channel: discord.abc.GuildChannel = self.bot.get_channel(
+                    int(log_channel)
+                )
 
                 embed = lucid_embed(description=f"{member.mention} left.").set_author(
                     name=f"Member #{len(member.guild.members) + 1}",

@@ -1,6 +1,8 @@
 import asyncio
 
+import discord
 from discord.ext import commands
+
 from lucid_bot.lucid_embed import lucid_embed
 
 
@@ -18,7 +20,7 @@ class Slowmode(commands.Cog):
                 title="Channel Slowmode -",
                 description="How long should the message cool-down be?",
             )
-            message = await ctx.send(embed=embed)
+            message: discord.Message = await ctx.send(embed=embed)
 
             while True:
 

@@ -79,7 +79,9 @@ class Utils:
         while True:
 
             try:
-                announceChannel = await self.bot.wait_for("message", timeout=20)
+                announce_channel_message: discord.Message = await self.bot.wait_for(
+                    "message", timeout=20
+                )
 
             except asyncio.TimeoutError:
                 embed = lucid_embed(
@@ -90,12 +92,14 @@ class Utils:
 
                 return None
 
-            if announceChannel.author.id == ctx.author.id:
-                await announceChannel.delete()
-                channelTag = announceChannel.content
+            if announce_channel_message.author.id == ctx.author.id:
+                await announce_channel_message.delete()
+                channel_tag: str = announce_channel_message.content
 
                 try:
-                    announceChannel = announceChannel.channel_mentions[0]
+                    announce_channel: discord.abc.GuildChannel = (
+                        announce_channel_message.channel_mentions[0]
+                    )
 
                 except IndexError:
                     embed = lucid_embed(
@@ -108,7 +112,7 @@ class Utils:
 
                 break
 
-        return announceChannel, channelTag
+        return announce_channel, channel_tag
 
     async def announce_title(
         self, ctx: commands.Context, message: discord.Message
@@ -124,7 +128,9 @@ class Utils:
         while True:
 
             try:
-                announceTitle = await self.bot.wait_for("message", timeout=60)
+                announce_title_message: discord.Message = await self.bot.wait_for(
+                    "message", timeout=60
+                )
 
             except asyncio.TimeoutError:
                 embed = lucid_embed(
@@ -136,12 +142,12 @@ class Utils:
 
                 return None
 
-            if announceTitle.author.id == ctx.author.id:
-                await announceTitle.delete()
+            if announce_title_message.author.id == ctx.author.id:
+                await announce_title_message.delete()
 
                 break
 
-        return announceTitle.content
+        return announce_title_message.content
 
     async def announcement_description(
         self, ctx: commands.Context, message: discord.Message
@@ -157,7 +163,9 @@ class Utils:
         while True:
 
             try:
-                announceMessage = await self.bot.wait_for("message", timeout=180)
+                announce_description_message: discord.Message = await self.bot.wait_for(
+                    "message", timeout=180
+                )
 
             except asyncio.TimeoutError:
                 embed = lucid_embed(
@@ -169,12 +177,12 @@ class Utils:
 
                 return None
 
-            if announceMessage.author.id == ctx.author.id:
-                await announceMessage.delete()
+            if announce_description_message.author.id == ctx.author.id:
+                await announce_description_message.delete()
 
                 break
 
-        return announceMessage.content
+        return announce_description_message.content
 
     async def announce_color(
         self, message: discord.Message, ctx: commands.Context
@@ -229,9 +237,9 @@ class Utils:
             title="Bot Announcement -",
             description="Do you want to send the announcement " + "as shown above?",
         )
-        message = await ctx.send(embed=embed)
+        message: discord.Message = await ctx.send(embed=embed)
 
-        reaction_yes = await self.yes_no_dialogue(message, ctx, 10, False)
+        reaction_yes: bool = await self.yes_no_dialogue(message, ctx, 10, False)
 
         if reaction_yes:
             await announce_channel.send(embed=announce_embed)

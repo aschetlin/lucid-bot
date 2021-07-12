@@ -14,8 +14,8 @@ class Info(commands.Cog):
     @commands.command(name="info")
     @commands.cooldown(1, 30, commands.BucketType.user)
     async def _info(self, ctx: commands.Context) -> None:
-        prefix = self.config["prefix"]
-        botName = self.config["botName"]
+        prefix: str = self.config["prefix"]
+        botName: str = self.config["botName"]
         hexInt = int(random.choice(list(self.config["colors"])), 16)
 
         embed = lucid_embed(title=f"{botName} Bot Info", color=hexInt)

@@ -1,6 +1,8 @@
 import asyncio
+from typing import Optional
 
 import redis
+import discord
 from discord.ext import commands
 
 from lucid_bot import config, utils
@@ -31,7 +33,7 @@ class Report(commands.Cog):
             title="Issue Report -",
             description="Would you like to start an issue report ticket?",
         )
-        message = await ctx.author.send(embed=embed)
+        message: discord.Message = await ctx.author.send(embed=embed)
         startTicket = await self.nbf.yes_no_dialogue(message, ctx, 30, True)
 
         if startTicket:
@@ -45,7 +47,9 @@ class Report(commands.Cog):
             while True:
 
                 try:
-                    issueTitle = await self.bot.wait_for("message", timeout=20)
+                    issueTitle: discord.Message = await self.bot.wait_for(
+                        "message", timeout=20
+                    )
 
                 except asyncio.TimeoutError:
                     embed = lucid_embed(
@@ -69,7 +73,9 @@ class Report(commands.Cog):
                 await ctx.author.send(embed=embed)
 
                 try:
-                    issueDescription = await self.bot.wait_for("message", timeout=120)
+                    issueDescription: discord.Message = await self.bot.wait_for(
+                        "message", timeout=120
+                    )
 
                 except asyncio.TimeoutError:
                     embed = lucid_embed(
@@ -88,7 +94,7 @@ class Report(commands.Cog):
                     )
                     await ctx.author.send(embed=embed)
 
-                    user = self.bot.get_user(581593263736356885)
+                    user: Optional[discord.User] = self.bot.get_user(self.bot.owner_id)
                     ticketcount = int(self.r.get("ticketcount") or 0)
 
                     await user.send(f"**Issue Ticket #{ticketcount} - **")
