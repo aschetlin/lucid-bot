@@ -9,7 +9,7 @@ class Purge(commands.Cog):
 
     @commands.command(name="purge")
     @commands.has_permissions(manage_messages=True)
-    async def _purge(self, ctx, amount=5):
+    async def _purge(self, ctx: commands.Context, amount: int = 5) -> None:
         await ctx.channel.purge(limit=amount + 1)
 
         embed = lucid_embed(

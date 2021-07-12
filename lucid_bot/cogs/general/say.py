@@ -7,7 +7,7 @@ class Say(commands.Cog):
 
     @commands.command(name="say")
     @commands.has_permissions(manage_messages=True)
-    async def _say(self, ctx, *, message):
+    async def _say(self, ctx: commands.Context, *, message: str) -> None:
         await ctx.message.delete()
         await ctx.send(message)
 

@@ -20,30 +20,30 @@ class Events(commands.Cog):
         self.utils = utils.Utils
 
     @commands.Cog.listener()
-    async def on_connect(self):
+    async def on_connect(self) -> None:
         time = self.utils.time()
         print(f"\n{time}Bot connected to Discord.")
 
     @commands.Cog.listener()
-    async def on_ready(self):
+    async def on_ready(self) -> None:
         botName = self.config["botName"]
         time = self.utils.time()
         print(f"\n{time}{botName} Bot ready.")
         print("-----------------------------")
 
     @commands.Cog.listener()
-    async def on_disconnect(self):
+    async def on_disconnect(self) -> None:
         time = self.utils.time()
         print("-----------------------------")
         print(f"\n{time}Bot disconnected.")
 
     @commands.Cog.listener()
-    async def on_command(self, ctx):
+    async def on_command(self, ctx: commands.Context) -> None:
         time = self.utils.time()
         print(f"{time}{ctx.author}::{ctx.author.id} did `{ctx.message.content}`")
 
     @commands.Cog.listener()
-    async def on_message(self, message):
+    async def on_message(self, message: discord.Message) -> None:
         repost_active = self.redis.hget(message.guild.id, "repostActive")
 
         if repost_active == "True":
@@ -63,7 +63,9 @@ class Events(commands.Cog):
                 await channel.send(message.content)
 
     @commands.Cog.listener()
-    async def on_message_edit(self, before, after):
+    async def on_message_edit(
+        self, before: discord.Message, after: discord.Message
+    ) -> None:
         if self.redis.hget(before.guild.id, "editLogActive") == "True":
             embed = (
                 lucid_embed()
@@ -85,7 +87,7 @@ class Events(commands.Cog):
                 await before.channel.send(embed=embed)
 
     @commands.Cog.listener()
-    async def on_message_delete(self, message):
+    async def on_message_delete(self, message: discord.Message) -> None:
         if self.redis.hget(message.guild.id, "deleteLogActive") == "True":
             embed = (
                 lucid_embed()
@@ -106,7 +108,7 @@ class Events(commands.Cog):
                 await message.channel.send(embed=embed)
 
     @commands.Cog.listener()
-    async def on_member_join(self, member: discord.Member):
+    async def on_member_join(self, member: discord.Member) -> None:
         if self.redis.hget(member.guild.id, "joinLeaveLogActive") == "True":
             log_channel = self.redis.hget(member.guild.id, "logChannel")
 
@@ -120,7 +122,7 @@ class Events(commands.Cog):
                 await log_channel.send(embed=embed)
 
     @commands.Cog.listener()
-    async def on_member_remove(self, member: discord.Member):
+    async def on_member_remove(self, member: discord.Member) -> None:
         if self.redis.hget(member.guild.id, "joinLeaveLogActive") == "True":
             log_channel = self.redis.hget(member.guild.id, "logChannel")
 
@@ -134,7 +136,9 @@ class Events(commands.Cog):
                 await log_channel.send(embed=embed)
 
     @commands.Cog.listener()
-    async def on_command_error(self, ctx, error):
+    async def on_command_error(
+        self, ctx: commands.Context, error: commands.CommandError
+    ) -> None:
 
         if isinstance(error, commands.CommandNotFound):
             await ctx.message.add_reaction("❓")

@@ -18,7 +18,7 @@ class Repost(commands.Cog):
 
     @commands.group(name="repost", invoke_without_command=True)
     @commands.has_permissions(administrator=True)
-    async def _repost(self, ctx):
+    async def _repost(self, ctx: commands.Context) -> None:
         embed = (
             lucid_embed(ctx, title="Chat Reposter Status: ")
             .add_field(
@@ -39,17 +39,17 @@ class Repost(commands.Cog):
         await ctx.send(embed=embed)
 
     @_repost.command(name="activate")
-    async def _repost_activate(self, ctx):
+    async def _repost_activate(self, ctx: commands.Context) -> None:
         self.redis.hmset(ctx.guild.id, {"repostActive": "True"})
         await ctx.message.add_reaction("✅")
 
     @_repost.command(name="deactivate")
-    async def _repost_deactivate(self, ctx):
+    async def _repost_deactivate(self, ctx: commands.Context) -> None:
         self.redis.hmset(ctx.guild.id, {"repostActive": "False"})
         await ctx.message.add_reaction("✅")
 
     @_repost.command(name="user")
-    async def _repost_user(self, ctx, user_id: int):
+    async def _repost_user(self, ctx: commands.Context, user_id: int) -> None:
         try:
             await self.bot.fetch_user(user_id)
 
@@ -61,19 +61,15 @@ class Repost(commands.Cog):
         await ctx.message.add_reaction("✅")
 
     @_repost.command(name="channel")
-    async def _repost_channel(self, ctx, channel_id: int):
+    async def _repost_channel(self, ctx: commands.Context, channel_id: int) -> None:
         try:
             self.bot.get_channel(channel_id)
 
         except (discord.NotFound, discord.HTTPException):
-            await ctx.send(
-                f"Channel with ID {channel_id} could not be found."
-            )
+            await ctx.send(f"Channel with ID {channel_id} could not be found.")
             return
 
-        self.redis.hmset(
-            ctx.guild.id, {"repostTargetChannel": int(channel_id)}
-        )
+        self.redis.hmset(ctx.guild.id, {"repostTargetChannel": int(channel_id)})
         await ctx.message.add_reaction("✅")
 
 

@@ -13,7 +13,7 @@ class Mute(commands.Cog):
 
     @commands.command(name="mute")
     @commands.has_permissions(kick_members=True)
-    async def _mute(self, ctx, *args):
+    async def _mute(self, ctx: commands.Context, *args) -> None:
 
         if not args:
             embed = lucid_embed(

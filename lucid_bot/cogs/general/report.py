@@ -20,7 +20,7 @@ class Report(commands.Cog):
 
     @commands.command(name="report", aliases=["issue"])
     @commands.cooldown(1, 60, commands.BucketType.user)
-    async def _report(self, ctx):
+    async def _report(self, ctx: commands.Context) -> None:
         embed = lucid_embed(
             title="Issue Report -",
             description="Issue report started in your dms!",
@@ -45,9 +45,7 @@ class Report(commands.Cog):
             while True:
 
                 try:
-                    issueTitle = await self.bot.wait_for(
-                        "message", timeout=20
-                    )
+                    issueTitle = await self.bot.wait_for("message", timeout=20)
 
                 except asyncio.TimeoutError:
                     embed = lucid_embed(
@@ -71,9 +69,7 @@ class Report(commands.Cog):
                 await ctx.author.send(embed=embed)
 
                 try:
-                    issueDescription = await self.bot.wait_for(
-                        "message", timeout=120
-                    )
+                    issueDescription = await self.bot.wait_for("message", timeout=120)
 
                 except asyncio.TimeoutError:
                     embed = lucid_embed(
@@ -101,9 +97,7 @@ class Report(commands.Cog):
                         title=str(issueTitle.content),
                         description=str(issueDescription.content),
                     )
-                    embed.set_footer(
-                        text=str(ctx.author) + " - " + str(ctx.author.id)
-                    )
+                    embed.set_footer(text=str(ctx.author) + " - " + str(ctx.author.id))
 
                     await user.send(embed=embed)
 

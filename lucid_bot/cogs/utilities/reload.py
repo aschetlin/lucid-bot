@@ -9,7 +9,7 @@ class Reload(commands.Cog):
 
     @commands.group(name="reload", hidden=True, invoke_without_command=True)
     @commands.is_owner()
-    async def _reload(self, ctx, module):
+    async def _reload(self, ctx: commands.Context, module: str) -> None:
         try:
             self.bot.reload_extension(extensions[module])
             await ctx.message.add_reaction("✅")
@@ -19,7 +19,7 @@ class Reload(commands.Cog):
             await ctx.message.add_reaction("❌")
 
     @_reload.command(name="all", hidden=True)
-    async def _reload_all(self, ctx):
+    async def _reload_all(self, ctx: commands.Context) -> None:
         try:
             for extension in extensions:
                 self.bot.reload_extension(extensions[extension])
