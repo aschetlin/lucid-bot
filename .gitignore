@@ -6,3 +6,4 @@
 /venv
 README.org
 __pycache__
+.env

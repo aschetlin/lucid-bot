@@ -4,5 +4,10 @@ services:
     build: .
     volumes:
       - .:/lucid-bot
+    environment:
+      LUCID_BOT__NAME: "${LUCID_BOT__NAME}"
+      LUCID_BOT__TOKEN: "${LUCID_BOT__TOKEN}"
+      LUCID_BOT__PREFIX: "${LUCID_BOT__PREFIX}"
+      LUCID_BOT__REDIS__DB: "${LUCID_BOT__REDIS__DB}"
   redis:
     image: "redis:buster"
