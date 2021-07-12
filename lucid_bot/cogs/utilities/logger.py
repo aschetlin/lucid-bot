@@ -30,13 +30,18 @@ class Logger(commands.Cog):
         embed = (
             lucid_embed(title="Logging Status -")
             .add_field(
-                name="Edit-log Active:",
+                name="Edit Log Active:",
                 value=self.redis.hget(ctx.guild.id, "editLogActive"),
                 inline=False,
             )
             .add_field(
-                name="Delete-log Active:",
+                name="Delete Log Active:",
                 value=self.redis.hget(ctx.guild.id, "deleteLogActive"),
+                inline=False,
+            )
+            .add_field(
+                name="Join/Leave Log Active:",
+                value=self.redis.hget(ctx.guild.id, "joinLeaveLogActive"),
                 inline=False,
             )
             .add_field(
@@ -60,14 +65,16 @@ class Logger(commands.Cog):
         if log_type == "all":
             self.redis.hmset(ctx.guild.id, {"editLogActive": "True"})
             self.redis.hmset(ctx.guild.id, {"deleteLogActive": "True"})
+            self.redis.hmset(ctx.guild.id, {"joinLeaveLogActive": "True"})
 
-        elif log_type == "editlog" or log_type == "edit":
-            await ctx.send("edit")
+        elif log_type == "edit":
             self.redis.hmset(ctx.guild.id, {"editLogActive": "True"})
 
-        elif log_type == "deletelog" or log_type == "delete":
-            await ctx.send("delete")
+        elif log_type == "delete":
             self.redis.hmset(ctx.guild.id, {"deleteLogActive": "True"})
+
+        elif log_type == "join" or log_type == "leave" or log_type == "joinleave":
+            self.redis.hmset(ctx.guild.id, {"joinLeaveLogActive": "True"})
 
         else:
             raise BadArgument
@@ -85,14 +92,16 @@ class Logger(commands.Cog):
         if log_type == "all":
             self.redis.hmset(ctx.guild.id, {"editLogActive": "False"})
             self.redis.hmset(ctx.guild.id, {"deleteLogActive": "False"})
+            self.redis.hmset(ctx.guild.id, {"joinLeaveLogActive": "False"})
 
         elif log_type == "editlog" or log_type == "edit":
-            await ctx.send("edit")
             self.redis.hmset(ctx.guild.id, {"editLogActive": "False"})
 
         elif log_type == "deletelog" or log_type == "delete":
-            await ctx.send("delete")
             self.redis.hmset(ctx.guild.id, {"deleteLogActive": "False"})
+
+        elif log_type == "join" or log_type == "leave" or log_type == "joinleave":
+            self.redis.hmset(ctx.guild.id, {"joinLeaveLogActive": "False"})
 
         else:
             raise BadArgument

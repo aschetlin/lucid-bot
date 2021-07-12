@@ -1,5 +1,6 @@
 import redis
 
+import discord
 from discord.ext import commands
 
 from lucid_bot import config, utils
@@ -103,6 +104,34 @@ class Events(commands.Cog):
 
             else:
                 await message.channel.send(embed=embed)
+
+    @commands.Cog.listener()
+    async def on_member_join(self, member: discord.Member):
+        if self.redis.hget(member.guild.id, "joinLeaveLogActive") == "True":
+            log_channel = self.redis.hget(member.guild.id, "logChannel")
+
+            if log_channel is not None:
+                log_channel = self.bot.get_channel(int(log_channel))
+
+                embed = lucid_embed(description=f"{member.mention} joined.").set_author(
+                    name=f"Member #{len(member.guild.members) + 1}",
+                    icon_url=member.avatar_url,
+                )
+                await log_channel.send(embed=embed)
+
+    @commands.Cog.listener()
+    async def on_member_remove(self, member: discord.Member):
+        if self.redis.hget(member.guild.id, "joinLeaveLogActive") == "True":
+            log_channel = self.redis.hget(member.guild.id, "logChannel")
+
+            if log_channel is not None:
+                log_channel = self.bot.get_channel(int(log_channel))
+
+                embed = lucid_embed(description=f"{member.mention} left.").set_author(
+                    name=f"Member #{len(member.guild.members) + 1}",
+                    icon_url=member.avatar_url,
+                )
+                await log_channel.send(embed=embed)
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
