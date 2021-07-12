@@ -1,6 +1,8 @@
 import asyncio
 
+import discord
 from discord.ext import commands
+
 from lucid_bot.lucid_embed import lucid_embed
 
 
@@ -10,7 +12,7 @@ class Slowmode(commands.Cog):
 
     @commands.group(name="slowmode", invoke_without_command=True)
     @commands.has_permissions(manage_channels=True)
-    async def _slowmode(self, ctx, time: int = None):
+    async def _slowmode(self, ctx: commands.Context, time: int = None) -> None:
         if not time:
 
             embed = lucid_embed(
@@ -18,14 +20,12 @@ class Slowmode(commands.Cog):
                 title="Channel Slowmode -",
                 description="How long should the message cool-down be?",
             )
-            message = await ctx.send(embed=embed)
+            message: discord.Message = await ctx.send(embed=embed)
 
             while True:
 
                 try:
-                    slowmodeTime = await self.bot.wait_for(
-                        "message", timeout=20
-                    )
+                    slowmodeTime = await self.bot.wait_for("message", timeout=20)
 
                 except asyncio.TimeoutError:
                     embed = lucid_embed(
@@ -40,9 +40,7 @@ class Slowmode(commands.Cog):
 
                 if slowmodeTime.author.id == ctx.author.id:
                     await slowmodeTime.delete()
-                    await ctx.channel.edit(
-                        slowmode_delay=slowmodeTime.content
-                    )
+                    await ctx.channel.edit(slowmode_delay=slowmodeTime.content)
 
                     await message.delete()
                     await ctx.message.add_reaction("✅")

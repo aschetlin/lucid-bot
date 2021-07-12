@@ -1,6 +1,8 @@
 import asyncio
+from typing import Optional
 
 import redis
+import discord
 from discord.ext import commands
 
 from lucid_bot import config, utils
@@ -20,7 +22,7 @@ class Report(commands.Cog):
 
     @commands.command(name="report", aliases=["issue"])
     @commands.cooldown(1, 60, commands.BucketType.user)
-    async def _report(self, ctx):
+    async def _report(self, ctx: commands.Context) -> None:
         embed = lucid_embed(
             title="Issue Report -",
             description="Issue report started in your dms!",
@@ -31,7 +33,7 @@ class Report(commands.Cog):
             title="Issue Report -",
             description="Would you like to start an issue report ticket?",
         )
-        message = await ctx.author.send(embed=embed)
+        message: discord.Message = await ctx.author.send(embed=embed)
         startTicket = await self.nbf.yes_no_dialogue(message, ctx, 30, True)
 
         if startTicket:
@@ -45,7 +47,7 @@ class Report(commands.Cog):
             while True:
 
                 try:
-                    issueTitle = await self.bot.wait_for(
+                    issueTitle: discord.Message = await self.bot.wait_for(
                         "message", timeout=20
                     )
 
@@ -71,7 +73,7 @@ class Report(commands.Cog):
                 await ctx.author.send(embed=embed)
 
                 try:
-                    issueDescription = await self.bot.wait_for(
+                    issueDescription: discord.Message = await self.bot.wait_for(
                         "message", timeout=120
                     )
 
@@ -92,7 +94,7 @@ class Report(commands.Cog):
                     )
                     await ctx.author.send(embed=embed)
 
-                    user = self.bot.get_user(581593263736356885)
+                    user: Optional[discord.User] = self.bot.get_user(self.bot.owner_id)
                     ticketcount = int(self.r.get("ticketcount") or 0)
 
                     await user.send(f"**Issue Ticket #{ticketcount} - **")
@@ -101,9 +103,7 @@ class Report(commands.Cog):
                         title=str(issueTitle.content),
                         description=str(issueDescription.content),
                     )
-                    embed.set_footer(
-                        text=str(ctx.author) + " - " + str(ctx.author.id)
-                    )
+                    embed.set_footer(text=str(ctx.author) + " - " + str(ctx.author.id))
 
                     await user.send(embed=embed)
 

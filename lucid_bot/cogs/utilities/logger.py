@@ -1,5 +1,7 @@
 import redis
+from typing import Optional
 
+import discord
 from discord.ext import commands
 from discord.ext.commands.errors import BadArgument, MissingRequiredArgument
 
@@ -20,7 +22,7 @@ class Logger(commands.Cog):
 
     @commands.group(name="logger", invoke_without_command=True)
     @commands.has_permissions(administrator=True)
-    async def _logger(self, ctx):
+    async def _logger(self, ctx: commands.Context) -> None:
         try:
             log_channel = int(self.redis.hget(ctx.guild.id, "logChannel"))
 
@@ -55,7 +57,7 @@ class Logger(commands.Cog):
         await ctx.send(embed=embed)
 
     @_logger.command(name="activate")
-    async def _logger_activate(self, ctx, log_type: str) -> None:
+    async def _logger_activate(self, ctx: commands.Context, log_type: str) -> None:
 
         if not log_type:
             raise MissingRequiredArgument(log_type)
@@ -82,7 +84,7 @@ class Logger(commands.Cog):
         await ctx.message.add_reaction("✅")
 
     @_logger.command(name="deactivate")
-    async def _logger_deactivate(self, ctx, log_type: str) -> None:
+    async def _logger_deactivate(self, ctx: commands.Context, log_type: str) -> None:
 
         if not log_type:
             raise MissingRequiredArgument(log_type)
@@ -109,9 +111,11 @@ class Logger(commands.Cog):
         await ctx.message.add_reaction("✅")
 
     @_logger.command(name="channel")
-    async def _logger_channel(self, ctx, channel_id):
+    async def _logger_channel(self, ctx: commands.Context, channel_id: str) -> None:
         try:
-            channel = self.bot.get_channel(int(channel_id))
+            channel: Optional[discord.abc.GuildChannel] = self.bot.get_channel(
+                int(channel_id)
+            )
 
         except ValueError:
             await ctx.message.add_reaction("❌")

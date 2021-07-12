@@ -7,7 +7,7 @@ from lucid_bot.config import config
 from lucid_bot.utils import Utils
 from lucid_bot.extension_config import extensions
 
-intents = discord.Intents.default()
+intents: discord.Intents = discord.Intents.default()
 intents.members = True
 bot = commands.Bot(
     command_prefix=config["prefix"],

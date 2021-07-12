@@ -13,7 +13,7 @@ class Mute(commands.Cog):
 
     @commands.command(name="mute")
     @commands.has_permissions(kick_members=True)
-    async def _mute(self, ctx, *args):
+    async def _mute(self, ctx: commands.Context, *args) -> None:
 
         if not args:
             embed = lucid_embed(
@@ -22,12 +22,14 @@ class Mute(commands.Cog):
                 description="Which user should be muted?",
             )
 
-            message = await ctx.send(embed=embed)
+            message: discord.Message = await ctx.send(embed=embed)
 
             while True:
 
                 try:
-                    muteMsg = await self.bot.wait_for("message", timeout=15)
+                    mute_user_message: discord.Message = await self.bot.wait_for(
+                        "message", timeout=15
+                    )
 
                 except asyncio.TimeoutError:
                     embed = lucid_embed(
@@ -40,15 +42,16 @@ class Mute(commands.Cog):
 
                     return None
 
-                if muteMsg.author.id == ctx.author.id:
-                    await muteMsg.delete()
-                    permissions = discord.Permissions(send_messages=False)
+                if mute_user_message.author.id == ctx.author.id:
+                    await mute_user_message.delete()
 
                     try:
                         role = get(ctx.guild.roles, name="Muted")
 
                         if not role:
-                            role = await ctx.guild.create_role(name="Muted")
+                            role: discord.Role = await ctx.guild.create_role(
+                                name="Muted"
+                            )
 
                             for channel in ctx.guild.channels:
                                 await channel.set_permissions(
@@ -57,11 +60,11 @@ class Mute(commands.Cog):
                                     speak=False,
                                 )
 
-                        await muteMsg.mentions[0].add_roles(role)
+                        await mute_user_message.mentions[0].add_roles(role)
                         await ctx.message.delete()
 
                         embed = lucid_embed(ctx, success=True).set_author(
-                            name=f"| Successfully muted {muteMsg.mentions[0]}.",
+                            name=f"| Successfully muted {mute_user_message.mentions[0]}.",
                             icon_url="https://i.imgur.com/4yUeOVj.gif",
                         )
                         await message.edit(embed=embed)
@@ -91,13 +94,11 @@ class Mute(commands.Cog):
 
                         return None
         else:
-            muteUser = ctx.message.mentions[0]
+            mute_user: str = ctx.message.mentions[0]
             await ctx.message.delete()
 
-            permissions = discord.Permissions(send_messages=False)
-
             try:
-                role = get(ctx.guild.roles, name="Muted")
+                role: discord.Role = get(ctx.guild.roles, name="Muted")
 
                 if not role:
                     role = await ctx.guild.create_role(name="Muted")
@@ -107,10 +108,10 @@ class Mute(commands.Cog):
                             role, send_messages=False, speak=False
                         )
 
-                await muteUser.add_roles(role)
+                await mute_user.add_roles(role)
 
                 embed = lucid_embed(ctx, success=True).set_author(
-                    name=f"| Successfully muted {muteUser}",
+                    name=f"| Successfully muted {mute_user}",
                     icon_url="https://i.imgur.com/4yUeOVj.gif",
                 )
                 await ctx.send(embed=embed)

@@ -12,19 +12,21 @@ class Ban(commands.Cog):
 
     @commands.command(name="ban")
     @commands.has_permissions(ban_members=True)
-    async def _ban(self, ctx, *args):
+    async def _ban(self, ctx: commands.Context, *args) -> None:
         if not args:
             embed = lucid_embed(
                 ctx,
                 title="Punishment -",
                 description="Which user should be banned?",
             )
-            message = await ctx.send(embed=embed)
+            message: discord.Message = await ctx.send(embed=embed)
 
             while True:
 
                 try:
-                    banUser = await self.bot.wait_for("message", timeout=15)
+                    ban_user_message: discord.Message = await self.bot.wait_for(
+                        "message", timeout=15
+                    )
 
                 except asyncio.TimeoutError:
                     embed = lucid_embed(
@@ -37,13 +39,13 @@ class Ban(commands.Cog):
 
                     return None
 
-                if banUser.author.id == ctx.author.id:
-                    await banUser.delete()
+                if ban_user_message.author.id == ctx.author.id:
+                    await ban_user_message.delete()
                     try:
-                        await banUser.mentions[0].ban()
+                        await ban_user_message.mentions[0].ban()
 
                         embed = lucid_embed(ctx, success=True).set_author(
-                            name=f"| Successfully banned {banUser.mentions[0]}.",
+                            name=f"| Successfully banned {ban_user_message.mentions[0]}.",
                             icon_url="https://imgur.com/a/RvkKizk",
                         )
                         await message.edit(embed=embed)
@@ -92,8 +94,7 @@ class Ban(commands.Cog):
                     ctx,
                     fail=True,
                     title="Punishment Failed -",
-                    description="IndexError: Did you mention a valid "
-                    "user?",
+                    description="IndexError: Did you mention a valid " "user?",
                 )
                 await ctx.send(embed=embed)
 

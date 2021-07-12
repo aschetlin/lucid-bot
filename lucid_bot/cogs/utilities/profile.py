@@ -11,22 +11,20 @@ class Profile(commands.Cog):
 
     @commands.command(name="profile")
     @commands.cooldown(1, 30, commands.BucketType.user)
-    async def _profile(self, ctx, name):
+    async def _profile(self, ctx: commands.Context, name: str) -> None:
         with requests.get(
             f"https://api.mojang.com/users/profiles/minecraft/{name}"
         ) as r:
             try:
-                uuid = r.json().get("id")
-                uname = r.json().get("name")
+                uuid: str = r.json().get("id")
+                uname: str = r.json().get("name")
 
             except JSONDecodeError:
                 await ctx.message.add_reaction("❌")
                 return
 
         embed = (
-            lucid_embed(
-                ctx, success=True, title="Minecraft Profile Query -"
-            )
+            lucid_embed(ctx, success=True, title="Minecraft Profile Query -")
             .add_field(name="Username:", value=uname)
             .add_field(name="UUID:", value=uuid, inline=False)
             .add_field(
@@ -34,9 +32,7 @@ class Profile(commands.Cog):
                 value=f"[link](https://crafatar.com/skins/{uuid})",
                 inline=False,
             )
-            .set_thumbnail(
-                url=f"https://crafatar.com/renders/body/{uuid}?overlay"
-            )
+            .set_thumbnail(url=f"https://crafatar.com/renders/body/{uuid}?overlay")
         )
 
         await ctx.send(embed=embed)
