@@ -1,13 +1,17 @@
-import discord
 import redis
+
+import discord
 from discord.ext import commands
+
 from lucid_bot import config
+from lucid_bot.utils import Utils, LucidCommandResult
 from lucid_bot.lucid_embed import lucid_embed
 
 
 class Repost(commands.Cog):
     def __init__(self, bot) -> None:
         self.bot = bot
+        self.utils = Utils
         self.config = config.config
         self.redis = redis.Redis(
             host=self.config["redis"]["hostname"],
@@ -41,12 +45,12 @@ class Repost(commands.Cog):
     @_repost.command(name="activate")
     async def _repost_activate(self, ctx: commands.Context) -> None:
         self.redis.hmset(ctx.guild.id, {"repostActive": "True"})
-        await ctx.message.add_reaction("✅")
+        await self.utils.command_result(ctx, result=LucidCommandResult.SUCCESS)
 
     @_repost.command(name="deactivate")
     async def _repost_deactivate(self, ctx: commands.Context) -> None:
         self.redis.hmset(ctx.guild.id, {"repostActive": "False"})
-        await ctx.message.add_reaction("✅")
+        await self.utils.command_result(ctx, result=LucidCommandResult.SUCCESS)
 
     @_repost.command(name="user")
     async def _repost_user(self, ctx: commands.Context, user_id: int) -> None:
@@ -58,7 +62,7 @@ class Repost(commands.Cog):
             return
 
         self.redis.hmset(ctx.guild.id, {"repostTargetUser": int(user_id)})
-        await ctx.message.add_reaction("✅")
+        await self.utils.command_result(ctx, result=LucidCommandResult.SUCCESS)
 
     @_repost.command(name="channel")
     async def _repost_channel(self, ctx: commands.Context, channel_id: int) -> None:
@@ -70,7 +74,7 @@ class Repost(commands.Cog):
             return
 
         self.redis.hmset(ctx.guild.id, {"repostTargetChannel": int(channel_id)})
-        await ctx.message.add_reaction("✅")
+        await self.utils.command_result(ctx, result=LucidCommandResult.SUCCESS)
 
 
 def setup(bot):

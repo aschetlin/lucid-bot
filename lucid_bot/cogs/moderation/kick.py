@@ -4,11 +4,13 @@ import discord
 from discord.ext import commands
 
 from lucid_bot.lucid_embed import lucid_embed
+from lucid_bot.utils import Utils, LucidCommandResult
 
 
 class Kick(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.utils = Utils
 
     @commands.command(name="kick")
     @commands.has_permissions(kick_members=True)
@@ -41,37 +43,36 @@ class Kick(commands.Cog):
 
                 if kick_user_message.author.id == ctx.author.id:
                     await kick_user_message.delete()
+
                     try:
                         await kick_user_message.mentions[0].kick()
+                        await message.delete()
 
-                        embed = lucid_embed(ctx, success=True).set_author(
-                            name=f"| Successfully kicked {kick_user_message.mentions[0]}.",
-                            icon_url="https://i.imgur.com/4yUeOVj.gif",
+                        await self.utils.command_result(
+                            ctx,
+                            result=LucidCommandResult.SUCCESS,
                         )
-                        await message.edit(embed=embed)
 
                         return None
 
                     except IndexError:
-                        embed = lucid_embed(
-                            ctx,
-                            fail=True,
-                            title="Punishment Failed -",
-                            description="Did you mention a user?",
+                        await message.delete()
+                        await kick_user_message.delete()
+
+                        await self.utils.command_result(
+                            ctx, result=LucidCommandResult.FAIL
                         )
-                        await message.edit(embed=embed)
 
                         return None
 
                     except discord.errors.Forbidden:
-                        embed = lucid_embed(
+                        await message.delete()
+                        await kick_user_message.delete()
+
+                        await self.utils.command_result(
                             ctx,
-                            fail=True,
-                            title="Permissions Error -",
-                            description="Are you trying to kick another "
-                            "moderator/administrator?",
+                            result=LucidCommandResult.FAIL,
                         )
-                        await message.edit(embed=embed)
 
                         return None
 
@@ -79,34 +80,19 @@ class Kick(commands.Cog):
 
             try:
                 await ctx.message.mentions[0].kick()
-                await ctx.message.delete()
 
-                embed = lucid_embed(ctx, success=True).set_author(
-                    name=f"| Successfully kicked {ctx.message.mentions[0]}.",
-                    icon_url="https://i.imgur.com/4yUeOVj.gif",
+                await self.utils.command_result(
+                    ctx,
+                    result=LucidCommandResult.SUCCESS,
                 )
-                await ctx.send(embed=embed)
 
                 return None
 
             except IndexError:
-                embed = lucid_embed(
-                    ctx,
-                    fail=True,
-                    title="Punishment Failed -",
-                    description="IndexError: Did you mention a valid " "user?",
-                )
-                await ctx.send(embed=embed)
+                await self.utils.command_result(ctx, result=LucidCommandResult.FAIL)
 
             except discord.Forbidden:
-                embed = lucid_embed(
-                    ctx,
-                    fail=True,
-                    title="Permissions Error -",
-                    description="Are you trying to kick another "
-                    "moderator/administrator?",
-                )
-                await ctx.send(embed=embed)
+                await self.utils.command_result(ctx, result=LucidCommandResult.FAIL)
 
 
 def setup(bot):

@@ -3,9 +3,15 @@ from datetime import datetime
 
 import discord
 from discord.ext import commands
+from enum import Enum, auto
 
 from lucid_bot import config
 from lucid_bot.lucid_embed import lucid_embed
+
+
+class LucidCommandResult(Enum):
+    SUCCESS = auto()
+    FAIL = auto()
 
 
 class Utils:
@@ -18,17 +24,38 @@ class Utils:
         time = datetime.now().strftime("%H:%M:%S")
         return f"[\033[32m{time[:12]}\033[0m] | "
 
-    async def command_success(
-        self, ctx: commands.Context, react: bool = False, *, action: str = None
+    @staticmethod
+    async def command_result(
+        ctx: commands.Context,
+        *,
+        result: LucidCommandResult,
+        message: str = None,
     ) -> None:
-        if react:
-            await ctx.message.add_reaction("✅")
+        if not message:
+            if result is LucidCommandResult.SUCCESS:
+                await ctx.message.add_reaction(
+                    config.config["resultAssets"]["successReact"]
+                )
+
+            else:
+                await ctx.message.add_reaction(
+                    config.config["resultAssets"]["failReact"]
+                )
+
         else:
-            embed = lucid_embed(ctx, success=True).set_author(
-                name=f"Successfully {action}",
-                icon_url="https://i.imgur.com/4yUeOVj.gif",
-            )
-            await ctx.send(embed=embed)
+            if result is LucidCommandResult.SUCCESS:
+                embed = lucid_embed(ctx, success=True).set_author(
+                    name=message,
+                    icon_url=config.config["resultAssets"]["successImg"],
+                )
+                await ctx.send(embed=embed)
+
+            else:
+                embed = lucid_embed(ctx, fail=True).set_author(
+                    name=message,
+                    icon_url=config.config["resultAssets"]["failImg"],
+                )
+                await ctx.send(embed=embed)
 
     async def yes_no_dialogue(
         self,

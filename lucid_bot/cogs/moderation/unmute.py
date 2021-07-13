@@ -5,11 +5,13 @@ from discord.ext import commands
 from discord.utils import get
 
 from lucid_bot.lucid_embed import lucid_embed
+from lucid_bot.utils import Utils, LucidCommandResult
 
 
 class Unmute(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.utils = Utils
 
     @commands.command(name="unmute")
     @commands.has_permissions(kick_members=True)
@@ -51,74 +53,56 @@ class Unmute(commands.Cog):
                         )
 
                         await unmute_message.mentions[0].remove_roles(role)
-                        await ctx.message.delete()
 
-                        embed = lucid_embed(ctx, success=True).set_author(
-                            name=f"| Successfully unmuted {unmute_message.mentions[0]}.",
-                            icon_url="https://i.imgur.com/4yUeOVj.gif",
+                        await message.delete()
+                        await self.utils.command_result(
+                            ctx,
+                            result=LucidCommandResult.SUCCESS,
                         )
-                        await message.edit(embed=embed)
 
                         return None
 
                     except IndexError:
-                        embed = lucid_embed(
-                            ctx,
-                            fail=True,
-                            title="Command Failed -",
-                            description="Did you mention a user?",
+                        await message.delete()
+                        await unmute_message.delete()
+
+                        await self.utils.command_result(
+                            ctx, result=LucidCommandResult.FAIL
                         )
-                        await message.edit(embed=embed)
 
                         return None
 
                     except discord.errors.Forbidden:
-                        embed = lucid_embed(
+                        await message.delete()
+                        await unmute_message.delete()
+
+                        await self.utils.command_result(
                             ctx,
-                            fail=True,
-                            title="Permissions Error -",
-                            description="Are you trying to unmute another "
-                            "moderator/administrator?",
+                            result=LucidCommandResult.FAIL,
                         )
-                        await message.edit(embed=embed)
 
                         return None
         else:
-            await ctx.message.delete()
 
             try:
                 role = get(ctx.message.mentions[0].roles, name="Muted")
 
                 await ctx.message.mentions[0].remove_roles(role)
 
-                embed = lucid_embed(ctx, success=True).set_author(
-                    name=f"| Successfully unmuted {ctx.message.mentions[0]}.",
-                    icon_url="https://i.imgur.com/4yUeOVj.gif",
+                await self.utils.command_result(
+                    ctx,
+                    result=LucidCommandResult.SUCCESS,
                 )
-                await ctx.send(embed=embed)
 
                 return None
 
             except IndexError:
-                embed = lucid_embed(
-                    ctx,
-                    fail=True,
-                    title="Command Failed -",
-                    description="Did you mention a user?",
-                )
-                await ctx.send(embed=embed)
+                await self.utils.command_result(ctx, result=LucidCommandResult.FAIL)
 
                 return None
 
             except discord.errors.Forbidden:
-                embed = lucid_embed(
-                    ctx,
-                    fail=True,
-                    title="Permissions Error -",
-                    description="Are you trying to unmute another "
-                    "moderator/administrator?",
-                )
-                await ctx.send(embed=embed)
+                await self.utils.command_result(ctx, result=LucidCommandResult.FAIL)
 
                 return None
 

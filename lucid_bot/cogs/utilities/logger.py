@@ -6,6 +6,7 @@ from discord.ext import commands
 from discord.ext.commands.errors import BadArgument, MissingRequiredArgument
 
 from lucid_bot import config
+from lucid_bot.utils import Utils, LucidCommandResult
 from lucid_bot.lucid_embed import lucid_embed
 
 
@@ -13,6 +14,7 @@ class Logger(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.config = config.config
+        self.utils = Utils
         self.redis = redis.Redis(
             host=self.config["redis"]["hostname"],
             port=self.config["redis"]["port"],
@@ -81,7 +83,7 @@ class Logger(commands.Cog):
         else:
             raise BadArgument
 
-        await ctx.message.add_reaction("✅")
+        await self.utils.command_result(ctx, result=LucidCommandResult.SUCCESS)
 
     @_logger.command(name="deactivate")
     async def _logger_deactivate(self, ctx: commands.Context, log_type: str) -> None:
@@ -108,7 +110,7 @@ class Logger(commands.Cog):
         else:
             raise BadArgument
 
-        await ctx.message.add_reaction("✅")
+        await self.utils.command_result(ctx, result=LucidCommandResult.SUCCESS)
 
     @_logger.command(name="channel")
     async def _logger_channel(self, ctx: commands.Context, channel_id: str) -> None:
@@ -118,15 +120,15 @@ class Logger(commands.Cog):
             )
 
         except ValueError:
-            await ctx.message.add_reaction("❌")
+            await self.utils.command_result(ctx, result=LucidCommandResult.FAIL)
             return
 
         if channel is None:
-            await ctx.message.add_reaction("❌")
+            await self.utils.command_result(ctx, result=LucidCommandResult.FAIL)
 
         else:
             self.redis.hmset(ctx.guild.id, {"logChannel": channel_id})
-            await ctx.message.add_reaction("✅")
+            await self.utils.command_result(ctx, result=LucidCommandResult.SUCCESS)
 
 
 def setup(bot):
