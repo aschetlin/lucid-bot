@@ -70,7 +70,6 @@ class Unban(commands.Cog):
 
                     except discord.errors.Forbidden:
                         await message.delete()
-                        await ctx.message.delete()
 
                         await self.utils.command_result(
                             ctx, result=LucidCommandResult.FAIL
@@ -81,7 +80,6 @@ class Unban(commands.Cog):
 
             try:
                 await ctx.message.mentions[0].unban()
-                await ctx.message.delete()
 
                 await self.utils.command_result(
                     ctx,

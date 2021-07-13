@@ -33,23 +33,27 @@ class Utils:
     ) -> None:
         if not message:
             if result is LucidCommandResult.SUCCESS:
-                await ctx.message.add_reaction("<:lucid_success:864625886099013634>")
+                await ctx.message.add_reaction(
+                    config.config["resultAssets"]["successReact"]
+                )
 
             else:
-                await ctx.message.add_reaction("<:lucid_fail:864625908350844928>")
+                await ctx.message.add_reaction(
+                    config.config["resultAssets"]["failReact"]
+                )
 
         else:
             if result is LucidCommandResult.SUCCESS:
                 embed = lucid_embed(ctx, success=True).set_author(
                     name=message,
-                    icon_url="https://i.imgur.com/cpLEWws.png",
+                    icon_url=config.config["resultAssets"]["successImg"],
                 )
                 await ctx.send(embed=embed)
 
             else:
                 embed = lucid_embed(ctx, fail=True).set_author(
                     name=message,
-                    icon_url="https://i.imgur.com/8y9I5yD.png",
+                    icon_url=config.config["resultAssets"]["failImg"],
                 )
                 await ctx.send(embed=embed)
 

@@ -64,8 +64,6 @@ class Mute(commands.Cog):
 
                         user = mute_user_message.mentions[0]
                         await user.add_roles(role)
-
-                        await ctx.message.delete()
                         await message.delete()
 
                         await self.utils.command_result(
@@ -97,7 +95,6 @@ class Mute(commands.Cog):
 
         else:
             mute_user: str = ctx.message.mentions[0]
-            await ctx.message.delete()
 
             try:
                 role: discord.Role = get(ctx.guild.roles, name="Muted")

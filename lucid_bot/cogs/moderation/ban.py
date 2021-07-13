@@ -78,7 +78,6 @@ class Ban(commands.Cog):
 
             try:
                 await ctx.message.mentions[0].ban()
-                await ctx.message.delete()
 
                 await self.utils.command_result(
                     ctx,

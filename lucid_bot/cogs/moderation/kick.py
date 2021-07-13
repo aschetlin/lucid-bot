@@ -80,7 +80,6 @@ class Kick(commands.Cog):
 
             try:
                 await ctx.message.mentions[0].kick()
-                await ctx.message.delete()
 
                 await self.utils.command_result(
                     ctx,

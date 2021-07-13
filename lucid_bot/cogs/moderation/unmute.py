@@ -53,7 +53,6 @@ class Unmute(commands.Cog):
                         )
 
                         await unmute_message.mentions[0].remove_roles(role)
-                        await ctx.message.delete()
 
                         await message.delete()
                         await self.utils.command_result(
@@ -84,7 +83,6 @@ class Unmute(commands.Cog):
 
                         return None
         else:
-            await ctx.message.delete()
 
             try:
                 role = get(ctx.message.mentions[0].roles, name="Muted")
