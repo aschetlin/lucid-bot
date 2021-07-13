@@ -4,6 +4,7 @@ import discord
 from discord.ext import commands
 
 from lucid_bot import config, utils
+from lucid_bot.utils import LucidCommandResult
 from lucid_bot.lucid_embed import lucid_embed
 
 
@@ -150,10 +151,14 @@ class Events(commands.Cog):
             await ctx.message.add_reaction("❓")
 
         elif isinstance(error, commands.NotOwner):
-            await ctx.message.add_reaction("❌")
+            await self.utils.command_result(
+                ctx, react=True, result=LucidCommandResult.FAIL
+            )
 
         elif isinstance(error, commands.CheckFailure):
-            await ctx.message.add_reaction("❌")
+            await self.utils.command_result(
+                ctx, react=True, result=LucidCommandResult.FAIL
+            )
 
         elif isinstance(error, commands.CommandOnCooldown):
             await ctx.message.add_reaction("🕐")

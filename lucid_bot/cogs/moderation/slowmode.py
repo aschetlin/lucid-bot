@@ -4,11 +4,13 @@ import discord
 from discord.ext import commands
 
 from lucid_bot.lucid_embed import lucid_embed
+from lucid_bot.utils import Utils, LucidCommandResult
 
 
 class Slowmode(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.utils = Utils
 
     @commands.group(name="slowmode", invoke_without_command=True)
     @commands.has_permissions(manage_channels=True)
@@ -43,7 +45,9 @@ class Slowmode(commands.Cog):
                     await ctx.channel.edit(slowmode_delay=slowmodeTime.content)
 
                     await message.delete()
-                    await ctx.message.add_reaction("✅")
+                    await self.utils.command_result(
+                        ctx, result=LucidCommandResult.SUCCESS
+                    )
 
                     return None
         else:
@@ -52,21 +56,15 @@ class Slowmode(commands.Cog):
                 slowmodeTime = time
 
                 await ctx.channel.edit(slowmode_delay=slowmodeTime)
-                await ctx.message.add_reaction("✅")
+                await self.utils.command_result(ctx, result=LucidCommandResult.SUCCESS)
 
             except IndexError:
-                embed = lucid_embed(
-                    ctx,
-                    fail=True,
-                    title="Channel Slowmode -",
-                    description="Invalid slowmode time.",
-                )
-                await ctx.send(embed=embed)
+                await self.utils.command_result(ctx, result=LucidCommandResult.FAIL)
 
     @_slowmode.command(name="lift")
     async def _slowmode_lift(self, ctx):
         await ctx.channel.edit(slowmode_delay=0)
-        await ctx.message.add_reaction("✅")
+        await self.utils.command_result(ctx, result=LucidCommandResult.SUCCESS)
 
 
 def setup(bot):

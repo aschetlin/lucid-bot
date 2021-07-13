@@ -4,11 +4,13 @@ import discord
 from discord.ext import commands
 
 from lucid_bot.lucid_embed import lucid_embed
+from lucid_bot.utils import Utils, LucidCommandResult
 
 
 class Unban(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.utils = Utils
 
     @commands.command(name="unban")
     @commands.has_permissions(ban_members=True)
@@ -47,11 +49,11 @@ class Unban(commands.Cog):
                         )
                         await ctx.guild.unban(unban_user)
 
-                        embed = lucid_embed(ctx, success=True).set_author(
-                            name=f"| Successfully unbanned {unban_message.mentions[0]}.",
-                            icon_url="https://i.imgur.com/4yUeOVj.gif",
+                        await message.delete()
+                        await self.utils.command_result(
+                            ctx,
+                            result=LucidCommandResult.SUCCESS,
                         )
-                        await message.edit(embed=embed)
 
                         return None
 
@@ -67,14 +69,12 @@ class Unban(commands.Cog):
                     #     return None
 
                     except discord.errors.Forbidden:
-                        embed = lucid_embed(
-                            ctx,
-                            fail=True,
-                            title="Permissions Error -",
-                            description="Are you trying to ban another "
-                            "moderator/administrator?",
+                        await message.delete()
+                        await ctx.message.delete()
+
+                        await self.utils.command_result(
+                            ctx, result=LucidCommandResult.FAIL
                         )
-                        await message.edit(embed=embed)
 
                         return None
         else:
@@ -83,24 +83,15 @@ class Unban(commands.Cog):
                 await ctx.message.mentions[0].unban()
                 await ctx.message.delete()
 
-                embed = lucid_embed().set_author(
+                await self.utils.command_result(
                     ctx,
-                    success=True,
-                    name=f"| Successfully unbanned {ctx.message.mentions[0]}.",
-                    icon_url="https://i.imgur.com/4yUeOVj.gif",
+                    result=LucidCommandResult.SUCCESS,
                 )
-                await ctx.send(embed=embed)
 
                 return None
 
             except IndexError:
-                embed = lucid_embed(
-                    ctx,
-                    fail=True,
-                    title="Unban Failed -",
-                    description="IndexError: Did you mention a valid " "user?",
-                )
-                await ctx.send(embed=embed)
+                await self.utils.command_result(ctx, result=LucidCommandResult.FAIL)
 
             # except discord.Forbidden:
             #     embed = Embed(

@@ -5,11 +5,13 @@ from discord.ext import commands
 from discord.utils import get
 
 from lucid_bot.lucid_embed import lucid_embed
+from lucid_bot.utils import Utils, LucidCommandResult
 
 
 class Mute(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.utils = Utils
 
     @commands.command(name="mute")
     @commands.has_permissions(kick_members=True)
@@ -60,39 +62,39 @@ class Mute(commands.Cog):
                                     speak=False,
                                 )
 
-                        await mute_user_message.mentions[0].add_roles(role)
-                        await ctx.message.delete()
+                        user = mute_user_message.mentions[0]
+                        await user.add_roles(role)
 
-                        embed = lucid_embed(ctx, success=True).set_author(
-                            name=f"| Successfully muted {mute_user_message.mentions[0]}.",
-                            icon_url="https://i.imgur.com/4yUeOVj.gif",
+                        await ctx.message.delete()
+                        await message.delete()
+
+                        await self.utils.command_result(
+                            ctx,
+                            result=LucidCommandResult.SUCCESS,
                         )
-                        await message.edit(embed=embed)
 
                         return None
 
                     except IndexError:
-                        embed = lucid_embed(
-                            ctx,
-                            fail=True,
-                            title="Punishment Failed -",
-                            description="Did you mention a user?",
+                        await message.delete()
+                        await mute_user_message.delete()
+
+                        await self.utils.command_result(
+                            ctx, result=LucidCommandResult.FAIL
                         )
-                        await message.edit(embed=embed)
 
                         return None
 
                     except discord.errors.Forbidden:
-                        embed = lucid_embed(
-                            ctx,
-                            fail=True,
-                            title="Permissions Error -",
-                            description="Are you trying to mute another "
-                            "moderator/administrator?",
+                        await message.delete()
+                        await mute_user_message.delete()
+
+                        await self.utils.command_result(
+                            ctx, result=LucidCommandResult.FAIL
                         )
-                        await message.edit(embed=embed)
 
                         return None
+
         else:
             mute_user: str = ctx.message.mentions[0]
             await ctx.message.delete()
@@ -110,34 +112,20 @@ class Mute(commands.Cog):
 
                 await mute_user.add_roles(role)
 
-                embed = lucid_embed(ctx, success=True).set_author(
-                    name=f"| Successfully muted {mute_user}",
-                    icon_url="https://i.imgur.com/4yUeOVj.gif",
+                await self.utils.command_result(
+                    ctx,
+                    result=LucidCommandResult.SUCCESS,
                 )
-                await ctx.send(embed=embed)
 
                 return None
 
             except IndexError:
-                embed = lucid_embed(
-                    ctx,
-                    fail=True,
-                    title="Punishment Failed -",
-                    description="Did you mention a user?",
-                )
-                await ctx.send(embed=embed)
+                await self.utils.command_result(ctx, result=LucidCommandResult.FAIL)
 
                 return None
 
             except discord.errors.Forbidden:
-                embed = lucid_embed(
-                    ctx,
-                    fail=True,
-                    title="Permissions Error -",
-                    description="Are you trying to ban another "
-                    "moderator/administrator?",
-                )
-                await ctx.send(embed=embed)
+                await self.utils.command_result(ctx, result=LucidCommandResult.FAIL)
 
                 return None
 

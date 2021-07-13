@@ -3,11 +3,13 @@ import requests
 from discord.ext import commands
 
 from lucid_bot.lucid_embed import lucid_embed
+from lucid_bot.utils import Utils, LucidCommandResult
 
 
 class Profile(commands.Cog):
     def __init__(self, bot) -> None:
         self.bot = bot
+        self.utils = Utils
 
     @commands.command(name="profile")
     @commands.cooldown(1, 30, commands.BucketType.user)
@@ -20,7 +22,8 @@ class Profile(commands.Cog):
                 uname: str = r.json().get("name")
 
             except JSONDecodeError:
-                await ctx.message.add_reaction("❌")
+                await self.utils.command_result(ctx, result=LucidCommandResult.FAIL)
+
                 return
 
         embed = (
