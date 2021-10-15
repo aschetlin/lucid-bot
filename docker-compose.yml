@@ -1,13 +1,14 @@
 version: "3"
 services:
+  redis:
+    image: "redis:buster"
   bot:
     build: .
     volumes:
       - .:/lucid-bot
     environment:
+      PYTHONUNBUFFERED: 1
       LUCID_BOT__NAME: "${LUCID_BOT__NAME}"
       LUCID_BOT__TOKEN: "${LUCID_BOT__TOKEN}"
       LUCID_BOT__PREFIX: "${LUCID_BOT__PREFIX}"
       LUCID_BOT__REDIS__DB: "${LUCID_BOT__REDIS__DB}"
-  redis:
-    image: "redis:buster"

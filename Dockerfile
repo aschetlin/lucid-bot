@@ -12,4 +12,4 @@ RUN pip install -r requirements.txt
 
 RUN chmod +x main.py
 
-CMD ["./main.py"]
+CMD ["python", "-u", "main.py"]

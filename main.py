@@ -16,7 +16,6 @@ bot = commands.Bot(
 )
 bot.remove_command("help")
 
-
 for extension in extensions:
     optional_params = []
     current_extension = extensions[extension]
